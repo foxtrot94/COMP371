@@ -21,7 +21,7 @@
 *.lai
 *.la
 *.a
-*.lib
+#*.lib # we need this one :)
 
 # Executables
 *.exe
@@ -31,3 +31,5 @@
 /ipch
 /project/Debug
 *.opendb
+*.VC.db
+*.suo
