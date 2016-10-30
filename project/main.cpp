@@ -1,6 +1,7 @@
 #include "main.h"
 #include "input.h"
 #include "utils.h"
+#include "Shader.h"
 
 using namespace std;
 
@@ -29,10 +30,8 @@ int main()
 
 	glfwGetFramebufferSize(window, &width, &height);
 
-	//Compile and link the shaders
-	GLuint vertexShader = OpenAndCompile("vertex.shader", GL_VERTEX_SHADER);
-	GLuint fragmentShader = OpenAndCompile("fragment.shader", GL_FRAGMENT_SHADER);
-	GLuint shaderObject = UseShaders(vertexShader, fragmentShader);
+	Shader shaderBuilder("vertex.shader", "fragment.shader");
+	GLuint shaderObject = shaderBuilder.getShaderProgram();
 
 	//Set up the VAO, the VBOs and the EBO
 	GLuint VBO, VAO, colorVBO;
@@ -56,7 +55,7 @@ int main()
 	float lastFrame = 0.f, thisFrame=0.f;
 	while (!glfwWindowShouldClose(window)){
 		//TODO: Abstract most of this into a RenderTarget model.
-		thisFrame = glfwGetTime();
+		thisFrame = (float)glfwGetTime();
 		deltaTime = thisFrame - lastFrame;
 		framerate = 1.f / deltaTime;
 		lastFrame = thisFrame;
