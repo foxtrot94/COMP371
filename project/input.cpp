@@ -149,7 +149,7 @@ void CursorPositionCallback(GLFWwindow * window, double x, double y){
 	//Move forward and backward
 	if (MOUSE_R_PRESSED) {
 		//We're missing something here
-		cameraTranslation.z += CAMERA_STEP * deltaY;
+		cameraTranslation.z += CAMERA_STEP * (float)deltaY;
 		
 		//std::cout << deltaY << std::endl;
 	}
