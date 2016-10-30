@@ -1,6 +1,8 @@
 #include "main.h"
 #include "input.h"
 #include "utils.h"
+#include "Renderer.h"
+#include "WorldGenericObject.h"
 #include "Shader.h"
 
 using namespace std;
