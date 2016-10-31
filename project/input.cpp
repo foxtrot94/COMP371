@@ -11,20 +11,82 @@ const float CAMERA_STEP = 1.f;
 glm::vec3 CAMERA_INITIAL_TRANSLATION;
 glm::vec3 CAMERA_INITIAL_DIRECTION;
 
+void Input::resetCamera(){
+	cameraTranslation = CAMERA_INITIAL_TRANSLATION;
+	cameraDirectionPoint = CAMERA_INITIAL_DIRECTION;
+}
+
+void Input::moveFwd()
+{
+	cameraTranslation.y += CAMERA_STEP;
+}
+
+void Input::moveBwd()
+{
+	cameraTranslation.y -= CAMERA_STEP;
+}
+
+void Input::turnLeft()
+{
+
+}
+
+void Input::turnRight()
+{
+
+}
+
+void Input::strafeLeft()
+{
+
+}
+
+void Input::strafeRight()
+{
+
+}
+
+
+
+void Input::setCamera(Camera* newCamera){
+	mainCamera = newCamera;
+}
+
 //This is essentially just a huge switch case to handle input correctly
 void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, int mode)
 {
+	Input* instance = Input::getInstance();
+
 	static char lastKey = 0;
 	char pressKey = 0;
+	if (action == GLFW_PRESS) {
 	switch (key)
 	{
+	case GLFW_KEY_UP:
+		instance->moveFwd();
+		std::cout << cameraTranslation.y << std::endl;
+		break;
+	case GLFW_KEY_DOWN:
+		instance->moveBwd();
+		std::cout << cameraTranslation.y << std::endl;
+		break;
+	case GLFW_KEY_LEFT:
+		cameraTranslation.x -= CAMERA_STEP;
+		break;
+	case GLFW_KEY_RIGHT:
+		cameraTranslation.x += CAMERA_STEP;
+		break;
+	case GLFW_KEY_R:
+		instance->resetCamera();
+		break;
+		
+	
+
+
 	case GLFW_KEY_ESCAPE:
 		break;
 
-	case GLFW_KEY_R:
-		cameraTranslation = CAMERA_INITIAL_TRANSLATION;
-		cameraDirectionPoint = CAMERA_INITIAL_DIRECTION;
-		break;
+
 
 	case GLFW_KEY_X:
 		pressKey = SHIFT_WAS_PRESSED ? 'X' : 'x';
@@ -62,18 +124,7 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 		}
 		break;
 
-	case GLFW_KEY_UP:
-		cameraTranslation.y += CAMERA_STEP;
-		break;
-	case GLFW_KEY_DOWN:
-		cameraTranslation.y -= CAMERA_STEP;
-		break;
-	case GLFW_KEY_LEFT:
-		cameraTranslation.x -= CAMERA_STEP;
-		break;
-	case GLFW_KEY_RIGHT:
-		cameraTranslation.x += CAMERA_STEP;
-		break;
+
 
 	case GLFW_KEY_PAGE_UP:
 		cameraTranslation.z += CAMERA_STEP*10.f;
@@ -96,7 +147,8 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 		std::cout << "pressed " << pressKey << std::endl;
 		lastKey = pressKey;
 	}
-	
+
+	}  // IF (action=press)
 }
 
 void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
