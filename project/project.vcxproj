@@ -118,12 +118,11 @@
     <ClInclude Include="CImg.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
-    <ClInclude Include="typedefs.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="WorldGenericObject.h" />
+    <ClInclude Include="BaseObjects.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="input.cpp" />

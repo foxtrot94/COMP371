@@ -2,7 +2,7 @@
 #include "input.h"
 #include "utils.h"
 #include "Renderer.h"
-#include "WorldGenericObject.h"
+#include "BaseObjects.h"
 #include "Shader.h"
 
 using namespace std;
@@ -25,12 +25,12 @@ int main()
 	int width, height; //viewport 
 
 	std::cout << "Starting OpenGL 3.3 using GLFW" << std::endl;
-	AppInit("Shin Sekai - COMP371 OpenGL Project", HEIGHT, WIDTH, &window);
-	SetInputCallbacks(window);
+	//AppInit("Shin Sekai - COMP371 OpenGL Project", HEIGHT, WIDTH, &window);
+	//SetInputCallbacks(window);
 	glEnable(GL_DEPTH_TEST);
 	glFrontFace(GL_CCW);
 
-	glfwGetFramebufferSize(window, &width, &height);
+	//glfwGetFramebufferSize(window, &width, &height);
 
 	Shader shaderBuilder("vertex.shader", "fragment.shader");
 	GLuint shaderObject = shaderBuilder.getShaderProgram();
@@ -55,15 +55,15 @@ int main()
 	//Game loop
 	std::cout << "Initialization complete, starting game" << std::endl;
 	float lastFrame = 0.f, thisFrame=0.f;
-	while (!glfwWindowShouldClose(window)){
-		//TODO: Abstract most of this into a RenderTarget model.
+	//TODO: Abstract most of this into a RenderTarget model.
+	while (false){
 		thisFrame = (float)glfwGetTime();
 		deltaTime = thisFrame - lastFrame;
 		framerate = 1.f / deltaTime;
 		lastFrame = thisFrame;
 
 		glfwPollEvents();
-		glfwGetFramebufferSize(window, &width, &height);
+		//glfwGetFramebufferSize(window, &width, &height);
 		glViewport(0, 0, width, height);
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //Black Background
