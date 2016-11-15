@@ -3,6 +3,7 @@
 #include "utils.h"
 
 #include "base\Engine.h"
+#include "TriangleTest.h"
 
 using namespace std;
 
