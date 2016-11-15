@@ -16,19 +16,4 @@
 #include <string>
 #include <fstream>
 
-//TODO: Remove Globals
-//Globals are bad, but we can at least keep them all in one place
-#ifndef __GLOBALS__
-#define __GLOBALS__
-
-const GLuint WIDTH = 800, HEIGHT = 600;
-
-extern glm::vec3 cameraTranslation;
-extern glm::vec3 cameraDirectionPoint;
-
-extern glm::vec3 objectRotation;
-
-extern float framerate;
-extern float deltaTime;
-
-#endif
+//Woohoo! No Globals!

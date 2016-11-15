@@ -56,7 +56,8 @@ public:
 	~Renderer();
 
 	//Initialize the renderer
-	Window* Initialize(std::string windowName, const unsigned int minHeight, const unsigned int minWidth);
+	//Defaults to a standard 800x600 Window
+	Window* Initialize(std::string windowName, const uint minWidth = 800, const uint minHeight = 600);
 
 	//Use a particular, compiled shader
 	void UseShader(Shader* shader);

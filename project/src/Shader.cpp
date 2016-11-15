@@ -20,6 +20,7 @@ Shader::Shader(std::string vertex_shader_path, std::string fragment_shader_path)
 		std::cerr << "ERROR: the given shader does not have the expected uniforms" << std::endl;
 		std::cerr << "Check that the name corresponds to what is used in the constructor" << std::endl;
 		if (_DEBUG) {
+			//Made this debug break to avoid debugging GLSL shaders. Check them to see what's wrong
 			__debugbreak();
 		}
 	}

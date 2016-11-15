@@ -11,7 +11,7 @@ Renderer::~Renderer()
 {
 }
 
-Renderer::Window* Renderer::Initialize(std::string windowName, const unsigned int minHeight, const unsigned int minWidth)
+Renderer::Window* Renderer::Initialize(std::string windowName, const uint minWidth, const uint minHeight)
 {
 	// Init GLFW
 	glfwInit();
