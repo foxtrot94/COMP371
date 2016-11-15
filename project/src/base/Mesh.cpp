@@ -46,7 +46,7 @@ std::vector<vec3> GLMesh::readLocalVertexColor()
 
 void GLMesh::setContextArray(uint VAO)
 {
-	if(VAO==NULL)
+	if(glArray==NULL)
 		glArray = VAO;
 }
 

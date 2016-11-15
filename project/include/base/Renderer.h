@@ -11,6 +11,8 @@
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
 
+#include "Utils.h"
+
 
 class WorldGenericObject;
 class Shader;
@@ -44,9 +46,6 @@ protected:
 	//OpenGL Shader Class wrapper
 	Shader* shader;
 
-	//Draw an ordered list of points
-	void Draw(WorldGenericObject* Object);
-
 	//Send a mesh object to the GPU memory and renderer context
 	bool AddToRenderingContext(GLMesh* mesh);
 public:
@@ -61,4 +60,13 @@ public:
 
 	//Use a particular, compiled shader
 	void UseShader(Shader* shader);
+
+	//Takes new parameters from camera before rendering - TODO: Replace with actual Camera
+	void UpdateCamera(mat4& view, mat4& projection);
+
+	//Draw a single WorldGenericObject on screen
+	void Render(WorldGenericObject* Object);
+
+	//Draw a batch of WorldGenericObjects on screen
+	void Render(std::vector<WorldGenericObject*> Objects);
 };

@@ -41,6 +41,10 @@ Renderer::Window* Renderer::Initialize(std::string windowName, const unsigned in
 		return nullptr;
 	}
 
+	//Aditional features enabled by default
+	glEnable(GL_DEPTH_TEST);
+	glFrontFace(GL_CCW);
+
 	//Good to go.
 	return new Window(outWindow,minWidth,minHeight,windowName);
 }
@@ -53,7 +57,18 @@ void Renderer::UseShader(Shader * shader)
 	}
 }
 
-void Renderer::Draw(WorldGenericObject* Object)
+void Renderer::UpdateCamera(mat4 & view, mat4 & projection)
+{
+	if (shader == NULL) {
+		return;
+	}
+	Shader::Uniforms uniforms = shader->getUniforms();
+
+	glUniformMatrix4fv(uniforms.viewMatrixPtr, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(uniforms.projectMatrixPtr, 1, GL_FALSE, glm::value_ptr(projection));
+}
+
+void Renderer::Render(WorldGenericObject* Object)
 {
 	GLMesh* mesh = Object->getMesh();
 	if (shader==NULL || mesh==NULL || !mesh->isInitialized()) {
@@ -69,11 +84,19 @@ void Renderer::Draw(WorldGenericObject* Object)
 
 	Shader::Uniforms uniform = shader->getUniforms(); //TODO: optimize in the future. Get uniforms outside or something
 	glUniformMatrix4fv(uniform.transformMatrixPtr, 1, GL_FALSE, glm::value_ptr(Object->Model));
+
 	glBindVertexArray(mesh->getContextArray());
 	//Basically, draw RenderTarget
-	glDrawElements(GL_TRIANGLES, mesh->getBufferSize(), GL_UNSIGNED_INT, 0);
+	//TODO: FIX
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+	//glDrawElements(GL_TRIANGLES, mesh->getBufferSize(), GL_UNSIGNED_INT, 0);
 	
 	glBindVertexArray(0); //TODO: Optimize. Put this outside
+}
+
+void Renderer::Render(std::vector<WorldGenericObject*> Objects)
+{
+	//TODO:
 }
 
 bool Renderer::AddToRenderingContext(GLMesh * mesh)
@@ -101,18 +124,22 @@ bool Renderer::AddToRenderingContext(GLMesh * mesh)
 		flatVertices.push_back(vertex.z);
 		flatColor.push_back(color.z);
 	}
+	
+	glBindVertexArray(VAO);
 
 	// Position attribute
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size, &flatVertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size*3, &flatVertices[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0); //TODO: Abstract into shader
 
 	// Color Attribute
 	glBindBuffer(GL_ARRAY_BUFFER, colorBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size, &flatColor[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size*3, &flatColor[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (GLvoid*)0);
 	glEnableVertexAttribArray(1); //TODO: abstract into shader
+
+	glBindVertexArray(NULL);
 
 	//Add to object again
 	mesh->setContextArray(VAO);
