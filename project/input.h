@@ -25,8 +25,15 @@ public:
 
 	void setCamera(Camera* newCamera);
 	
+	void leftMouseClick();
+	void rightMouseClick();
+
+	void moveCamera(glm::vec2 direction);
+
 private:
-	Input() {};
+	Input() : MOUSE_L_PRESSED(false), MOUSE_R_PRESSED(false) {};
+	bool MOUSE_L_PRESSED;
+	bool MOUSE_R_PRESSED;
 	Camera* mainCamera;
 };
 
