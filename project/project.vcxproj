@@ -114,11 +114,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\base\Grid.h" />
+    <ClInclude Include="include\base\Mesh.h" />
+    <ClInclude Include="include\base\Modulator.h" />
+    <ClInclude Include="include\Building.h" />
     <ClInclude Include="include\base\Engine.h" />
+    <ClInclude Include="include\Plane.h" />
+    <ClInclude Include="include\Plant.h" />
     <ClInclude Include="include\main.h" />
     <ClInclude Include="include\CImg.h" />
     <ClInclude Include="include\base\Renderer.h" />
     <ClInclude Include="include\base\Shader.h" />
+    <ClInclude Include="include\Terrain.h" />
+    <ClInclude Include="include\TriangleTest.h" />
     <ClInclude Include="include\Utils.h" />
     <ClInclude Include="include\input.h" />
     <ClInclude Include="include\stdafx.h" />
@@ -126,8 +134,10 @@
     <ClInclude Include="include\base\Objects.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\base\Engine.cpp" />
+    <ClCompile Include="src\base\Mesh.cpp" />
     <ClCompile Include="src\input.cpp" />
-    <ClCompile Include="src\objects\Base.cpp" />
+    <ClCompile Include="src\base\Objects.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Utils.cpp" />

@@ -12,9 +12,27 @@ private:
 	GLuint createShaderProgram(std::string vertex_shader_path, std::string fragment_shader_path);
 
 	GLuint shaderProgram;
+
+	GLuint transformLoc;
+	GLuint viewMatrixLoc;
+	GLuint projectionLoc;
+
 public:
-	inline GLuint getShaderProgram() { return shaderProgram; };
-	Shader::Shader(std::string vertex_shader_path, std::string fragment_shader_path);
+	struct Uniforms {
+		GLuint transformMatrixPtr;
+		GLuint viewMatrixPtr;
+		GLuint projectMatrixPtr;
+		Uniforms() {
+			transformMatrixPtr = NULL;
+			viewMatrixPtr = NULL;
+			projectMatrixPtr = NULL;
+		}
+	};
+
+	Shader(std::string vertex_shader_path, std::string fragment_shader_path);
 	~Shader();
+
+	inline GLuint getShaderProgram() { return shaderProgram; };
+	Uniforms getUniforms();
 };
 

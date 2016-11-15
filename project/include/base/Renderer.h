@@ -11,7 +11,10 @@
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
 
+
 class WorldGenericObject;
+class Shader;
+class GLMesh;
 
 //Main class for dealing with the OpenGL renderer and displaying stuff on screen
 //tech debt: switch it up and put this as an interface for an underlying DirectX, OpenGL and Vulkan renderer
@@ -31,17 +34,21 @@ public:
 	};
 
 protected:
+	//Window Management
 	int windowHeight, windowWidth;
 	Window* mainWindow;
 
 	//Singleton instance
 	static Renderer* singleton;
 
+	//OpenGL Shader Class wrapper
+	Shader* shader;
+
 	//Draw an ordered list of points
 	void Draw(WorldGenericObject* Object);
 
-	//
-	void DrawObjects(std::vector<WorldGenericObject*> objects);
+	//Send a mesh object to the GPU memory and renderer context
+	bool AddToRenderingContext(GLMesh* mesh);
 public:
 	//Protected Ctor
 	Renderer(); //Debug purposes only
@@ -52,5 +59,6 @@ public:
 	//Initialize the renderer
 	Window* Initialize(std::string windowName, const unsigned int minHeight, const unsigned int minWidth);
 
-
+	//Use a particular, compiled shader
+	void UseShader(Shader* shader);
 };

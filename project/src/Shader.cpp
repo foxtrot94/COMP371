@@ -5,14 +5,44 @@
 
 Shader::Shader(std::string vertex_shader_path, std::string fragment_shader_path)
 {
+	//RIIA
+	shaderProgram = NULL;
+
+	//Create the Shader
 	shaderProgram = createShaderProgram(vertex_shader_path, fragment_shader_path);
-	glUseProgram(shaderProgram);
+	//Get the location of uniforms in the shader
+	transformLoc = glGetUniformLocation(shaderProgram, "model");
+	viewMatrixLoc = glGetUniformLocation(shaderProgram, "view");
+	projectionLoc = glGetUniformLocation(shaderProgram, "projection");
+
+	//Signal an issue if the loaded shader is malformed
+	if (transformLoc == -1 || viewMatrixLoc == -1 || projectionLoc == -1) {
+		std::cerr << "ERROR: the given shader does not have the expected uniforms" << std::endl;
+		std::cerr << "Check that the name corresponds to what is used in the constructor" << std::endl;
+		if (_DEBUG) {
+			__debugbreak();
+		}
+	}
 }
 
 
 Shader::~Shader()
 {
 
+}
+
+Shader::Uniforms Shader::getUniforms()
+{
+	if (shaderProgram == NULL) {
+		return Uniforms();
+	}
+	
+	Uniforms retVal;
+	retVal.transformMatrixPtr = transformLoc;
+	retVal.viewMatrixPtr = viewMatrixLoc;
+	retVal.projectMatrixPtr = projectionLoc;
+
+	return retVal;
 }
 
 // reads ShaderCode from a file (i.e. vertex.shader, fragment.shader) and returns the code as a string
