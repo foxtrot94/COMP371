@@ -15,6 +15,7 @@ int main()
 	std::cout << "Starting OpenGL 3.3 using GLFW" << std::endl;
 	Renderer* render = new Renderer();
 	Renderer::Window* engineWindow = render->Initialize("Shin Sekai - COMP371 OpenGL Project");
+	SetInputCallbacks(engineWindow->glfwContext);
 	Shader shaderBuilder("glsl\\vertex.shader", "glsl\\fragment.shader");
 	render->UseShader(&shaderBuilder);
 
