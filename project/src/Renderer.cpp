@@ -83,11 +83,10 @@ void Renderer::Render(WorldGenericObject* Object)
 	}
 
 	Shader::Uniforms uniform = shader->getUniforms(); //TODO: optimize in the future. Get uniforms outside or something
-	glUniformMatrix4fv(uniform.transformMatrixPtr, 1, GL_FALSE, glm::value_ptr(Object->Model));
+	glUniformMatrix4fv(uniform.transformMatrixPtr, 1, GL_FALSE, glm::value_ptr(*(Object->getModel())));
 
 	glBindVertexArray(mesh->getContextArray());
 	//Basically, draw RenderTarget
-	//TODO: FIX
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 	//glDrawElements(GL_TRIANGLES, mesh->getBufferSize(), GL_UNSIGNED_INT, 0);
 	

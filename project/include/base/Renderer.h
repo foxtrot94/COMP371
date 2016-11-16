@@ -68,6 +68,6 @@ public:
 	//Draw a single WorldGenericObject on screen
 	void Render(WorldGenericObject* Object);
 
-	//Draw a batch of WorldGenericObjects on screen
+	//Batch draw of WorldGenericObjects on screen
 	void Render(std::vector<WorldGenericObject*> Objects);
 };
