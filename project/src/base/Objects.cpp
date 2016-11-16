@@ -14,6 +14,11 @@ GLMesh * WorldGenericObject::getMesh()
 	return &(this->mesh);
 }
 
+void WorldGenericObject::assignMesh(GLMesh * newMesh)
+{
+	this->mesh = *newMesh;
+}
+
 void EngineObject::translate(float x, float y, float z)
 {
 	vec3 translation(x, y, z);

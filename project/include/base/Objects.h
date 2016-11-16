@@ -16,6 +16,11 @@ protected:
 	vec3 scales;
 
 public:
+	//ctor
+	EngineObject(){}
+	//virt dtor
+	virtual ~EngineObject(){}
+
 	//Retrieve the model matrix
 	inline mat4* getModel() { return &Model; }
 
@@ -49,11 +54,7 @@ protected:
 public:
 	GLMesh* getMesh();
 
-	//void assignMesh(GLMesh* newMesh);
-
-
-	//Commenting out for now - Use only if short on time.
-	//friend class Renderer;
+	void assignMesh(GLMesh* newMesh);
 };
 
 //Base Procedural Class for creating any Procedural Object
@@ -63,8 +64,6 @@ private:
 	long seed;
 
 	//TODO: Incorporate RNG here
-
-	//TODO: Anything else to track state
 
 protected:
 	//Function that should be called to instance this object
