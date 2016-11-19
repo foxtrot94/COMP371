@@ -2,7 +2,8 @@
 #include <iostream>
 #include "..\glfw\glfw3.h"
 #include "glm.hpp"
-class Camera;
+#include "..\Camera.h"
+//class Camera;
 
 class Input{
 public:

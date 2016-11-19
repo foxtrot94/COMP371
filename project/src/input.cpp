@@ -8,6 +8,7 @@ void Input::resetCamera(){
 
 void Input::moveFwd()
 {
+	//mainCamera->moveFw
 	std::cout << "going fwd" << std::endl;
 }
 

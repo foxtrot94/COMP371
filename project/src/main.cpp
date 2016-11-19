@@ -4,17 +4,19 @@
 
 #include "base\Engine.h"
 #include "TriangleTest.h"
+#include "..\Camera.h"
 
 //Entry point
 int main()
 {
 	glm::mat4 model(1.f), view(1.f), projection(1.f); //Test only matrices
 	float lastFrame = 0.f, thisFrame = 0.f, framerate = 0.f, deltaTime=1.f;
-
+	
 	//Initialize
 	std::cout << "Starting OpenGL 3.3 using GLFW" << std::endl;
 	Renderer* render = new Renderer();
 	Renderer::Window* engineWindow = render->Initialize("Shin Sekai - COMP371 OpenGL Project");
+	Camera* camera = Camera::getInstance(engineWindow);
 	SetInputCallbacks(engineWindow->glfwContext);
 	Shader shaderBuilder("glsl\\vertex.shader", "glsl\\fragment.shader");
 	render->UseShader(&shaderBuilder);
@@ -48,6 +50,8 @@ int main()
 		//Show to screen
 		glfwSwapBuffers(engineWindow->glfwContext);
 	}
+
+
 
 	//Cleanup now
 	//TODO: Check what's being leaked
