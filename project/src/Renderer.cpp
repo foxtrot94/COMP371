@@ -12,6 +12,7 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
+	delete shader; //this might cause some problems in the future
 	singleton = NULL;
 }
 

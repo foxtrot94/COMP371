@@ -7,7 +7,7 @@
 int main()
 {
 	LightweightEngine* le = new LightweightEngine();
-	le->Init();
+	le->Init("Shin Sekai - COMP371 OpenGL Project");
 	le->Run();
 	return 0;
 }

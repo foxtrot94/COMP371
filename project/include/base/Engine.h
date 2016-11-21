@@ -1,5 +1,9 @@
 #pragma once
 
+#include <string>
+#include <vector>
+#include <algorithm>
+
 #include "Objects.h"
 #include "Renderer.h"
 #include "Modulator.h"
@@ -18,15 +22,16 @@ private:
 	Renderer* renderer;
 	//On-Screen window created by the renderer
 	Renderer::Window* engineWindow;
+	//List of all objects known to the Engine
+	std::vector<EngineObject*> engineObjects;
+	//Time related variables
+	float lastFrame, thisFrame, framerate, deltaTime, totalTime;
 
 	//Audio management interface
 	Modulator* modulator;
 
 	//Primary Input manager
 	Input* input;
-
-	//Time related variables
-	float lastFrame, thisFrame, framerate, deltaTime, totalTime;
 
 	//Update everything related to time
 	void UpdateTime();
@@ -48,7 +53,7 @@ public:
 	~LightweightEngine();
 
 	//Initialize
-	void Init();
+	void Init(std::string WindowTitle);
 
 	//Run the engine
 	void Run();

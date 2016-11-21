@@ -2,6 +2,9 @@
 #include "main.h"
 #include "base\input.h"
 
+//Initialize the singleton instance
+Input* Input::instance = NULL;
+
 void Input::resetCamera(){
 
 }
@@ -188,13 +191,6 @@ void CursorPositionCallback(GLFWwindow * window, double x, double y){
 	lastX = x;
 	lastY = y;
 
-}
-
-//TODO: REMOVE!
-void SetInputCallbacks(GLFWwindow* window) {
-	glfwSetKeyCallback(window, &KeyInputCallback);
-	glfwSetCursorPosCallback(window, &CursorPositionCallback);
-	glfwSetMouseButtonCallback(window, &MouseButtonCallback);
 }
 
 

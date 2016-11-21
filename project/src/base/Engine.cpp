@@ -62,22 +62,26 @@ LightweightEngine::~LightweightEngine()
 	Cleanup();
 }
 
-void LightweightEngine::Init()
+void LightweightEngine::Init(std::string WindowTitle)
 {
+	//Initialize GLFW and the renderer
+	std::cout << "Starting OpenGL 3.3 using GLFW" << std::endl;
+	engineWindow = renderer->Initialize(WindowTitle);
+	Shader* shaderBuilder = new Shader("glsl\\vertex.shader", "glsl\\fragment.shader");
+	renderer->UseShader(shaderBuilder);
 
+	//Also initialize the Input
+	glfwSetKeyCallback(engineWindow->glfwContext, &KeyInputCallback);
+	glfwSetCursorPosCallback(engineWindow->glfwContext, &CursorPositionCallback);
+	glfwSetMouseButtonCallback(engineWindow->glfwContext, &MouseButtonCallback);
 }
 
 void LightweightEngine::Run()
 {
-	glm::mat4 model(1.f), view(1.f), projection(1.f); //Test only matrices
-
-	//Initialize
-	std::cout << "Starting OpenGL 3.3 using GLFW" << std::endl;
-	
-	engineWindow = renderer->Initialize("Shin Sekai - COMP371 OpenGL Project");
-	SetInputCallbacks(engineWindow->glfwContext);
-	Shader shaderBuilder("glsl\\vertex.shader", "glsl\\fragment.shader");
-	renderer->UseShader(&shaderBuilder);
+	//Check init
+	if (engineWindow == NULL) {
+		return;
+	}
 
 	std::cout << "Initialization complete, starting game" << std::endl;
 
