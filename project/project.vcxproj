@@ -128,7 +128,7 @@
     <ClInclude Include="include\Terrain.h" />
     <ClInclude Include="include\TriangleTest.h" />
     <ClInclude Include="include\Utils.h" />
-    <ClInclude Include="include\input.h" />
+    <ClInclude Include="include\base\input.h" />
     <ClInclude Include="include\stdafx.h" />
     <ClInclude Include="include\targetver.h" />
     <ClInclude Include="include\base\Objects.h" />

@@ -1,6 +1,6 @@
 #include <iostream>
 #include "main.h"
-#include "input.h"
+#include "base\input.h"
 
 void Input::resetCamera(){
 
@@ -59,7 +59,7 @@ void Input::setCamera(Camera* newCamera){
 //This is essentially just a huge switch case to handle input correctly
 void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, int mode)
 {
-	Input* instance = Input::getInstance();
+	Input* instance = Input::GetInstance();
 
 	static char lastKey = 0;
 	char pressKey = 0;
@@ -123,7 +123,7 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 
 void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
 
-	Input* instance = Input::getInstance();
+	Input* instance = Input::GetInstance();
 
 	if (action == GLFW_PRESS) {
 		switch (button)
@@ -165,7 +165,7 @@ void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
 
 void CursorPositionCallback(GLFWwindow * window, double x, double y){
 
-	Input* instance = Input::getInstance();
+	Input* instance = Input::GetInstance();
 
 	static bool firstInput = true;
 	static double lastX, lastY;
@@ -190,6 +190,7 @@ void CursorPositionCallback(GLFWwindow * window, double x, double y){
 
 }
 
+//TODO: REMOVE!
 void SetInputCallbacks(GLFWwindow* window) {
 	glfwSetKeyCallback(window, &KeyInputCallback);
 	glfwSetCursorPosCallback(window, &CursorPositionCallback);

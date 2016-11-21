@@ -7,7 +7,7 @@ class Camera;
 class Input{
 public:
 
-	static Input* getInstance(){
+	static Input* GetInstance(){
 		static Input* instance;
 		if (instance == nullptr){
 			instance = new Input();
