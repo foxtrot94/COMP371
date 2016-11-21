@@ -13,7 +13,7 @@ int main()
 
 	//Initialize
 	std::cout << "Starting OpenGL 3.3 using GLFW" << std::endl;
-	Renderer* render = new Renderer();
+	Renderer* render = Renderer::GetInstance();
 	Renderer::Window* engineWindow = render->Initialize("Shin Sekai - COMP371 OpenGL Project");
 	Shader shaderBuilder("glsl\\vertex.shader", "glsl\\fragment.shader");
 	render->UseShader(&shaderBuilder);
@@ -24,6 +24,8 @@ int main()
 	TriangleTest triangle;
 	double totalTime=0.f;
 
+	//Unlock framerate
+	glfwSwapInterval(0);
 	//Game loop
 	while (!glfwWindowShouldClose(engineWindow->glfwContext)){
 		//Get framerate and time
@@ -42,7 +44,7 @@ int main()
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //Black Background
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 		//Update the camera and render once
-		triangle.translate(0.05f * glm::sin(totalTime), 0.f, 0.f);
+		triangle.translate(0.05f * glm::sin(10.f*totalTime), 0.f, 0.f);
 		render->UpdateCamera(view, projection);
 		render->Render((WorldGenericObject*)&triangle);
 		glBindVertexArray(NULL);

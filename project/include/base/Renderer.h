@@ -37,20 +37,22 @@ public:
 
 protected:
 	//Window Management
-	int windowHeight, windowWidth;
 	Window* mainWindow;
 
 	//Singleton instance
 	static Renderer* singleton;
 
-	//OpenGL Shader Class wrapper
+	//OpenGL Shader in Use
 	Shader* shader;
+
+	//Protected Ctor
+	Renderer();
 
 	//Send a mesh object to the GPU memory and renderer context
 	bool AddToRenderingContext(GLMesh* mesh);
 public:
-	//Protected Ctor
-	Renderer(); //Debug purposes only
+	//Singleton point of entry
+	static Renderer* GetInstance();
 
 	//Dtor
 	~Renderer();
@@ -59,10 +61,13 @@ public:
 	//Defaults to a standard 800x600 Window
 	Window* Initialize(std::string windowName, const uint minWidth = 800, const uint minHeight = 600);
 
+	//Retrieve the default drawing window
+	Window* GetMainWindow();
+
 	//Use a particular, compiled shader
 	void UseShader(Shader* shader);
 
-	//Takes new parameters from camera before rendering - TODO: Replace with actual Camera
+	//Takes new parameters from camera before rendering - TODO: Replace with actual Camera class
 	void UpdateCamera(mat4& view, mat4& projection);
 
 	//Draw a single WorldGenericObject on screen

@@ -2,13 +2,17 @@
 #include "base\Objects.h"
 #include "base\Shader.h"
 
+Renderer* Renderer::singleton = NULL;
+
 Renderer::Renderer()
 {
-	mainWindow = nullptr;
+	mainWindow = NULL;
+	shader = NULL;
 }
 
 Renderer::~Renderer()
 {
+	singleton = NULL;
 }
 
 Renderer::Window* Renderer::Initialize(std::string windowName, const uint minWidth, const uint minHeight)
@@ -47,6 +51,11 @@ Renderer::Window* Renderer::Initialize(std::string windowName, const uint minWid
 
 	//Good to go.
 	return new Window(outWindow,minWidth,minHeight,windowName);
+}
+
+Renderer::Window * Renderer::GetMainWindow()
+{
+	return mainWindow;
 }
 
 void Renderer::UseShader(Shader * shader)
@@ -145,4 +154,13 @@ bool Renderer::AddToRenderingContext(GLMesh * mesh)
 	mesh->setContextBuffer(vertexBO, colorBO, size);
 
 	return true;
+}
+
+Renderer * Renderer::GetInstance()
+{
+	if (singleton == NULL) {
+		singleton = new Renderer();
+	}
+
+	return singleton;
 }
