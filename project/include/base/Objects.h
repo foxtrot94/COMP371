@@ -17,9 +17,9 @@ protected:
 
 public:
 	//ctor
-	EngineObject(){}
+	EngineObject() {}
 	//virt dtor
-	virtual ~EngineObject(){}
+	virtual ~EngineObject() {}
 
 	//Retrieve the model matrix
 	inline mat4* getModel() { return &Model; }
@@ -38,10 +38,20 @@ public:
 	//Scale the objects
 	void scale(vec3 scale);
 
+	//Update the object at each tick
+	virtual void Update(const float& deltaTime) {}
+
+	//DO NOT USE UNLESS ENABLING SSE COMPILATION
+	//void * operator new (size_t size){
+	//	return _aligned_malloc(sizeof(EngineObject),16);
+	//}
+	//void operator delete(void* mem) {
+	//	_aligned_free(mem);
+	//}
+	
+	//getters
 	vec3 getTranslation();
-
 	vec3 getRotations() { return rotations; }
-
 	vec3 getScale() { return scales; }
 };
 

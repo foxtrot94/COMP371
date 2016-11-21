@@ -105,7 +105,11 @@ void Renderer::Render(WorldGenericObject* Object)
 
 void Renderer::Render(std::vector<WorldGenericObject*> Objects)
 {
-	//TODO:
+	glBindVertexArray(NULL);
+	for (WorldGenericObject* object : Objects) {
+		Render(object);
+	}
+	glBindVertexArray(NULL);
 }
 
 bool Renderer::AddToRenderingContext(GLMesh * mesh)

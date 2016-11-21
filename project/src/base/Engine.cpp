@@ -23,18 +23,18 @@ void LightweightEngine::ProcessInputs()
 void LightweightEngine::DrawFrame()
 {
 	//@foxtrot94: DEBUG CODE - Remove or Comment in Master
-	TriangleTest triangle;
 	mat4 view(1.f), projection(1.f);
 	//@foxtrot94
 
 	//Draw on buffer
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //Black Background
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//Update the camera and render once
-	triangle.translate(0.05f * glm::sin(10.f*totalTime), 0.f, 0.f);
+	//Update the camera, the objects and render once
 	renderer->UpdateCamera(view, projection);
-	renderer->Render((WorldGenericObject*)&triangle);
-	glBindVertexArray(NULL);
+	for (auto* object : drawables){
+		object->Update(deltaTime);
+	}
+	renderer->Render(drawables);
 
 	//Show to screen
 	glfwSwapBuffers(engineWindow->glfwContext);
@@ -87,12 +87,19 @@ void LightweightEngine::Run()
 
 	//Unlock framerate
 	glfwSwapInterval(0);
+	//@foxtrot94: DEBUG CODE - Remove or Comment in Master
+	WorldGenericObject* triangle = new TriangleTest();
+	drawables.push_back(triangle);
+
 	//Game loop
 	while (!glfwWindowShouldClose(engineWindow->glfwContext)) {
 		this->UpdateTime();
 		this->ProcessInputs();
 		this->DrawFrame();
 	}
+
+	drawables.pop_back();
+	delete triangle;
 
 	//Cleanup now
 	//TODO: Check what's being leaked

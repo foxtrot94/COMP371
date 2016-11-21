@@ -24,6 +24,8 @@ private:
 	Renderer::Window* engineWindow;
 	//List of all objects known to the Engine
 	std::vector<EngineObject*> engineObjects;
+	//List of all renderable, in-world objects
+	std::vector<WorldGenericObject*> drawables;
 	//Time related variables
 	float lastFrame, thisFrame, framerate, deltaTime, totalTime;
 
