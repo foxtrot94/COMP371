@@ -27,8 +27,8 @@ public:
 
 	~TriangleTest() {}
 
+	//Example update function
 	virtual void Update(const float& deltaTime) override {
-		std::cout << totalTime << std::endl;
 		this->translate(deltaTime * glm::sin(totalTime+glm::radians(90.f)), 0.f, 0.f);
 		totalTime += deltaTime;
 	}

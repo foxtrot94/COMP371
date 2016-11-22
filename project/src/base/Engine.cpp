@@ -1,6 +1,23 @@
 #include "base/Engine.h"
 #include "TriangleTest.h"
 
+LightweightEngine::LightweightEngine()
+{
+	renderer = Renderer::GetInstance();
+	input = Input::GetInstance();
+
+	thisFrame = 0.f;
+	deltaTime = 0.1f;
+	framerate = 0.f;
+	lastFrame = 0.f;
+
+	//Check for possible issues
+}
+
+LightweightEngine::~LightweightEngine()
+{
+	Cleanup();
+}
 void LightweightEngine::UpdateTime()
 {
 	//Get framerate and time
@@ -31,7 +48,7 @@ void LightweightEngine::DrawFrame()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//Update the camera, the objects and render once
 	renderer->UpdateCamera(view, projection);
-	for (auto* object : drawables){
+	for (auto* object : drawables) {
 		object->Update(deltaTime);
 	}
 	renderer->Render(drawables);
@@ -44,22 +61,6 @@ void LightweightEngine::Cleanup()
 {
 	delete renderer;
 	delete input;
-}
-
-LightweightEngine::LightweightEngine()
-{
-	renderer = Renderer::GetInstance();
-	input = Input::GetInstance();
-
-	thisFrame = 0.f;
-	deltaTime = 0.1f;
-	framerate = 0.f;
-	lastFrame = 0.f;
-}
-
-LightweightEngine::~LightweightEngine()
-{
-	Cleanup();
 }
 
 void LightweightEngine::Init(std::string WindowTitle)
