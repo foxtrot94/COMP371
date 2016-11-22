@@ -28,8 +28,10 @@
 *.out
 *.app
 /Debug
+/Demo
 /ipch
 /project/Debug
+/project/Demo
 *.opendb
 *.VC.db
 *.suo
