@@ -1,12 +1,22 @@
+#include <time.h>
+
 #include "base/Objects.h"
 #include "gtc/matrix_transform.hpp"
 
-ProceduralObject::ProceduralObject() {
+long ProceduralObject::ID = 0;
 
+ProceduralObject::ProceduralObject() {
+	ID += 1;
+	seed = time(NULL) + ID;
 }
 
 ProceduralObject::~ProceduralObject() {
 
+}
+
+void ProceduralObject::Generate() {
+	//If this hasn't been overriden, crash.
+	//*((int *)0)=1;
 }
 
 GLMesh * WorldGenericObject::getMesh()

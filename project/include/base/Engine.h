@@ -12,7 +12,7 @@
 
 //TODO: Rename class to something better
 //Lightweight Engine abstraction layer for working with OpenGL
-class LightweightEngine {
+class WorldEngine {
 public:
 	//TODO:
 	//struct Time {
@@ -50,10 +50,10 @@ private:
 
 public:
 	//Default ctor
-	LightweightEngine();
+	WorldEngine();
 
 	//Default dtor
-	~LightweightEngine();
+	~WorldEngine();
 
 	//Initialize
 	void Init(std::string WindowTitle);

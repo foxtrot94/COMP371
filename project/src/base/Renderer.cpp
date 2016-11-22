@@ -108,7 +108,7 @@ void Renderer::Render(WorldGenericObject* Object)
 
 	glBindVertexArray(mesh->getContextArray());
 	//Basically, draw RenderTarget
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLES, 0, mesh->getBufferSize());
 	//glDrawElements(GL_TRIANGLES, mesh->getBufferSize(), GL_UNSIGNED_INT, 0);//TODO?
 	
 	glBindVertexArray(0); //TODO: Optimize. Put this outside
