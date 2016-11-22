@@ -54,6 +54,9 @@ public:
 	//Assign the mesh buffers - Both are expected to be of the same size
 	void setContextBuffer(uint vertexBuffer, uint colorBuffer, uint size);
 
+	//Destroy the mesh glContext
+	void DestroyContext();
+
 	//Retrieve the VAO for Rendering by OpenGL
 	uint getContextArray() { return glArray; }
 

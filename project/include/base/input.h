@@ -1,19 +1,29 @@
 #pragma once
 #include <iostream>
-#include "..\glfw\glfw3.h"
+
 #include "glm.hpp"
+
 class Camera;
+struct GLFWwindow;
 
 class Input{
-public:
+private:
+	Input() : MOUSE_L_PRESSED(false), MOUSE_R_PRESSED(false) {};
+	bool MOUSE_L_PRESSED;
+	bool MOUSE_R_PRESSED;
+	bool SHIFT_BTN_PRESSED;
+	Camera* mainCamera;
 
-	static Input* getInstance(){
-		static Input* instance;
+	static Input* instance;
+public:
+	static Input* GetInstance(){
 		if (instance == nullptr){
 			instance = new Input();
 		}
 		return instance; 
 	}
+
+	~Input(){}
 
 	void resetCamera();
 	void moveFwd();
@@ -33,13 +43,6 @@ public:
 	void setMouseLeftBtnPressStatus(bool newLMouseBtnStatus) { MOUSE_L_PRESSED = newLMouseBtnStatus; }
 	void setMouseRightBtnPressStatus(bool newRMouseBtnStatus) { MOUSE_R_PRESSED = newRMouseBtnStatus; }
 	void setShiftBtnPressStatus(bool newShiftBtnStatus) { SHIFT_BTN_PRESSED = newShiftBtnStatus; }
-
-private:
-	Input() : MOUSE_L_PRESSED(false), MOUSE_R_PRESSED(false) {};
-	bool MOUSE_L_PRESSED;
-	bool MOUSE_R_PRESSED;
-	bool SHIFT_BTN_PRESSED;
-	Camera* mainCamera;
 };
 
 //Handles keyboard input
@@ -50,5 +53,3 @@ void CursorPositionCallback(GLFWwindow* window, double x, double y);
 
 //Handles input from the mouse buttons
 void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-
-void SetInputCallbacks(GLFWwindow* window);

@@ -38,3 +38,5 @@
 *.user
 *.sdf
 *.TMP
+/Demo
+/project/Demo
