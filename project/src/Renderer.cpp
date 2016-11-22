@@ -12,6 +12,17 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
+	//Clear the context objects
+	for (int i = 0; i < ContextArrays.size(); ++i) {
+		glDeleteVertexArrays(1, &(ContextArrays[i]));
+	}
+	ContextArrays.clear();
+
+	for (int i = 0; i < ContextBuffers.size(); ++i) {
+		glDeleteBuffers(1, &(ContextBuffers[i]));
+	}
+	ContextBuffers.clear();
+
 	delete shader; //this might cause some problems in the future
 	singleton = NULL;
 }
@@ -98,7 +109,7 @@ void Renderer::Render(WorldGenericObject* Object)
 	glBindVertexArray(mesh->getContextArray());
 	//Basically, draw RenderTarget
 	glDrawArrays(GL_TRIANGLES, 0, 3);
-	//glDrawElements(GL_TRIANGLES, mesh->getBufferSize(), GL_UNSIGNED_INT, 0);
+	//glDrawElements(GL_TRIANGLES, mesh->getBufferSize(), GL_UNSIGNED_INT, 0);//TODO?
 	
 	glBindVertexArray(0); //TODO: Optimize. Put this outside
 }
@@ -154,8 +165,12 @@ bool Renderer::AddToRenderingContext(GLMesh * mesh)
 
 	glBindVertexArray(NULL);
 
-	//Add to object again
+	//Register and Add to object again
+	ContextArrays.push_back(VAO);
 	mesh->setContextArray(VAO);
+
+	ContextBuffers.push_back(vertexBO);
+	ContextBuffers.push_back(colorBO);
 	mesh->setContextBuffer(vertexBO, colorBO, size);
 
 	return true;

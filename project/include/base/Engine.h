@@ -11,6 +11,7 @@
 #include "input.h"
 
 //TODO: Rename class to something better
+//Lightweight Engine abstraction layer for working with OpenGL
 class LightweightEngine {
 public:
 	//TODO:
@@ -56,6 +57,9 @@ public:
 
 	//Initialize
 	void Init(std::string WindowTitle);
+
+	//Load the entire world
+	void LoadWorld();
 
 	//Run the engine
 	void Run();

@@ -1,9 +1,10 @@
 #pragma once
 #include <iostream>
-#include "..\glfw\glfw3.h"
+
 #include "glm.hpp"
 
 class Camera;
+struct GLFWwindow;
 
 class Input{
 private:
@@ -21,6 +22,8 @@ public:
 		}
 		return instance; 
 	}
+
+	~Input(){}
 
 	void resetCamera();
 	void moveFwd();

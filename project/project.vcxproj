@@ -136,7 +136,7 @@
   <ItemGroup>
     <ClCompile Include="src\base\Engine.cpp" />
     <ClCompile Include="src\base\Mesh.cpp" />
-    <ClCompile Include="src\input.cpp" />
+    <ClCompile Include="src\base\input.cpp" />
     <ClCompile Include="src\base\Objects.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Shader.cpp" />

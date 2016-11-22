@@ -76,14 +76,18 @@ void LightweightEngine::Init(std::string WindowTitle)
 	glfwSetMouseButtonCallback(engineWindow->glfwContext, &MouseButtonCallback);
 }
 
+void LightweightEngine::LoadWorld()
+{
+	//TODO: Place all the world loading here.
+	//We can fire off a thread to keep the screen drawing while this method begins loading the world
+}
+
 void LightweightEngine::Run()
 {
 	//Check init
 	if (engineWindow == NULL) {
 		return;
 	}
-
-	std::cout << "Initialization complete, starting game" << std::endl;
 
 	//Unlock framerate
 	glfwSwapInterval(0);
@@ -92,6 +96,7 @@ void LightweightEngine::Run()
 	drawables.push_back(triangle);
 
 	//Game loop
+	std::cout << "Initialization complete, starting game" << std::endl;
 	while (!glfwWindowShouldClose(engineWindow->glfwContext)) {
 		this->UpdateTime();
 		this->ProcessInputs();
@@ -100,11 +105,6 @@ void LightweightEngine::Run()
 
 	drawables.pop_back();
 	delete triangle;
-
-	//Cleanup now
-	//TODO: Check what's being leaked
-	//TODO: cleanup meshes
-	//TODO: Cleanup engine resources
 
 	glfwTerminate();
 }

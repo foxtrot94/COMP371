@@ -45,6 +45,10 @@ protected:
 	//OpenGL Shader in Use
 	Shader* shader;
 
+	//List of elements being tracked in the OpenGL context
+	std::vector<uint> ContextArrays;
+	std::vector<uint> ContextBuffers;
+
 	//Protected Ctor
 	Renderer();
 
