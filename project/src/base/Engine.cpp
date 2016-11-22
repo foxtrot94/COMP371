@@ -51,7 +51,7 @@ void WorldEngine::DrawFrame()
 		cameraTranslation + cameraDirectionPoint,	//looks at Point
 		glm::vec3(0.0f, 0.0f, 1.0f)
 	);
-	projection = glm::perspective(45.0f, ((GLfloat)engineWindow->width)/ ((GLfloat)engineWindow->height), 0.1f, 1000.0f); //BUG WAS HERE!!!!
+	projection = glm::perspective(90.0f, engineWindow->AspectRatio(), 0.1f, 1000.0f); //BUG WAS HERE!!!!
 	//@foxtrot94
 
 	//Draw on buffer
