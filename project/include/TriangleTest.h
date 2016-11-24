@@ -2,7 +2,7 @@
 
 #include "base/Objects.h"
 
-//Replicates the learnopengl.com triangle in our framework
+// Replicates the learnopengl.com triangle in our framework
 class TriangleTest : WorldGenericObject {
 private:
 

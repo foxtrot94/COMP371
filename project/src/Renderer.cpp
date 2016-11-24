@@ -87,8 +87,10 @@ void Renderer::Render(WorldGenericObject* Object)
 
 	glBindVertexArray(mesh->getContextArray());
 	//Basically, draw RenderTarget
+
+	//fixed for buildings
 	//TODO: FIX
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLES, 0, 25 * 36);
 	//glDrawElements(GL_TRIANGLES, mesh->getBufferSize(), GL_UNSIGNED_INT, 0);
 	
 	glBindVertexArray(0); //TODO: Optimize. Put this outside

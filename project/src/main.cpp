@@ -4,6 +4,7 @@
 
 #include "base\Engine.h"
 #include "TriangleTest.h"
+#include "Building.h"
 
 //Entry point
 int main()
@@ -22,7 +23,8 @@ int main()
 	std::cout << "Initialization complete, starting game" << std::endl;
 	
 	//Test Object
-	TriangleTest triangle;
+	//TriangleTest triangle;
+	Building triangle;
 	//Game loop
 	while (!glfwWindowShouldClose(engineWindow->glfwContext)){
 		//Get framerate and time
