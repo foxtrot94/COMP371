@@ -1,6 +1,7 @@
 #include "base\Renderer.h"
 #include "base\Objects.h"
 #include "base\Shader.h"
+#include "objloader.hpp"
 
 Renderer* Renderer::singleton = NULL;
 
@@ -24,6 +25,8 @@ Renderer::~Renderer()
 	ContextBuffers.clear();
 
 	delete shader; //this might cause some problems in the future
+	delete skyBoxShader;
+
 	singleton = NULL;
 }
 
@@ -78,6 +81,11 @@ void Renderer::UseShader(Shader * shader)
 	}
 }
 
+void Renderer::UseSkyBoxShader(Shader * shader)
+{
+	this->skyBoxShader = shader;
+}
+
 void Renderer::UpdateCamera(mat4 & view, mat4 & projection)
 {
 	if (shader == NULL) {
@@ -121,6 +129,30 @@ void Renderer::Render(std::vector<WorldGenericObject*> Objects)
 		Render(object);
 	}
 	glBindVertexArray(NULL);
+}
+
+void Renderer::RenderSkyBox() {
+	glUseProgram(skyBoxShader->getShaderProgram());
+	glm::mat4 skybox_view = glm::mat4(1.f); // TODO set it to whatever updateCamera has
+
+	Shader::Uniforms uniform = skyBoxShader->getUniforms();
+	
+	glUniformMatrix4fv(shader->getUniforms().viewMatrixPtr, 1, GL_FALSE, glm::value_ptr(skybox_view));
+
+	glUniformMatrix4fv(skyBoxShader->getUniforms().viewMatrixPtr, 1, GL_FALSE, glm::value_ptr(skybox_view));
+	
+	glm::mat4 projection_matrix = glm::perspective(45.0f, (GLfloat)this->GetMainWindow()->width / (GLfloat)this->GetMainWindow()->height, 0.1f, 100.0f);
+	glUniformMatrix4fv(skyBoxShader->getUniforms().projectMatrixPtr, 1, GL_FALSE, glm::value_ptr(projection_matrix));
+
+	glUniform1i(glGetUniformLocation(skyboxShaderProgram, "skyboxTexture"), 1); //use texture unit 1
+
+	glDepthMask(GL_FALSE);
+
+	glBindVertexArray(skyboxVAO);
+	glDrawArrays(GL_TRIANGLES, 0, skybox_vertices.size());
+	glBindVertexArray(0);
+
+	glDepthMask(GL_TRUE);
 }
 
 bool Renderer::AddToRenderingContext(GLMesh * mesh)
@@ -174,6 +206,84 @@ bool Renderer::AddToRenderingContext(GLMesh * mesh)
 	mesh->setContextBuffer(vertexBO, colorBO, size);
 
 	return true;
+}
+
+uint Renderer::loadCubeMap(std::vector<const char*> faces)
+{
+	uint textureID;
+	glGenTextures(1, &textureID);
+
+	int width, height;
+	unsigned char* image;
+
+	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+	for (uint i = 0; i < faces.size(); ++i)
+	{
+		//load image from memory
+		image = SOIL_load_image(faces[i], &width, &height, 0, SOIL_LOAD_RGB);
+		
+		//send image to cubemap 
+		glTexImage2D(
+			GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0,
+			GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image
+			);
+
+		SOIL_free_image_data(image); // remove currently loaded image from memory
+	}
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+}
+
+// References: using the skybox source code from Lab 7
+void Renderer::InitSkyBox() 
+{
+#pragma region loadingSkybox
+	//loading skybox from obj
+	std::vector<glm::vec3> skybox_vertices;
+	std::vector<glm::vec3> skybox_normals; //unused
+	std::vector<glm::vec2> skybox_UVs; //unused
+
+	loadOBJ("cube.obj", skybox_vertices, skybox_normals, skybox_UVs);
+
+#pragma endregion from cube.obj
+
+#pragma region generateVAO_VBO_forSkybox
+	uint skyboxVAO, skyboxVerticesVBO;
+
+	glGenVertexArrays(1, &skyboxVAO);
+	glBindVertexArray(skyboxVAO);
+
+	glGenBuffers(1, &skyboxVerticesVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, skyboxVerticesVBO);
+	glBufferData(GL_ARRAY_BUFFER, skybox_vertices.size() * sizeof(glm::vec3), &skybox_vertices.front(), GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glBindVertexArray(0);
+
+#pragma endregion
+
+#pragma region loadSkyBoxCubeMap
+	//prepare skybox cubemap
+	std::vector<const GLchar*> faces;
+	faces.push_back("right.jpg");
+	faces.push_back("left.jpg");
+	faces.push_back("top.jpg");
+	faces.push_back("bottom.jpg");
+	faces.push_back("back.jpg");
+	faces.push_back("front.jpg");
+	
+	glActiveTexture(GL_TEXTURE1);
+	GLuint cubemapTexture = loadCubeMap(faces);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+#pragma endregion and send it to GPU
+
 }
 
 Renderer * Renderer::GetInstance()
