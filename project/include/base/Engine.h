@@ -9,6 +9,7 @@
 #include "Modulator.h"
 #include "Shader.h"
 #include "input.h"
+#include "Camera.h"
 
 //TODO: Rename class to something better
 //Lightweight Engine abstraction layer for working with OpenGL
@@ -35,6 +36,9 @@ private:
 
 	//Primary Input manager
 	Input* input;
+
+	//Main Camera
+	Camera* camera;
 
 	//Update everything related to time
 	void UpdateTime();

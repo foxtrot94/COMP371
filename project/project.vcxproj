@@ -188,6 +188,7 @@
     <ClInclude Include="include\base\Modulator.h" />
     <ClInclude Include="include\Building.h" />
     <ClInclude Include="include\base\Engine.h" />
+    <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Plane.h" />
     <ClInclude Include="include\Plant.h" />
     <ClInclude Include="include\main.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="src\base\Objects.cpp" />
     <ClCompile Include="src\base\Renderer.cpp" />
     <ClCompile Include="src\base\Shader.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Utils.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp">
