@@ -6,6 +6,7 @@ LightweightEngine::LightweightEngine()
 	renderer = Renderer::GetInstance();
 	input = Input::GetInstance();
 
+
 	thisFrame = 0.f;
 	deltaTime = 0.1f;
 	framerate = 0.f;
@@ -43,10 +44,19 @@ void LightweightEngine::DrawFrame()
 	mat4 view(1.f), projection(1.f);
 	//@foxtrot94
 
+	//Camera taking deltaTime for its operations
+	camera->SetCameraSpeed(deltaTime);
+
+	// Camera/View transformation
+	view = glm::lookAt(camera->camPam.cameraPos, camera->camPam.cameraPos + camera->camPam.cameraFront,camera->camPam.cameraUp);
+	projection = glm::perspective(camera->camPam.fov, (GLfloat)engineWindow->width/ (GLfloat)engineWindow->height, 0.1f, 100.0f);
+
 	//Draw on buffer
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //Black Background
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	//Update the camera, the objects and render once
+	
 	renderer->UpdateCamera(view, projection);
 	for (auto* object : drawables) {
 		object->Update(deltaTime);
@@ -70,6 +80,11 @@ void LightweightEngine::Init(std::string WindowTitle)
 	engineWindow = renderer->Initialize(WindowTitle);
 	Shader* shaderBuilder = new Shader("glsl\\vertex.shader", "glsl\\fragment.shader");
 	renderer->UseShader(shaderBuilder);
+
+	//Initialize Camera and pass width and height from engine window
+	camera = Camera::GetInstance(engineWindow);
+	//Pass camera to Input
+	input->setCamera(camera);
 
 	//Also initialize the Input
 	glfwSetKeyCallback(engineWindow->glfwContext, &KeyInputCallback);

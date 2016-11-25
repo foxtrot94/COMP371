@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-
+#include "Camera.h"
 #include "glm.hpp"
 
 class Camera;
