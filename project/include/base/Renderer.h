@@ -7,7 +7,8 @@
 #include "..\glew\glew.h"	// include GL Extension Wrangler
 #include "..\glfw\glfw3.h"	// include GLFW helper library
 #include "..\glm\glm.hpp"
-#include "..\..\..\soil\SOIL.h" // include Simple OpenGL Image Library
+
+#include "..\SkyBox.h"
 
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
@@ -49,6 +50,7 @@ protected:
 	//OpenGL SkyBox Shader
 	Shader* skyBoxShader;
 	
+	SkyBox* skybox;
 	//List of elements being tracked in the OpenGL context
 	std::vector<uint> ContextArrays;
 	std::vector<uint> ContextBuffers;

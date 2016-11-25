@@ -4,7 +4,7 @@
 
 #include <glm.hpp>
 
-#include "objloader.hpp"
+#include "..\include\objloader.hpp"
 
 #pragma warning(disable:4996)
 
