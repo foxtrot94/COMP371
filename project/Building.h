@@ -2,8 +2,6 @@
 
 #include "base/Objects.h"
 
-#include <stdlib.h>
-#include <stdio.h>
 #include <time.h>
 
 class Building : ProceduralObject {
@@ -217,7 +215,7 @@ public:
 
 		// TODO: Add texture mapping
 
-		// TODO: Decide which patterns can't go above other patterns 
+		// TODO: Decide which patterns can't go above other patterns. AKA FourPillarsPattern
 
 		srand(time(0));
 

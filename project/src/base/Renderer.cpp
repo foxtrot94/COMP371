@@ -15,7 +15,7 @@ Renderer::~Renderer()
 	//Clear the context objects
 	for (uint i = 0; i < ContextArrays.size(); ++i) {
 		glDeleteVertexArrays(1, &(ContextArrays[i]));
-	}
+}
 	ContextArrays.clear();
 
 	for (uint i = 0; i < ContextBuffers.size(); ++i) {
