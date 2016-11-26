@@ -7,12 +7,12 @@
 int main()
 {
 	std::cout << "" << std::endl;
-	LightweightEngine* le = new LightweightEngine();
+	WorldEngine* ShinSekai = new WorldEngine();
+	
+	ShinSekai->Init("Shin Sekai - COMP371 OpenGL Project");
+	ShinSekai->LoadWorld();
+	ShinSekai->Run();
 
-	le->Init("Shin Sekai - COMP371 OpenGL Project");
-	le->LoadWorld();
-	le->Run();
-
-	delete le;
+	delete ShinSekai;
 	return 0;
 }

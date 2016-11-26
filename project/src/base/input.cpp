@@ -93,7 +93,7 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 
 	static char lastKey = 0;
 	char pressKey = 0;
-	if (action == GLFW_PRESS) {
+	//if (action == GLFW_PRESS) {
 	switch (key)
 	{
 	case GLFW_KEY_W:
@@ -124,7 +124,6 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 		glfwSetWindowShouldClose(window, GL_TRUE);
 		break;
 
-	
 	case GLFW_KEY_LEFT_SHIFT:
 	case GLFW_KEY_RIGHT_SHIFT:
 		instance->setShiftBtnPressStatus(true);
@@ -148,7 +147,7 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 		lastKey = pressKey;
 	}
 
-	}  // IF (action==press)
+	//}  // IF (action==press)
 }
 
 void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {

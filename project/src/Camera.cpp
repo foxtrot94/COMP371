@@ -7,11 +7,10 @@ float Camera::GetCameraSpeed()
 	return cameraSpeed;
 }
 
-void Camera::SetCameraSpeed(float time)
+void Camera::Update(const float& deltaTime)
 {
-	cameraSpeed = time * CAM_SPEED_CONSTANT;
+	cameraSpeed = deltaTime * CAM_SPEED_CONSTANT;
 }
-
 
 GLfloat Camera::GetYaw()
 {
@@ -21,7 +20,6 @@ void Camera::SetYaw(GLfloat camYaw)
 {
 	camPam.yaw = camYaw;
 }
-
 
 GLfloat Camera::GetPitch()
 {
@@ -33,8 +31,6 @@ void Camera::SetPitch(GLfloat camPitch)
 
 }
 
-
-
 glm::vec3 Camera::GetCameraFront()
 {
 	return camPam.cameraFront;
@@ -43,7 +39,6 @@ void Camera::SetCameraFront(glm::vec3 front)
 {
 	camPam.cameraFront = front;
 }
-
 
 float Camera::GetCameraSensitivity()
 {
@@ -54,13 +49,10 @@ void Camera::SetCameraSensitivity(float sens)
 	cameraSensitivity = sens;
 }
 
-
-
 void Camera::chooseDirection(char operation, char axis)
 {
 	if (operation == 'p' && axis == 'x')
 	{
-	
 		increaseX(GetCameraSpeed());
 	}
 	else if (operation == 'n' && axis == 'x')
@@ -80,7 +72,16 @@ void Camera::chooseDirection(char operation, char axis)
 
 }
 
+mat4 Camera::GetView()
+{
+	return glm::lookAt(camPam.cameraPos, camPam.cameraPos + camPam.cameraFront, camPam.cameraUp);
+}
 
+mat4 Camera::GetProjection(EngWindPtr engineWindow)
+{
+	//TODO: Put near and far place as members of the camera internals
+	return glm::perspective(camPam.fov, engineWindow->AspectRatio(), 0.1f, 1000.0f);
+}
 
 // Front and Back Operations
 void Camera::increaseZ(float camSpeed)

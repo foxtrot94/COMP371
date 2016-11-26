@@ -70,17 +70,22 @@ public:
 //Base Procedural Class for creating any Procedural Object
 class ProceduralObject : public WorldGenericObject {
 private:
+	//Identifier/Primary Key
+	static long ID;
+
 	//Seed used to generate object
 	long seed;
 
 	//TODO: Incorporate RNG here
 
 protected:
-	//Function that should be called to instance this object
-	//Override and place procedural logic
-	virtual void Generate() = 0;
+
 
 public:
+	//Function that should be called to instance this object
+	//Override and place procedural logic
+	virtual void Generate();
+
 	//Default ctor
 	ProceduralObject(); //TODO: Remove and replace with ctor that takes bounds
 
