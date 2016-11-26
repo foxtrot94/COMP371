@@ -160,6 +160,7 @@ void Renderer::RenderSkyBox() {
 		glBindVertexArray(0);
 
 		glDepthMask(GL_TRUE);
+		glUseProgram(shader->getShaderProgram());
 	}
 	
 }

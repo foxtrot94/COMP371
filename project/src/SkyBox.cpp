@@ -62,12 +62,12 @@ std::vector<const char*> SkyBox::loadTextureImages()
 {
 		//prepare skybox cubemap
 		std::vector<const char*> faces;
-		faces.push_back("right.jpg");
-		faces.push_back("left.jpg");
-		faces.push_back("top.jpg");
-		faces.push_back("bottom.jpg");
-		faces.push_back("back.jpg");
-		faces.push_back("front.jpg");
+		faces.push_back("right.bmp");
+		faces.push_back("left.bmp");
+		faces.push_back("top.bmp");
+		faces.push_back("bottom.bmp");
+		faces.push_back("back.bmp");
+		faces.push_back("front.bmp");
 
 		glActiveTexture(GL_TEXTURE1);
 
@@ -100,8 +100,7 @@ uint SkyBox::loadCubeMap(std::vector<const char*> faces)
 		}
 
 		//load image from memory
-		image.load_jpeg(faces[i]);
-		//image = cimg_library::CImg<unsigned char>(faces[i]);
+		image = cimg_library::CImg<>(faces[i]);
 		
 		//send image to cubemap 
 		glTexImage2D(
