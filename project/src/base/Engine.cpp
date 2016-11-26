@@ -43,31 +43,15 @@ void WorldEngine::ProcessInputs()
 
 void WorldEngine::DrawFrame()
 {
-	//@foxtrot94: DEBUG CODE - Remove or Comment in Master
-	mat4 view(1.f), projection(1.f);
-	glm::vec3 cameraTranslation = glm::vec3(0.0f, 0.f, 1.f);
-	glm::vec3 cameraDirectionPoint = glm::vec3(1.f, 0.f, 0.f);
-	view = glm::lookAt(
-		cameraTranslation,							//Position
-		cameraTranslation + cameraDirectionPoint,	//looks at Point
-		glm::vec3(0.0f, 0.0f, 1.0f)
-	);
-	projection = glm::perspective(90.0f, engineWindow->AspectRatio(), 0.1f, 1000.0f); //BUG WAS HERE!!!!
-	//@foxtrot94
-
-	//Camera taking deltaTime for its operations
-	camera->SetCameraSpeed(deltaTime);
-
-	// Camera/View transformation
-	view = glm::lookAt(camera->camPam.cameraPos, camera->camPam.cameraPos + camera->camPam.cameraFront,camera->camPam.cameraUp);
-	projection = glm::perspective(camera->camPam.fov, (GLfloat)engineWindow->width/ (GLfloat)engineWindow->height, 0.1f, 100.0f);
-
-	//Draw on buffer
+	//Clear screen buffer
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //Black Background
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Update the camera, the objects and render once
-	
+	camera->Update(deltaTime);
+	mat4 view = camera->GetView();
+	mat4 projection = camera->GetProjection(engineWindow);
+
 	renderer->UpdateCamera(view, projection);
 	for (auto* object : drawables) {
 		object->Update(deltaTime);

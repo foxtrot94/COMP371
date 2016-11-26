@@ -204,7 +204,7 @@
     <ClInclude Include="include\base\Objects.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\Plane.cpp" />
+    <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\base\Engine.cpp" />
     <ClCompile Include="src\base\Mesh.cpp" />
     <ClCompile Include="src\base\input.cpp" />

@@ -46,7 +46,7 @@ private:
 	//Process inputs and events
 	void ProcessInputs();
 
-	//Draw a single frame using our renderer
+	//Draw a single frame using our renderer. Uses forward rendering mode.
 	void DrawFrame();
 
 	//Cleanup resources
