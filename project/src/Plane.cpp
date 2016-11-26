@@ -14,7 +14,7 @@ void Plane::Generate()
 	vertices.push_back(vec3(topRight.x, 0.f, bottomLeft.z));
 	vertices.push_back(vec3(topRight));
 
-	vec3 brown(150.f/255.f, 75.f/255.f, 0);
+	vec3 brown(87.f/255.f, 59.f/255.f, 12.f/255.f);
 	
 	std::vector<vec3> colors(vertices.size(), brown);
 

@@ -20,8 +20,8 @@ public:
 	const glm::vec3 CAMERA_UP = glm::vec3(0.0f, 1.0f, 0.0f);
 	const GLfloat INITIAL_YAW = -90.0f;	// Yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right (due to how Eular angles work) so we initially rotate a bit to the left.
 	const GLfloat INITIAL_PITCH = 0.0f;
-	const GLfloat DEFAULT_FOV = 90.0f;
-	const float CAM_SPEED_CONSTANT = 50.0f;
+	const GLfloat DEFAULT_FOV = 45.0f;
+	const float CAM_SPEED_CONSTANT = 100.0f;
 
     float cameraSensitivity = 0.5f;
 	float cameraSpeed = 0.0f;

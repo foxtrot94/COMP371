@@ -77,8 +77,8 @@ void Input::moveCamera(glm::vec2 direction)
 	/*std::cout << "PITCH : " << mainCamera->GetPitch()<<"  ";
 	std::cout << "YAW : " << mainCamera->GetYaw()<<"\n";
 	std::cout << "Front: X: " << front.x<< " Y: "<<front.y<< " Z: " << front.z << "\n";*/
-	std::cout << "x : " << direction.x;
-	std::cout << "y : " << direction.y << std::endl;
+	//std::cout << "x : " << direction.x;
+	//std::cout << "y : " << direction.y << std::endl;
 
 }
 
