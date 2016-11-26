@@ -47,7 +47,11 @@ void LightweightEngine::DrawFrame()
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //Black Background
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//Update the camera, the objects and render once
+	
+	renderer->RenderSkyBox();
+
 	renderer->UpdateCamera(view, projection);
+
 	for (auto* object : drawables) {
 		object->Update(deltaTime);
 	}

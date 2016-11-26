@@ -26,6 +26,7 @@ Renderer::~Renderer()
 	delete shader; //this might cause some problems in the future
 	delete skyBoxShader;
 	delete skybox;
+	delete mainWindow; // this might bite in the back later....
 
 	singleton = NULL;
 }
@@ -63,6 +64,8 @@ Renderer::Window* Renderer::Initialize(std::string windowName, const uint minWid
 	//Aditional features enabled by default
 	glEnable(GL_DEPTH_TEST);
 	glFrontFace(GL_CCW);
+
+	mainWindow = new Window(outWindow, minWidth, minHeight, windowName.c_str());
 
 	//Good to go.
 	return new Window(outWindow,minWidth,minHeight,windowName);
@@ -140,15 +143,18 @@ void Renderer::RenderSkyBox() {
 	{
 		uint skyboxShaderProgram = skyBoxShader->getShaderProgram();
 		glUseProgram(skyboxShaderProgram);
+		
 		glm::mat4 skybox_view = glm::mat4(1.f); // TODO set it to whatever updateCamera has
+		glm::mat4 skybox_transform = glm::mat4(1.f);
+		glm::mat4 projection_matrix = glm::perspective(45.0f, (GLfloat)this->GetMainWindow()->width / (GLfloat)this->GetMainWindow()->height, 0.1f, 100.0f);
 
 		Shader::Uniforms uniform = skyBoxShader->getUniforms();
 
-		glUniformMatrix4fv(shader->getUniforms().viewMatrixPtr, 1, GL_FALSE, glm::value_ptr(skybox_view));
+		//might not be necessary, sends to regular shader, view matrix of the skybox
+		//glUniformMatrix4fv(shader->getUniforms().viewMatrixPtr, 1, GL_FALSE, glm::value_ptr(skybox_view));
 
+		glUniformMatrix4fv(skyBoxShader->getUniforms().transformMatrixPtr, 1, GL_FALSE, glm::value_ptr(skybox_transform));
 		glUniformMatrix4fv(skyBoxShader->getUniforms().viewMatrixPtr, 1, GL_FALSE, glm::value_ptr(skybox_view));
-
-		glm::mat4 projection_matrix = glm::perspective(45.0f, (GLfloat)this->GetMainWindow()->width / (GLfloat)this->GetMainWindow()->height, 0.1f, 100.0f);
 		glUniformMatrix4fv(skyBoxShader->getUniforms().projectMatrixPtr, 1, GL_FALSE, glm::value_ptr(projection_matrix));
 
 		glUniform1i(glGetUniformLocation(skyboxShaderProgram, "skyboxTexture"), 1); //use texture unit 1

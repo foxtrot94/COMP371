@@ -93,15 +93,23 @@ uint SkyBox::loadCubeMap(std::vector<const char*> faces)
 	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 	for (uint i = 0; i < faces.size(); ++i)
 	{
-
+		/*
+		//debug only
 		if (!std::ifstream(faces[i])) {
 			std::cout << "File " << faces[i] << "  does not exist in current path" << std::endl;
 			return 0;
 		}
+		*/
 
 		//load image from memory
 		image = cimg_library::CImg<>(faces[i]);
-		
+
+		/*
+		//debug only
+		cimg_library::CImgDisplay main_disp(image, "Render");
+		while (!main_disp.is_closed())
+			main_disp.wait();		*/
+
 		//send image to cubemap 
 		glTexImage2D(
 			GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0,
