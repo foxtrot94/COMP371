@@ -47,7 +47,8 @@ void LightweightEngine::DrawFrame()
 	//Camera taking deltaTime for its operations
 	camera->SetCameraSpeed(deltaTime);
 
-	// Camera/View transformation
+	// Camera/View transformation 
+	//TODO: move these elsewhere
 	view = glm::lookAt(camera->camPam.cameraPos, camera->camPam.cameraPos + camera->camPam.cameraFront,camera->camPam.cameraUp);
 	projection = glm::perspective(camera->camPam.fov, (GLfloat)engineWindow->width/ (GLfloat)engineWindow->height, 0.1f, 100.0f);
 
