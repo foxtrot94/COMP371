@@ -1,5 +1,6 @@
 #include "..\include\SkyBox.h"
-
+#include <fstream>
+#include <iostream>
 
 SkyBox::SkyBox()
 {
@@ -85,22 +86,31 @@ uint SkyBox::loadCubeMap(std::vector<const char*> faces)
 	uint textureID;
 	glGenTextures(1, &textureID);
 
-	int width, height;
-	unsigned char* image;
+	//int width, height;
+	cimg_library::CImg<> image;
+	//unsigned char* image;
 
 	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 	for (uint i = 0; i < faces.size(); ++i)
 	{
-		//load image from memory
-		image = SOIL_load_image(faces[i], &width, &height, 0, SOIL_LOAD_RGB);
 
+		if (!std::ifstream(faces[i])) {
+			std::cout << "File " << faces[i] << "  does not exist in current path" << std::endl;
+			return 0;
+		}
+
+		//load image from memory
+		image.load_jpeg(faces[i]);
+		//image = cimg_library::CImg<unsigned char>(faces[i]);
+		
 		//send image to cubemap 
 		glTexImage2D(
 			GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0,
-			GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image
+			GL_RGB, image.width(), image.height(), 0, GL_RGB, GL_UNSIGNED_BYTE, image
 			);
 
-		SOIL_free_image_data(image); // remove currently loaded image from memory
+		image.assign();
+		//delete image;
 	}
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

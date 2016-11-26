@@ -50,7 +50,9 @@ protected:
 	//OpenGL SkyBox Shader
 	Shader* skyBoxShader;
 	
+	//SkyBox in use
 	SkyBox* skybox;
+
 	//List of elements being tracked in the OpenGL context
 	std::vector<uint> ContextArrays;
 	std::vector<uint> ContextBuffers;
@@ -60,9 +62,6 @@ protected:
 
 	//Send a mesh object to the GPU memory and renderer context
 	bool AddToRenderingContext(GLMesh* mesh);
-
-	//Load a cubemap, particularly needed for the skybox
-	uint loadCubeMap(std::vector<const char*> faces);
 
 public:
 	//Singleton point of entry

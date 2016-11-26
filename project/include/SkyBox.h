@@ -8,8 +8,8 @@
 #include "..\glew\glew.h"	// include GL Extension Wrangler
 #include "..\glfw\glfw3.h"	// include GLFW helper library
 #include "..\glm\glm.hpp"
-
-#include "..\..\soil\SOIL.h" // include Simple OpenGL Image Library
+#include "CImg.h"
+//#include "..\..\soil\SOIL.h" // include Simple OpenGL Image Library
 
 
 class SkyBox

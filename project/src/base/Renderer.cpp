@@ -25,6 +25,7 @@ Renderer::~Renderer()
 
 	delete shader; //this might cause some problems in the future
 	delete skyBoxShader;
+	delete skybox;
 
 	singleton = NULL;
 }
