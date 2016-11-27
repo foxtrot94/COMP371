@@ -25,10 +25,10 @@ Renderer::~Renderer()
 	}
 	ContextBuffers.clear();
 
-	delete shader; //this might cause some problems in the future
+	delete shader;
 	delete skyBoxShader;
 	delete skybox;
-	delete mainWindow; // this might bite in the back later....
+	delete mainWindow;
 
 	singleton = NULL;
 }
@@ -67,10 +67,9 @@ Renderer::Window* Renderer::Initialize(std::string windowName, const uint minWid
 	glEnable(GL_DEPTH_TEST);
 	glFrontFace(GL_CCW);
 
-	mainWindow = new Window(outWindow, minWidth, minHeight, windowName.c_str());
-
 	//Good to go.
-	return new Window(outWindow,minWidth,minHeight,windowName);
+	mainWindow = new Window(outWindow, minWidth, minHeight, windowName);
+	return mainWindow;
 }
 
 Renderer::Window * Renderer::GetMainWindow()

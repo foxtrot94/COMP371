@@ -1,5 +1,6 @@
 #include <time.h>
 #include <random>
+#include <thread>
 
 #include "gtc/matrix_transform.hpp"
 
@@ -69,6 +70,20 @@ void WorldEngine::DrawFrame()
 	glfwSwapBuffers(engineWindow->glfwContext);
 }
 
+void WorldEngine::DrawLoadScreen()
+{
+	if (engineWindow != NULL) {
+		while (!hasLoaded) {
+			this->UpdateTime();
+			this->ProcessInputs();
+			
+			glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //Black Background
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glfwSwapBuffers(engineWindow->glfwContext);
+		}
+	}
+}
+
 void WorldEngine::Cleanup()
 {
 	delete renderer;
@@ -81,17 +96,6 @@ void WorldEngine::Init(std::string WindowTitle)
 	std::cout << "Starting OpenGL 3.3 using GLFW" << std::endl;
 	engineWindow = renderer->Initialize(WindowTitle);
 
-	//Build standard shader
-	Shader* shaderBuilder = new Shader("glsl\\vertex.shader", "glsl\\fragment.shader");
-	renderer->UseShader(shaderBuilder);
-
-	//Build skybox shader
-	Shader* skyBoxShaderBuilder = new Shader("glsl\\skybox_vertex.shader", "glsl\\skybox_fragment.shader");
-	renderer->UseSkyBoxShader(skyBoxShaderBuilder);
-
-	//Initialize (load) skybox
-	renderer->InitSkyBox();
-	
 	//Seed randomness
 	srand(time(NULL));
 
@@ -107,10 +111,26 @@ void WorldEngine::Init(std::string WindowTitle)
 
 void WorldEngine::LoadWorld()
 {
+	std::thread loadScreen(&WorldEngine::DrawLoadScreen, this);
+
 	//TODO: Place all the world loading here.
-	//We can fire off a thread to keep the screen drawing while this method begins loading the world
+
+	//Build standard shader
+	Shader* shaderBuilder = new Shader("glsl\\vertex.shader", "glsl\\fragment.shader");
+	renderer->UseShader(shaderBuilder);
+
+	//Build skybox shader
+	Shader* skyBoxShaderBuilder = new Shader("glsl\\skybox_vertex.shader", "glsl\\skybox_fragment.shader");
+	renderer->UseSkyBoxShader(skyBoxShaderBuilder);
+
+	//Initialize (load) skybox
+	renderer->InitSkyBox();
+
 	WorldLayerManager layerMaker;
 	layerMaker.CreateCity();
+
+	hasLoaded = true;
+	loadScreen.join();
 }
 
 void WorldEngine::Run()

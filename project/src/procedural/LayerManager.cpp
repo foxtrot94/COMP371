@@ -118,6 +118,7 @@ void WorldLayerManager::CreateCity()
 		Grid::Coordinate(worldGrid->WIDTH-1,worldGrid->HEIGHT-1),
 		WorldLayerManager::MAX_RECURSIVE_DEPTH
 		);
+
 	worldGrid->TerminalPrint();
 	GenerateBuildings();
 	

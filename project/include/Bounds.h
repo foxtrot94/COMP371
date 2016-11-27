@@ -6,6 +6,7 @@
 class Bounds {
 	vec2 topRight;
 	vec2 bottomLeft;
+	vec3 center;
 
 public:
 	Bounds(float xmin, float xmax, float ymin, float ymax);
@@ -18,4 +19,7 @@ public:
 	float getYmin();
 
 	float getArea();
+
+	void setCenter(vec3 point);
+	vec3 getCenter();
 };
