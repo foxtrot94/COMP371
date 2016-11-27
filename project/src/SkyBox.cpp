@@ -41,9 +41,9 @@ void SkyBox::sendVertexBuffer()
 		loadVertices();
 	}
 	else {
-		glBindVertexArray(glArray);
-
 		glGenBuffers(1, &glVertexBuffer);
+		
+		glBindVertexArray(glArray);
 		glBindBuffer(GL_ARRAY_BUFFER, glVertexBuffer);
 		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices.front(), GL_STATIC_DRAW);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
