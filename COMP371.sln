@@ -1,12 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-<<<<<<< HEAD
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
-=======
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
->>>>>>> 553f5085ea8da4306957ffa34fa6336783ffd26e
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Project", "project\project.vcxproj", "{A8DB44C8-E361-4996-8208-3414F4059276}"
 EndProject

@@ -1,4 +1,5 @@
 #include "..\include\SkyBox.h"
+#include "..\..\soil\SOIL.h"
 #include <fstream>
 #include <iostream>
 
@@ -86,9 +87,9 @@ uint SkyBox::loadCubeMap(std::vector<const char*> faces)
 	uint textureID;
 	glGenTextures(1, &textureID);
 
-	//int width, height;
-	cimg_library::CImg<unsigned char> image;
-	//unsigned char* image;
+	int width, height;
+	//cimg_library::CImg<unsigned char> image;
+	unsigned char* image;
 
 	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 	for (uint i = 0; i < faces.size(); ++i)
@@ -102,25 +103,30 @@ uint SkyBox::loadCubeMap(std::vector<const char*> faces)
 		*/
 
 		//load image from memory
-		image = cimg_library::CImg<unsigned char>(faces[i]);
-		std::cout << image.spectrum() << std::endl;
-		image.display();
+		//image = cimg_library::CImg<unsigned char>(faces[i]);
 
+		image = SOIL_load_image(faces[i], &width, &height, 0, SOIL_LOAD_RGB);
 		/*
 		//debug only
 		cimg_library::CImgDisplay main_disp(image, "Render");
 		while (!main_disp.is_closed())
 			main_disp.wait();
 		*/
-
-		//send image to cubemap 
+		
+		/**** CIMG version
+			
 		glTexImage2D(
 			GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0,
 			GL_RGB, image.width(), image.height(), 0, GL_RGB, GL_UNSIGNED_BYTE, image
+			); **** CIMG version *****/
+		
+		glTexImage2D(
+			GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0,
+			GL_RGB, /*image.width()*/ width, /*image.height()*/ height, 0, GL_RGB, GL_UNSIGNED_BYTE, image
 			);
 
-		image.assign();
-		//delete image;
+		//image.assign();
+		SOIL_free_image_data(image);
 	}
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

@@ -73,13 +73,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>include;..\glm\gtx;..\glm\gtc;..\glm\detail;..\glm;..\glfw;..\glew;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;..\glm\gtx;..\glm\gtc;..\glm\detail;..\glm;..\glfw;C:\Users\c_popes\Desktop\COMP371\soil;..\glew;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\glfw;..\glew;..\COMP371\soil;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glu32.lib;opengl32.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\glfw;..\glew;..\soil;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glu32.lib;opengl32.lib;glfw3dll.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
@@ -189,11 +189,8 @@
     <ClInclude Include="include\base\Modulator.h" />
     <ClInclude Include="include\Building.h" />
     <ClInclude Include="include\base\Engine.h" />
-<<<<<<< HEAD
     <ClInclude Include="include\objloader.hpp" />
-=======
     <ClInclude Include="include\Camera.h" />
->>>>>>> 553f5085ea8da4306957ffa34fa6336783ffd26e
     <ClInclude Include="include\Plane.h" />
     <ClInclude Include="include\Plant.h" />
     <ClInclude Include="include\main.h" />
@@ -217,12 +214,9 @@
     <ClCompile Include="src\base\Objects.cpp" />
     <ClCompile Include="src\base\Renderer.cpp" />
     <ClCompile Include="src\base\Shader.cpp" />
-<<<<<<< HEAD
     <ClCompile Include="src\objloader.cpp" />
     <ClCompile Include="src\SkyBox.cpp" />
-=======
     <ClCompile Include="src\Camera.cpp" />
->>>>>>> 553f5085ea8da4306957ffa34fa6336783ffd26e
     <ClCompile Include="src\Utils.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp">
