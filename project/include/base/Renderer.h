@@ -20,6 +20,7 @@ class WorldGenericObject;
 class Camera;
 class Shader;
 class GLMesh;
+class GLTexture;
 
 //Main class for dealing with the OpenGL renderer and displaying stuff on screen
 //tech debt: switch it up and put this as an interface for an underlying DirectX, OpenGL and Vulkan renderer
@@ -70,7 +71,7 @@ protected:
 	Renderer();
 
 	//Send a mesh object to the GPU memory and renderer context
-	bool AddToRenderingContext(GLMesh* mesh);
+	bool AddToRenderingContext(GLMesh* mesh, GLTexture* texture);
 
 public:
 	//Singleton point of entry

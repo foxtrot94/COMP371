@@ -24,9 +24,19 @@ GLMesh * WorldGenericObject::getMesh()
 	return &(this->mesh);
 }
 
+GLTexture * WorldGenericObject::getTexture()
+{
+	return &(this->texture);
+}
+
 void WorldGenericObject::assignMesh(GLMesh * newMesh)
 {
 	this->mesh = *newMesh;
+}
+
+void WorldGenericObject::assignTexture(GLTexture * newTexture)
+{
+	texture = *newTexture;
 }
 
 void EngineObject::translate(float x, float y, float z)

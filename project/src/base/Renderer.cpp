@@ -104,15 +104,16 @@ void Renderer::UpdateCamera(mat4 & view, mat4 & projection)
 void Renderer::Render(WorldGenericObject* Object)
 {
 	GLMesh* mesh = Object->getMesh();
+	GLTexture* texture = Object->getTexture();
 	if (shader==NULL || mesh==NULL || !mesh->isInitialized()) {
 		//nothing to do here
 		return;
 	}
 
-	if (!mesh->isInRenderingContext()) {
+	if (!mesh->isInRenderingContext() && !texture->isInRenderingContext()) {
 		//Send it off to the GPU Video Memory
 		//FUTURE: Right now all meshes are taken as static, change some day...
-		AddToRenderingContext(mesh);
+		AddToRenderingContext(mesh, texture->isInitialized()? texture:NULL);
 	}
 
 	Shader::Uniforms uniform = shader->getUniforms(); //TODO: optimize in the future. Get uniforms outside or something
@@ -172,7 +173,7 @@ void Renderer::RenderSkyBox(Camera* camera) {
 	
 }
 
-bool Renderer::AddToRenderingContext(GLMesh * mesh)
+bool Renderer::AddToRenderingContext(GLMesh * mesh, GLTexture* texture)
 {
 	uint VAO, colorBO, vertexBO;
 	glGenVertexArrays(1, &VAO);
@@ -212,11 +213,33 @@ bool Renderer::AddToRenderingContext(GLMesh * mesh)
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (GLvoid*)0);
 	glEnableVertexAttribArray(1); //TODO: abstract into shader
 
+	uint glTexture=0, textureBO=0;
+	if (texture != NULL) {
+		glGenTextures(1, &glTexture);
+		glBindTexture(GL_TEXTURE_2D, glTexture);
+		
+		std::vector<const char*> img=texture->readImageData();
+		std::vector<float> texels = texture->readLocalTexels();
+		
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture->getWidth(), texture->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, &(img[0]));
+		glGenBuffers(1, &textureBO);
+		glBindBuffer(GL_ARRAY_BUFFER, textureBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size * 3, &texels[0], GL_STATIC_DRAW);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
+		glEnableVertexAttribArray(2); //TODO: abstract into shader
+
+		glBindTexture(GL_TEXTURE_2D, NULL);
+	}
+
 	glBindVertexArray(NULL);
 
 	//Register and Add to object again
 	ContextArrays.push_back(VAO);
 	mesh->setContextArray(VAO);
+	
+	if (texture) {
+		texture->setContextTexture(glTexture);
+	}
 
 	ContextBuffers.push_back(vertexBO);
 	ContextBuffers.push_back(colorBO);
