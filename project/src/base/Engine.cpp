@@ -148,7 +148,13 @@ void WorldEngine::Run()
 	//WorldGenericObject* building = new Building(12);
 	plane->Generate(Bounds(0.f,50.f,0.f,50.f));
 	plane->translate(-25.f, 0.f, -25.f);
+	
+	Road* road = new Road();
+	road->init();
+	
 	drawables.push_back(plane);
+	drawables.push_back(road);
+
 	//drawables.push_back(building);
 	//Game loop
 	std::cout << "Initialization complete, starting game" << std::endl;

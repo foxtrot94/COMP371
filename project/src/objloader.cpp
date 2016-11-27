@@ -100,3 +100,17 @@ bool loadOBJ(
 
 	return true;
 }
+
+GLMesh loadOBJ(const char * path)
+{
+	std::vector<glm::vec3> vertices;
+	std::vector<glm::vec3> normals;
+	std::vector<glm::vec2> uvs;
+
+	loadOBJ(path, vertices, normals, uvs);
+
+	GLMesh newMesh;
+	newMesh.setVertices(vertices);
+	return newMesh;
+}
+

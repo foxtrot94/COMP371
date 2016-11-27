@@ -1,6 +1,7 @@
 #ifndef OBJLOADER_H
 #define OBJLOADER_H
 #include <vector>
+#include "base\Mesh.h"
 
 bool loadOBJ(
 	const char * path, 
@@ -8,5 +9,7 @@ bool loadOBJ(
 	std::vector<glm::vec3> & out_normals,
 	std::vector<glm::vec2> & out_uvs
 );
+
+GLMesh loadOBJ(const char * path);
 
 #endif

@@ -113,7 +113,7 @@ private:
 		camPam = CameraParameters(
 			INITIAL_CAMERA_POS, CAMERA_FRONT, CAMERA_UP,
 			INITIAL_YAW, INITIAL_PITCH,
-			width, height,
+			(float)width, (float)height,
 			DEFAULT_FOV);
 	}
 
