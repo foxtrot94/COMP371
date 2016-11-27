@@ -60,3 +60,8 @@ void GLMesh::setContextBuffer(uint vertexBuffer, uint colorBuffer, uint size)
 	glColorBuffer = colorBuffer;
 	commonBufferSize = size;
 }
+
+void GLMesh::DestroyContext()
+{
+	//TODO: This should destroy the object and cleanup
+}
