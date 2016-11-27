@@ -12,6 +12,10 @@ private:
 	bool MOUSE_L_PRESSED;
 	bool MOUSE_R_PRESSED;
 	bool SHIFT_BTN_PRESSED;
+	bool isIPressed = false;
+	bool isSpacePressed = false;
+	bool DEBUG_MODE = false;
+
 	Camera* mainCamera;
 
 	static Input* instance;
@@ -39,6 +43,11 @@ public:
 	bool leftMouseClicked() { return MOUSE_L_PRESSED; }
 	void rightMouseClick();
 	bool rightMouseClicked() { return MOUSE_R_PRESSED; }
+
+	void debugFreeRoam();
+	void toggleFlashLight();
+	void placeOnPlane();
+
 
 	void moveCamera(glm::vec2 direction);
 

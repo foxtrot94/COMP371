@@ -8,6 +8,8 @@
 #include "..\glfw\glfw3.h"	// include GLFW helper library
 #include "..\glm\glm.hpp"
 
+#include "..\SkyBox.h"
+
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
 
@@ -53,6 +55,12 @@ protected:
 	//OpenGL Shader in Use
 	Shader* shader;
 
+	//OpenGL SkyBox Shader
+	Shader* skyBoxShader;
+	
+	//SkyBox in use
+	SkyBox* skybox;
+
 	//List of elements being tracked in the OpenGL context
 	std::vector<uint> ContextArrays;
 	std::vector<uint> ContextBuffers;
@@ -62,6 +70,7 @@ protected:
 
 	//Send a mesh object to the GPU memory and renderer context
 	bool AddToRenderingContext(GLMesh* mesh);
+
 public:
 	//Singleton point of entry
 	static Renderer* GetInstance();
@@ -79,6 +88,11 @@ public:
 	//Use a particular, compiled shader
 	void UseShader(Shader* shader);
 
+	//Use a particular, compiled skybox shader
+	void UseSkyBoxShader(Shader* shader);
+
+	void InitSkyBox();
+
 	//Takes new parameters from camera before rendering - TODO: Replace with actual Camera class
 	void UpdateCamera(mat4& view, mat4& projection);
 
@@ -87,4 +101,7 @@ public:
 
 	//Batch draw of WorldGenericObjects on screen
 	void Render(std::vector<WorldGenericObject*> Objects);
+
+	//Draw the skybox cube
+	void RenderSkyBox();
 };

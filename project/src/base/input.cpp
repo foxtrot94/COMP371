@@ -21,6 +21,7 @@ void Input::moveBwd()
 {
 	mainCamera->chooseDirection('n', 'z');
 	std::cout << "going bwd" << std::endl;
+
 }
 
 void Input::turnLeft()
@@ -53,6 +54,59 @@ void Input::leftMouseClick()
 void Input::rightMouseClick()
 {
 	std::cout << "aim" << std::endl;
+}
+
+void Input::debugFreeRoam()
+{
+	if (isIPressed == false)
+	{
+		DEBUG_MODE = true;
+	}
+	else if (isIPressed == true)
+	{
+		DEBUG_MODE = false;
+	}
+
+
+	if (DEBUG_MODE == false)
+	{
+		std::cout << "\n DEBUG MODE :OFF \n YOU MAY NOW BE GROUNDED";
+		mainCamera->debugMode(DEBUG_MODE);
+	}
+	else if (DEBUG_MODE == true)
+	{
+		std::cout << "\n DEBUG MODE :ON \n YOU MAY NOW FREE ROAM";
+		mainCamera->debugMode(DEBUG_MODE);
+	}
+
+
+	if (isIPressed == true)
+	{
+		isIPressed = false;
+	}
+	else if (isIPressed == false)
+	{
+		isIPressed = true;
+	}
+		
+}
+
+void Input::toggleFlashLight()
+{
+
+	std::cout << "FLASHLIGHT: ON";
+	std::cout << "FLASHLIGHT: OFF";
+
+
+}
+
+void Input::placeOnPlane()
+{ 
+	if (isSpacePressed == false)
+	{
+		mainCamera->startRoam();
+		isSpacePressed = true;
+	}
 }
 
 void Input::moveCamera(glm::vec2 direction)
@@ -94,45 +148,46 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 	static char lastKey = 0;
 	char pressKey = 0;
 	{
-		switch (key)
-		{
-		case GLFW_KEY_W:
-		case GLFW_KEY_UP:
-			instance->moveFwd();
-			break;
-		case GLFW_KEY_S:
-		case GLFW_KEY_DOWN:
-			instance->moveBwd();
-			break;
-		case GLFW_KEY_LEFT:
-			instance->turnLeft();
-			break;
-		case GLFW_KEY_RIGHT:
-			instance->turnRight();
-			break;
-		case GLFW_KEY_A:
-			instance->strafeLeft();
-			break;
-		case GLFW_KEY_D:
-			instance->strafeRight();
-			break;
-		case GLFW_KEY_R:
-			instance->resetCamera();
-			break;
+	switch (key)
+	{
+	case GLFW_KEY_W:
+	case GLFW_KEY_UP:
+		instance->moveFwd();
+		break;
+	case GLFW_KEY_S:
+	case GLFW_KEY_DOWN:
+		instance->moveBwd();
+		break;
+	case GLFW_KEY_LEFT:
+		instance->turnLeft();
+		break;
+	case GLFW_KEY_RIGHT:
+		instance->turnRight();
+		break;
+	case GLFW_KEY_A:
+		instance->strafeLeft();
+		break;
+	case GLFW_KEY_D:
+		instance->strafeRight();
+		break;
+	case GLFW_KEY_R:
+		instance->resetCamera();
+		break;
+		
+		
+	case GLFW_KEY_ESCAPE:
+		glfwSetWindowShouldClose(window, GL_TRUE);
+		break;
 
-		case GLFW_KEY_ESCAPE:
-			glfwSetWindowShouldClose(window, GL_TRUE);
-			break;
+	case GLFW_KEY_LEFT_SHIFT:
+	case GLFW_KEY_RIGHT_SHIFT:
+		instance->setShiftBtnPressStatus(true);
+		break;
 
-		case GLFW_KEY_LEFT_SHIFT:
-		case GLFW_KEY_RIGHT_SHIFT:
-			instance->setShiftBtnPressStatus(true);
-			break;
-
-		default:
-			//std::cout << "Unhandled input" << std::endl;
-			break;
-		}
+	default:
+		//std::cout << "Unhandled input" << std::endl;
+		break;
+	}
 	}
 
 	if (action == GLFW_RELEASE) {
@@ -141,9 +196,18 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 		case GLFW_KEY_RIGHT_SHIFT:
 			instance->setShiftBtnPressStatus(false);
 			break;
+		case GLFW_KEY_I:
+			instance->debugFreeRoam();
+			break;
+		case GLFW_KEY_F:
+			instance->toggleFlashLight();
+			break;
+		case GLFW_KEY_SPACE:
+			instance->placeOnPlane();
+			break;
 		}
 	}
-}
+	}
 
 void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
 
@@ -205,7 +269,7 @@ void CursorPositionCallback(GLFWwindow * window, double x, double y){
 	//get the deltas
 	double deltaX = x - lastX;
 	double deltaY = y - lastY;
-	//if(instance->leftMouseClicked())
+
 	instance->moveCamera(glm::vec2(deltaX, deltaY));
 	
 

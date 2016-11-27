@@ -25,7 +25,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Demo|Win32'" Label="Configuration">
@@ -73,13 +73,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>include;..\glm\gtx;..\glm\gtc;..\glm\detail;..\glm;..\glfw;..\glew;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;..\glm\gtx;..\glm\gtc;..\glm\detail;..\glm;..\glfw;C:\Users\c_popes\Desktop\COMP371\soil;..\glew;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\glfw;..\glew;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glu32.lib;opengl32.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\glfw;..\glew;..\soil;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glu32.lib;opengl32.lib;glfw3dll.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
@@ -183,6 +183,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\soil\SOIL.h" />
     <ClInclude Include="include\base\Grid.h" />
     <ClInclude Include="include\base\Mesh.h" />
     <ClInclude Include="include\base\Modulator.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="include\procedural\Grid.h" />
     <ClInclude Include="include\procedural\Building.h" />
     <ClInclude Include="include\base\Engine.h" />
+    <ClInclude Include="include\objloader.hpp" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\procedural\LayerManager.h" />
     <ClInclude Include="include\procedural\Plane.h" />
@@ -199,6 +201,7 @@
     <ClInclude Include="include\base\Renderer.h" />
     <ClInclude Include="include\base\Shader.h" />
     <ClInclude Include="include\procedural\Road.h" />
+    <ClInclude Include="include\SkyBox.h" />
     <ClInclude Include="include\Terrain.h" />
     <ClInclude Include="include\procedural\TriangleTest.h" />
     <ClInclude Include="include\Utils.h" />
@@ -218,6 +221,8 @@
     <ClCompile Include="src\base\Objects.cpp" />
     <ClCompile Include="src\base\Renderer.cpp" />
     <ClCompile Include="src\base\Shader.cpp" />
+    <ClCompile Include="src\objloader.cpp" />
+    <ClCompile Include="src\SkyBox.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\procedural\LayerManager.cpp" />
     <ClCompile Include="src\procedural\Roads.cpp" />

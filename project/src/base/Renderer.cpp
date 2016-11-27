@@ -24,6 +24,10 @@ Renderer::~Renderer()
 	ContextBuffers.clear();
 
 	delete shader; //this might cause some problems in the future
+	delete skyBoxShader;
+	delete skybox;
+	delete mainWindow; // this might bite in the back later....
+
 	singleton = NULL;
 }
 
@@ -61,6 +65,8 @@ Renderer::Window* Renderer::Initialize(std::string windowName, const uint minWid
 	glEnable(GL_DEPTH_TEST);
 	glFrontFace(GL_CCW);
 
+	mainWindow = new Window(outWindow, minWidth, minHeight, windowName.c_str());
+
 	//Good to go.
 	return new Window(outWindow,minWidth,minHeight,windowName);
 }
@@ -76,6 +82,11 @@ void Renderer::UseShader(Shader * shader)
 	if (shader != NULL) {
 		glUseProgram(shader->getShaderProgram());
 	}
+}
+
+void Renderer::UseSkyBoxShader(Shader * shader)
+{
+	this->skyBoxShader = shader;
 }
 
 void Renderer::UpdateCamera(mat4 & view, mat4 & projection)
@@ -121,6 +132,43 @@ void Renderer::Render(std::vector<WorldGenericObject*> Objects)
 		Render(object);
 	}
 	glBindVertexArray(NULL);
+}
+
+void Renderer::RenderSkyBox() {
+	if (skybox == NULL) 
+	{
+		InitSkyBox();
+	}
+	else
+	{
+		uint skyboxShaderProgram = skyBoxShader->getShaderProgram();
+		glUseProgram(skyboxShaderProgram);
+		
+		glm::mat4 skybox_view = glm::mat4(1.f); // TODO set it to whatever updateCamera has
+		glm::mat4 skybox_transform = glm::mat4(1.f);
+		glm::mat4 projection_matrix = glm::perspective(45.0f, (GLfloat)this->GetMainWindow()->width / (GLfloat)this->GetMainWindow()->height, 0.1f, 100.0f);
+
+		Shader::Uniforms uniform = skyBoxShader->getUniforms();
+
+		//might not be necessary, sends to regular shader, view matrix of the skybox
+		//glUniformMatrix4fv(shader->getUniforms().viewMatrixPtr, 1, GL_FALSE, glm::value_ptr(skybox_view));
+
+		glUniformMatrix4fv(skyBoxShader->getUniforms().transformMatrixPtr, 1, GL_FALSE, glm::value_ptr(skybox_transform));
+		glUniformMatrix4fv(skyBoxShader->getUniforms().viewMatrixPtr, 1, GL_FALSE, glm::value_ptr(skybox_view));
+		glUniformMatrix4fv(skyBoxShader->getUniforms().projectMatrixPtr, 1, GL_FALSE, glm::value_ptr(projection_matrix));
+
+		glUniform1i(glGetUniformLocation(skyboxShaderProgram, "skyboxTexture"), 1); //use texture unit 1
+
+		glDepthMask(GL_FALSE);
+
+		glBindVertexArray(skybox->getContextArray());
+		glDrawArrays(GL_TRIANGLES, 0, skybox->getVertexBufferSize());
+		glBindVertexArray(0);
+
+		glDepthMask(GL_TRUE);
+		glUseProgram(shader->getShaderProgram());
+	}
+	
 }
 
 bool Renderer::AddToRenderingContext(GLMesh * mesh)
@@ -174,6 +222,19 @@ bool Renderer::AddToRenderingContext(GLMesh * mesh)
 	mesh->setContextBuffer(vertexBO, colorBO, size);
 
 	return true;
+}
+
+
+// References: using the skybox source code from Lab 7
+void Renderer::InitSkyBox() 
+{
+	skybox = new SkyBox();
+	skybox->loadVertices();
+
+	skybox->genArray();
+	skybox->sendVertexBuffer();
+
+	skybox->loadTextures();
 }
 
 Renderer * Renderer::GetInstance()

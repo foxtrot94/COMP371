@@ -56,6 +56,7 @@ void WorldEngine::DrawFrame()
 	camera->Update(deltaTime);
 	mat4 view = camera->GetView();
 	mat4 projection = camera->GetProjection(engineWindow);
+	renderer->RenderSkyBox();
 
 	renderer->UpdateCamera(view, projection);
 	for (auto* object : drawables) {
@@ -78,9 +79,18 @@ void WorldEngine::Init(std::string WindowTitle)
 	//Initialize GLFW and the renderer
 	std::cout << "Starting OpenGL 3.3 using GLFW" << std::endl;
 	engineWindow = renderer->Initialize(WindowTitle);
+
+	//Build standard shader
 	Shader* shaderBuilder = new Shader("glsl\\vertex.shader", "glsl\\fragment.shader");
 	renderer->UseShader(shaderBuilder);
 
+	//Build skybox shader
+	Shader* skyBoxShaderBuilder = new Shader("glsl\\skybox_vertex.shader", "glsl\\skybox_fragment.shader");
+	renderer->UseSkyBoxShader(skyBoxShaderBuilder);
+
+	//Initialize (load) skybox
+	renderer->InitSkyBox();
+	
 	//Seed randomness
 	srand(time(NULL));
 
