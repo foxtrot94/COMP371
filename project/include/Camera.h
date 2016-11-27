@@ -23,7 +23,7 @@ public:
 	const GLfloat DEFAULT_FOV = 45.0f;
 	//TODO: Change so we have more adaptive speed, acceleration and other
 	float CAM_SPEED_CONSTANT = 1000.0f;
-	float isYFrozen = true;
+	bool isYFrozen = true;
     float cameraSensitivity = 0.5f;
 	float cameraSpeed = 0.0f;
 
