@@ -43,7 +43,23 @@ void WorldEngine::ProcessInputs()
 
 void WorldEngine::DrawFrame()
 {
+//<<<<<<< HEAD
+	//@foxtrot94: DEBUG CODE - Remove or Comment in Master
+	//mat4 view(1.f), projection(1.f);
+	//@foxtrot94
+
+	//Camera taking deltaTime for its operations
+	camera->Update(deltaTime);
+
+	// Camera/View transformation 
+	//TODO: move these elsewhere
+	//view = glm::lookAt(camera->camPam.cameraPos, camera->camPam.cameraPos + camera->camPam.cameraFront,camera->camPam.cameraUp);
+	//projection = glm::perspective(camera->camPam.fov, (GLfloat)engineWindow->width/ (GLfloat)engineWindow->height, 0.1f, 100.0f);
+
+	//Draw on buffer
+//=======
 	//Clear screen buffer
+//>>>>>>> refs/remotes/origin/master
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //Black Background
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

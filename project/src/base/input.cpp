@@ -13,18 +13,27 @@ void Input::resetCamera(){
 
 void Input::moveFwd()
 {
+	if (isSpacePressed == true)
+	{
+
 	mainCamera->chooseDirection('p','z');
 	std::cout << "going fwd" << std::endl;
+	}
 }
 
 void Input::moveBwd()
 {
-	mainCamera->chooseDirection('n', 'z');
-	std::cout << "going bwd" << std::endl;
+	if (isSpacePressed == true)
+	{
+
+		mainCamera->chooseDirection('n', 'z');
+		std::cout << "going bwd" << std::endl;
+	}
 }
 
 void Input::turnLeft()
 {
+
 	std::cout << "turning left" << std::endl;
 }
 
@@ -35,14 +44,22 @@ void Input::turnRight()
 
 void Input::strafeLeft()
 {
-	mainCamera->chooseDirection('n', 'x');
-	std::cout << "dodge left" << std::endl;
+	if (isSpacePressed == true)
+	{
+
+		mainCamera->chooseDirection('n', 'x');
+		std::cout << "dodge left" << std::endl;
+	}
 }
 
 void Input::strafeRight()
 {
-	mainCamera->chooseDirection('p', 'x');
-	std::cout << "dodge right" << std::endl;
+	if (isSpacePressed == true)
+	{
+
+		mainCamera->chooseDirection('p', 'x');
+		std::cout << "dodge right" << std::endl;
+	}
 }
 
 void Input::leftMouseClick()
@@ -53,6 +70,59 @@ void Input::leftMouseClick()
 void Input::rightMouseClick()
 {
 	std::cout << "aim" << std::endl;
+}
+
+void Input::debugFreeRoam()
+{
+	if (isIPressed == false)
+	{
+		DEBUG_MODE = true;
+	}
+	else if (isIPressed == true)
+	{
+		DEBUG_MODE = false;
+	}
+
+
+	if (DEBUG_MODE == false)
+	{
+		std::cout << "\n DEBUG MODE :OFF \n YOU MAY NOW BE GROUNDED";
+		mainCamera->debugMode(DEBUG_MODE);
+	}
+	else if (DEBUG_MODE == true)
+	{
+		std::cout << "\n DEBUG MODE :ON \n YOU MAY NOW FREE ROAM";
+		mainCamera->debugMode(DEBUG_MODE);
+	}
+
+
+	if (isIPressed == true)
+	{
+		isIPressed = false;
+	}
+	else if (isIPressed == false)
+	{
+		isIPressed = true;
+	}
+		
+}
+
+void Input::toggleFlashLight()
+{
+
+	std::cout << "FLASHLIGHT: ON";
+	std::cout << "FLASHLIGHT: OFF";
+
+
+}
+
+void Input::placeOnPlane()
+{ 
+	if (isSpacePressed == false)
+	{
+		mainCamera->startRoam();
+		isSpacePressed = true;
+	}
 }
 
 void Input::moveCamera(glm::vec2 direction)
@@ -119,6 +189,7 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 	case GLFW_KEY_R:
 		instance->resetCamera();
 		break;
+	
 		
 	case GLFW_KEY_ESCAPE:
 		glfwSetWindowShouldClose(window, GL_TRUE);
@@ -139,6 +210,15 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 		case GLFW_KEY_LEFT_SHIFT:
 		case GLFW_KEY_RIGHT_SHIFT:
 			instance->setShiftBtnPressStatus(false);
+			break;
+		case GLFW_KEY_I:
+			instance->debugFreeRoam();
+			break;
+		case GLFW_KEY_F:
+			instance->toggleFlashLight();
+			break;
+		case GLFW_KEY_SPACE:
+			instance->placeOnPlane();
 			break;
 		}
 	}
