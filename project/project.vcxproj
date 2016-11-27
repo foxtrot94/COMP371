@@ -25,7 +25,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Demo|Win32'" Label="Configuration">
@@ -183,20 +183,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Building.h" />
     <ClInclude Include="include\base\Grid.h" />
     <ClInclude Include="include\base\Mesh.h" />
     <ClInclude Include="include\base\Modulator.h" />
+    <ClInclude Include="include\procedural\Grid.h" />
+    <ClInclude Include="include\procedural\Building.h" />
     <ClInclude Include="include\base\Engine.h" />
     <ClInclude Include="include\Camera.h" />
-    <ClInclude Include="include\Plane.h" />
+    <ClInclude Include="include\procedural\LayerManager.h" />
+    <ClInclude Include="include\procedural\Plane.h" />
     <ClInclude Include="include\Plant.h" />
     <ClInclude Include="include\main.h" />
     <ClInclude Include="include\CImg.h" />
     <ClInclude Include="include\base\Renderer.h" />
     <ClInclude Include="include\base\Shader.h" />
     <ClInclude Include="include\Terrain.h" />
-    <ClInclude Include="include\TriangleTest.h" />
+    <ClInclude Include="include\procedural\TriangleTest.h" />
     <ClInclude Include="include\Utils.h" />
     <ClInclude Include="include\base\input.h" />
     <ClInclude Include="include\stdafx.h" />
@@ -204,7 +206,9 @@
     <ClInclude Include="include\base\Objects.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Plane.cpp" />
+    <ClCompile Include="src\procedural\Building.cpp" />
+    <ClCompile Include="src\procedural\Grid.cpp" />
+    <ClCompile Include="src\procedural\Plane.cpp" />
     <ClCompile Include="src\base\Engine.cpp" />
     <ClCompile Include="src\base\Mesh.cpp" />
     <ClCompile Include="src\base\input.cpp" />
@@ -212,6 +216,7 @@
     <ClCompile Include="src\base\Renderer.cpp" />
     <ClCompile Include="src\base\Shader.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\procedural\LayerManager.cpp" />
     <ClCompile Include="src\Utils.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp">

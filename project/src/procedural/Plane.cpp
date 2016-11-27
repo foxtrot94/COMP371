@@ -1,4 +1,4 @@
-#include "Plane.h"
+#include "procedural/Plane.h"
 
 void Plane::Generate()
 {
@@ -20,6 +20,4 @@ void Plane::Generate()
 
 	mesh.setVertices(vertices);
 	mesh.setVertexColor(colors);
-	
-
 }

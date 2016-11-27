@@ -3,6 +3,8 @@
 
 #include "base\Engine.h"
 
+#include "procedural\Grid.h"
+
 //Entry point
 int main()
 {

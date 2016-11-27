@@ -84,7 +84,7 @@ protected:
 public:
 	//Function that should be called to instance this object
 	//Override and place procedural logic
-	virtual void Generate();
+	virtual void Generate() = 0;
 
 	//Default ctor
 	ProceduralObject(); //TODO: Remove and replace with ctor that takes bounds

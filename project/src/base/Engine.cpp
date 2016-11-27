@@ -1,8 +1,11 @@
+#include <time.h>
+#include <random>
+
 #include "gtc/matrix_transform.hpp"
 
 #include "base/Engine.h"
-#include "TriangleTest.h"
-#include "Plane.h"
+#include "procedural/TriangleTest.h"
+#include "procedural/Plane.h"
 
 WorldEngine::WorldEngine()
 {
@@ -76,9 +79,11 @@ void WorldEngine::Init(std::string WindowTitle)
 	Shader* shaderBuilder = new Shader("glsl\\vertex.shader", "glsl\\fragment.shader");
 	renderer->UseShader(shaderBuilder);
 
+	//Seed randomness
+	srand(time(NULL));
+
 	//Initialize Camera and pass width and height from engine window
 	camera = Camera::GetInstance(engineWindow);
-	//Pass camera to Input
 	input->setCamera(camera);
 
 	//Also initialize the Input

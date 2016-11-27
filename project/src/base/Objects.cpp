@@ -14,11 +14,6 @@ ProceduralObject::~ProceduralObject() {
 
 }
 
-void ProceduralObject::Generate() {
-	//If this hasn't been overriden, crash.
-	//*((int *)0)=1;
-}
-
 GLMesh * WorldGenericObject::getMesh()
 {
 	return &(this->mesh);
