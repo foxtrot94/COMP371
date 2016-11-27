@@ -74,8 +74,29 @@ void Camera::chooseDirection(char operation, char axis)
 
 mat4 Camera::GetView()
 {
-	return glm::lookAt(camPam.cameraPos, camPam.cameraPos + camPam.cameraFront, camPam.cameraUp);
+	// camPam.cameraPos + camPam.cameraFront
+	if (isRoamStarted == false)
+	{
+		return GetInitialView();
+	}
+	else if (isRoamStarted == true)
+	{
+		return GetSpaceView();
+	}
+	
 }
+mat4 Camera::GetInitialView()
+{
+	// camPam.cameraPos + camPam.cameraFront
+	 return glm::lookAt(camPam.cameraPos, glm::vec3(0.0f), camPam.cameraUp);
+}
+
+mat4 Camera::GetSpaceView()
+{
+	
+    return glm::lookAt(camPam.cameraPos, camPam.cameraPos + camPam.cameraFront, camPam.cameraUp);
+}
+
 
 mat4 Camera::GetProjection(EngWindPtr engineWindow)
 {
@@ -83,26 +104,78 @@ mat4 Camera::GetProjection(EngWindPtr engineWindow)
 	return glm::perspective(camPam.fov, engineWindow->AspectRatio(), 0.1f, 1000.0f);
 }
 
+
+
+//Freezes Y, so you cant move up
+void Camera::freezeY()
+{
+	
+	if (isYFrozen == true)
+	{
+		camPam.cameraPos.y = 5;
+	}
+	else if (isYFrozen == false)
+	{
+		
+	}
+
+}
+
+
 // Front and Back Operations
 void Camera::increaseZ(float camSpeed)
 {
 	
 	camPam.cameraPos += camPam.cameraFront * camSpeed;
+	freezeY();
+
 	
 }
 void Camera::decreaseZ(float camSpeed)
 {
 	camPam.cameraPos -= camPam.cameraFront * camSpeed;
+	freezeY();
 }
 
 //Strafe Left and Right Operations
 void Camera::decreaseX(float camSpeed)
 {
 	camPam.cameraPos -=  glm::normalize(glm::cross(camPam.cameraFront, camPam.cameraUp)) * camSpeed;
+	freezeY();
 }
 
 void Camera::increaseX(float camSpeed)
 {
 	camPam.cameraPos += glm::normalize(glm::cross(camPam.cameraFront, camPam.cameraUp)) * camSpeed;
+	freezeY();
 }
+
+
+void Camera::debugMode(bool isOn)
+{
+	if (isOn == true)
+	{
+		CAM_SPEED_CONSTANT = 8000;
+		isYFrozen = false;
+	}
+	else if (isOn == false)
+	{
+		camPam.cameraPos = glm::vec3(0.0f, 5.0f, 3.0f);
+		CAM_SPEED_CONSTANT = 1000;
+		isYFrozen = true;
+	}
+}
+
+void Camera::startRoam()
+{
+	if (isRoamStarted == false)
+	{
+		camPam.cameraPos = glm::vec3(0.0f, 5.0f, 3.0f);
+		isRoamStarted = true;
+	}
+		
+}
+
+
+
 
