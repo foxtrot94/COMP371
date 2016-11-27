@@ -11,7 +11,7 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
+#*.dll #need this one for glfw and glew deps
 
 # Fortran module files
 *.mod
@@ -28,8 +28,16 @@
 *.out
 *.app
 /Debug
+/Demo
 /ipch
 /project/Debug
+/project/Demo
 *.opendb
 *.VC.db
 *.suo
+*.user
+*.sdf
+*.TMP
+/Demo
+/project/Demo
+*.orig
