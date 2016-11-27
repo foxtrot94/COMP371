@@ -40,3 +40,4 @@
 *.TMP
 /Demo
 /project/Demo
+*.orig

@@ -40,6 +40,9 @@ private:
 	//Main Camera
 	Camera* camera;
 
+	//
+	bool hasLoaded;
+
 	//Update everything related to time
 	void UpdateTime();
 
@@ -48,6 +51,9 @@ private:
 
 	//Draw a single frame using our renderer. Uses forward rendering mode.
 	void DrawFrame();
+
+	//
+	void DrawLoadScreen();
 
 	//Cleanup resources
 	void Cleanup();

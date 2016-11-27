@@ -13,27 +13,19 @@ void Input::resetCamera(){
 
 void Input::moveFwd()
 {
-	if (isSpacePressed == true)
-	{
-
 	mainCamera->chooseDirection('p','z');
 	std::cout << "going fwd" << std::endl;
-	}
 }
 
 void Input::moveBwd()
 {
-	if (isSpacePressed == true)
-	{
+	mainCamera->chooseDirection('n', 'z');
+	std::cout << "going bwd" << std::endl;
 
-		mainCamera->chooseDirection('n', 'z');
-		std::cout << "going bwd" << std::endl;
-	}
 }
 
 void Input::turnLeft()
 {
-
 	std::cout << "turning left" << std::endl;
 }
 
@@ -44,22 +36,14 @@ void Input::turnRight()
 
 void Input::strafeLeft()
 {
-	if (isSpacePressed == true)
-	{
-
-		mainCamera->chooseDirection('n', 'x');
-		std::cout << "dodge left" << std::endl;
-	}
+	mainCamera->chooseDirection('n', 'x');
+	std::cout << "dodge left" << std::endl;
 }
 
 void Input::strafeRight()
 {
-	if (isSpacePressed == true)
-	{
-
-		mainCamera->chooseDirection('p', 'x');
-		std::cout << "dodge right" << std::endl;
-	}
+	mainCamera->chooseDirection('p', 'x');
+	std::cout << "dodge right" << std::endl;
 }
 
 void Input::leftMouseClick()
@@ -147,8 +131,8 @@ void Input::moveCamera(glm::vec2 direction)
 	/*std::cout << "PITCH : " << mainCamera->GetPitch()<<"  ";
 	std::cout << "YAW : " << mainCamera->GetYaw()<<"\n";
 	std::cout << "Front: X: " << front.x<< " Y: "<<front.y<< " Z: " << front.z << "\n";*/
-	std::cout << "x : " << direction.x;
-	std::cout << "y : " << direction.y << std::endl;
+	//std::cout << "x : " << direction.x;
+	//std::cout << "y : " << direction.y << std::endl;
 
 }
 
@@ -163,7 +147,7 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 
 	static char lastKey = 0;
 	char pressKey = 0;
-	//if (action == GLFW_PRESS) {
+	{
 	switch (key)
 	{
 	case GLFW_KEY_W:
@@ -189,7 +173,7 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 	case GLFW_KEY_R:
 		instance->resetCamera();
 		break;
-	
+		
 		
 	case GLFW_KEY_ESCAPE:
 		glfwSetWindowShouldClose(window, GL_TRUE);
@@ -203,6 +187,7 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 	default:
 		//std::cout << "Unhandled input" << std::endl;
 		break;
+	}
 	}
 
 	if (action == GLFW_RELEASE) {
@@ -222,13 +207,7 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 			break;
 		}
 	}
-	if (pressKey && lastKey!=pressKey) {
-		std::cout << "pressed " << pressKey << std::endl;
-		lastKey = pressKey;
 	}
-
-	//}  // IF (action==press)
-}
 
 void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
 

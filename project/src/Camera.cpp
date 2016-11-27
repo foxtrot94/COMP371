@@ -9,7 +9,7 @@ float Camera::GetCameraSpeed()
 
 void Camera::Update(const float& deltaTime)
 {
-	cameraSpeed = deltaTime * CAM_SPEED_CONSTANT;
+	cameraSpeed = (deltaTime) * CAM_SPEED_CONSTANT;
 }
 
 GLfloat Camera::GetYaw()
@@ -75,14 +75,14 @@ void Camera::chooseDirection(char operation, char axis)
 mat4 Camera::GetView()
 {
 	// camPam.cameraPos + camPam.cameraFront
-	if (isRoamStarted == false)
-	{
-		return GetInitialView();
-	}
-	else if (isRoamStarted == true)
-	{
+	//if (isRoamStarted == false)
+	//{
+	//	return GetInitialView();
+	//}
+	//else if (isRoamStarted == true)
+	//{
 		return GetSpaceView();
-	}
+	//}
 	
 }
 mat4 Camera::GetInitialView()
@@ -101,7 +101,7 @@ mat4 Camera::GetSpaceView()
 mat4 Camera::GetProjection(EngWindPtr engineWindow)
 {
 	//TODO: Put near and far place as members of the camera internals
-	return glm::perspective(camPam.fov, engineWindow->AspectRatio(), 0.1f, 1000.0f);
+	return glm::perspective(camPam.fov, engineWindow->AspectRatio(), 0.1f, 2000.0f);
 }
 
 

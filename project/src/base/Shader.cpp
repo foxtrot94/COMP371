@@ -60,7 +60,10 @@ std::string Shader::readShaderCodeFromFile(std::string shader_path)
 	}
 	else {
 		printf("Impossible to open %s. Are you in the right directory?\n", shader_path.c_str());
-		getchar();
+		#if _DEBUG
+		//Made this debug break to avoid debugging GLSL shaders. Check them to see what's wrong
+		__debugbreak();
+		#endif
 		exit(-1);
 	}
 

@@ -40,7 +40,9 @@ public:
 	void setCamera(Camera* newCamera);
 	
 	void leftMouseClick();
+	bool leftMouseClicked() { return MOUSE_L_PRESSED; }
 	void rightMouseClick();
+	bool rightMouseClicked() { return MOUSE_R_PRESSED; }
 
 	void debugFreeRoam();
 	void toggleFlashLight();

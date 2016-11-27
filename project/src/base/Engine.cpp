@@ -1,8 +1,14 @@
+#include <time.h>
+#include <random>
+#include <thread>
+
 #include "gtc/matrix_transform.hpp"
 
 #include "base/Engine.h"
-#include "TriangleTest.h"
-#include "Plane.h"
+#include "procedural/TriangleTest.h"
+#include "procedural/Plane.h"
+#include "procedural/Building.h"
+#include "procedural/LayerManager.h"
 
 WorldEngine::WorldEngine()
 {
@@ -43,23 +49,7 @@ void WorldEngine::ProcessInputs()
 
 void WorldEngine::DrawFrame()
 {
-//<<<<<<< HEAD
-	//@foxtrot94: DEBUG CODE - Remove or Comment in Master
-	//mat4 view(1.f), projection(1.f);
-	//@foxtrot94
-
-	//Camera taking deltaTime for its operations
-	camera->Update(deltaTime);
-
-	// Camera/View transformation 
-	//TODO: move these elsewhere
-	//view = glm::lookAt(camera->camPam.cameraPos, camera->camPam.cameraPos + camera->camPam.cameraFront,camera->camPam.cameraUp);
-	//projection = glm::perspective(camera->camPam.fov, (GLfloat)engineWindow->width/ (GLfloat)engineWindow->height, 0.1f, 100.0f);
-
-	//Draw on buffer
-//=======
 	//Clear screen buffer
-//>>>>>>> refs/remotes/origin/master
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //Black Background
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -67,6 +57,8 @@ void WorldEngine::DrawFrame()
 	camera->Update(deltaTime);
 	mat4 view = camera->GetView();
 	mat4 projection = camera->GetProjection(engineWindow);
+
+	renderer->RenderSkyBox(camera);
 
 	renderer->UpdateCamera(view, projection);
 	for (auto* object : drawables) {
@@ -76,6 +68,20 @@ void WorldEngine::DrawFrame()
 
 	//Show to screen
 	glfwSwapBuffers(engineWindow->glfwContext);
+}
+
+void WorldEngine::DrawLoadScreen()
+{
+	if (engineWindow != NULL) {
+		while (!hasLoaded) {
+			this->UpdateTime();
+			this->ProcessInputs();
+			
+			glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //Black Background
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glfwSwapBuffers(engineWindow->glfwContext);
+		}
+	}
 }
 
 void WorldEngine::Cleanup()
@@ -89,12 +95,12 @@ void WorldEngine::Init(std::string WindowTitle)
 	//Initialize GLFW and the renderer
 	std::cout << "Starting OpenGL 3.3 using GLFW" << std::endl;
 	engineWindow = renderer->Initialize(WindowTitle);
-	Shader* shaderBuilder = new Shader("glsl\\vertex.shader", "glsl\\fragment.shader");
-	renderer->UseShader(shaderBuilder);
+
+	//Seed randomness
+	srand(time(NULL));
 
 	//Initialize Camera and pass width and height from engine window
 	camera = Camera::GetInstance(engineWindow);
-	//Pass camera to Input
 	input->setCamera(camera);
 
 	//Also initialize the Input
@@ -105,8 +111,26 @@ void WorldEngine::Init(std::string WindowTitle)
 
 void WorldEngine::LoadWorld()
 {
+	std::thread loadScreen(&WorldEngine::DrawLoadScreen, this);
+
 	//TODO: Place all the world loading here.
-	//We can fire off a thread to keep the screen drawing while this method begins loading the world
+
+	//Build standard shader
+	Shader* shaderBuilder = new Shader("glsl\\vertex.shader", "glsl\\fragment.shader");
+	renderer->UseShader(shaderBuilder);
+
+	//Build skybox shader
+	Shader* skyBoxShaderBuilder = new Shader("glsl\\skybox_vertex.shader", "glsl\\skybox_fragment.shader");
+	renderer->UseSkyBoxShader(skyBoxShaderBuilder);
+
+	//Initialize (load) skybox
+	renderer->InitSkyBox();
+
+	WorldLayerManager layerMaker;
+	layerMaker.CreateCity();
+
+	hasLoaded = true;
+	loadScreen.join();
 }
 
 void WorldEngine::Run()
@@ -121,9 +145,11 @@ void WorldEngine::Run()
 	//@foxtrot94: DEBUG CODE - Remove or Comment in Master
 	WorldGenericObject* triangle = new TriangleTest();
 	ProceduralObject* plane = new Plane();
-	plane->Generate();
+	//WorldGenericObject* building = new Building(12);
+	plane->Generate(Bounds(0.f,50.f,0.f,50.f));
+	plane->translate(-25.f, 0.f, -25.f);
 	drawables.push_back(plane);
-
+	//drawables.push_back(building);
 	//Game loop
 	std::cout << "Initialization complete, starting game" << std::endl;
 	while (!glfwWindowShouldClose(engineWindow->glfwContext)) {
@@ -132,9 +158,11 @@ void WorldEngine::Run()
 		this->DrawFrame();
 	}
 
+	//drawables.pop_back();
 	drawables.pop_back();
 	delete triangle;
 	delete plane;
+	//delete building;
 
 	glfwTerminate();
 }
