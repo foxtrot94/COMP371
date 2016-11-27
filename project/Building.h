@@ -9,50 +9,53 @@ private:
 	// Variables useful for this class
 	std::vector<vec3> buildingVertices, colors;
 	float curHeight, curSize;
+	int angleNumber, diagNumber;
 
-	void buildCube(float size, vec3 pos) {
+	glm::vec2 buildingPos;
+
+	void buildCube(float size, vec3 pos) { // pos is the offset
 		// Front square
-		buildingVertices.push_back(vec3(pos.x - size, pos.y + size, pos.z - size)); //top left near 
-		buildingVertices.push_back(vec3(pos.x - size, pos.y - size, pos.z - size)); //bottom left near
-		buildingVertices.push_back(vec3(pos.x + size, pos.y - size, pos.z - size)); //bottom right near
-		buildingVertices.push_back(vec3(pos.x - size, pos.y + size, pos.z - size)); //top left near
-		buildingVertices.push_back(vec3(pos.x + size, pos.y - size, pos.z - size)); //bottom right near
-		buildingVertices.push_back(vec3(pos.x + size, pos.y + size, pos.z - size)); //top right near
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y + size, buildingPos.y + pos.z - size)); //top left near 
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y - size, buildingPos.y + pos.z - size)); //bottom left near
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y - size, buildingPos.y + pos.z - size)); //bottom right near
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y + size, buildingPos.y + pos.z - size)); //top left near
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y - size, buildingPos.y + pos.z - size)); //bottom right near
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y + size, buildingPos.y + pos.z - size)); //top right near
 		// Back square
-		buildingVertices.push_back(vec3(pos.x - size, pos.y + size, pos.z + size)); //top left far 
-		buildingVertices.push_back(vec3(pos.x - size, pos.y - size, pos.z + size)); //bottom left far
-		buildingVertices.push_back(vec3(pos.x + size, pos.y - size, pos.z + size)); //bottom right far
-		buildingVertices.push_back(vec3(pos.x - size, pos.y + size, pos.z + size)); //top left far
-		buildingVertices.push_back(vec3(pos.x + size, pos.y - size, pos.z + size)); //bottom right far
-		buildingVertices.push_back(vec3(pos.x + size, pos.y + size, pos.z + size)); //top right far
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y + size, buildingPos.y + pos.z + size)); //top left far 
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y - size, buildingPos.y + pos.z + size)); //bottom left far
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y - size, buildingPos.y + pos.z + size)); //bottom right far
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y + size, buildingPos.y + pos.z + size)); //top left far
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y - size, buildingPos.y + pos.z + size)); //bottom right far
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y + size, buildingPos.y + pos.z + size)); //top right far
 		// Left square
-		buildingVertices.push_back(vec3(pos.x - size, pos.y + size, pos.z - size)); //top left near 
-		buildingVertices.push_back(vec3(pos.x - size, pos.y - size, pos.z - size)); //bottom left near
-		buildingVertices.push_back(vec3(pos.x - size, pos.y - size, pos.z + size)); //bottom left far
-		buildingVertices.push_back(vec3(pos.x - size, pos.y - size, pos.z + size)); //bottom left far
-		buildingVertices.push_back(vec3(pos.x - size, pos.y + size, pos.z - size)); //top left near
-		buildingVertices.push_back(vec3(pos.x - size, pos.y + size, pos.z + size)); //top left far
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y + size, buildingPos.y + pos.z - size)); //top left near 
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y - size, buildingPos.y + pos.z - size)); //bottom left near
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y - size, buildingPos.y + pos.z + size)); //bottom left far
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y - size, buildingPos.y + pos.z + size)); //bottom left far
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y + size, buildingPos.y + pos.z - size)); //top left near
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y + size, buildingPos.y + pos.z + size)); //top left far
 		// Right square
-		buildingVertices.push_back(vec3(pos.x + size, pos.y + size, pos.z - size)); //top right near
-		buildingVertices.push_back(vec3(pos.x + size, pos.y - size, pos.z - size)); //bottom right near
-		buildingVertices.push_back(vec3(pos.x + size, pos.y - size, pos.z + size)); //bottom right far
-		buildingVertices.push_back(vec3(pos.x + size, pos.y - size, pos.z + size)); //bottom right far
-		buildingVertices.push_back(vec3(pos.x + size, pos.y + size, pos.z + size)); //top right far
-		buildingVertices.push_back(vec3(pos.x + size, pos.y + size, pos.z - size)); //top right near
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y + size, buildingPos.y + pos.z - size)); //top right near
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y - size, buildingPos.y + pos.z - size)); //bottom right near
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y - size, buildingPos.y + pos.z + size)); //bottom right far
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y - size, buildingPos.y + pos.z + size)); //bottom right far
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y + size, buildingPos.y + pos.z + size)); //top right far
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y + size, buildingPos.y + pos.z - size)); //top right near
 		// Top square
-		buildingVertices.push_back(vec3(pos.x + size, pos.y + size, pos.z - size)); //top right near
-		buildingVertices.push_back(vec3(pos.x + size, pos.y + size, pos.z + size)); //top right far
-		buildingVertices.push_back(vec3(pos.x - size, pos.y + size, pos.z + size)); //top left far
-		buildingVertices.push_back(vec3(pos.x - size, pos.y + size, pos.z + size)); //top left far
-		buildingVertices.push_back(vec3(pos.x - size, pos.y + size, pos.z - size)); //top left near 
-		buildingVertices.push_back(vec3(pos.x + size, pos.y + size, pos.z - size)); //top right near
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y + size, buildingPos.y + pos.z - size)); //top right near
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y + size, buildingPos.y + pos.z + size)); //top right far
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y + size, buildingPos.y + pos.z + size)); //top left far
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y + size, buildingPos.y + pos.z + size)); //top left far
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y + size, buildingPos.y + pos.z - size)); //top left near 
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y + size, buildingPos.y + pos.z - size)); //top right near
 		// Bottom square
-		buildingVertices.push_back(vec3(pos.x + size, pos.y - size, pos.z - size)); //bottom right near
-		buildingVertices.push_back(vec3(pos.x + size, pos.y - size, pos.z + size)); //bottom right far
-		buildingVertices.push_back(vec3(pos.x - size, pos.y - size, pos.z + size)); //bottom left far
-		buildingVertices.push_back(vec3(pos.x - size, pos.y - size, pos.z + size)); //bottom left far
-		buildingVertices.push_back(vec3(pos.x - size, pos.y - size, pos.z - size)); //bottom left near
-		buildingVertices.push_back(vec3(pos.x + size, pos.y - size, pos.z - size)); //bottom right near
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y - size, buildingPos.y + pos.z - size)); //bottom right near
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y - size, buildingPos.y + pos.z + size)); //bottom right far
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y - size, buildingPos.y + pos.z + size)); //bottom left far
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y - size, buildingPos.y + pos.z + size)); //bottom left far
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x - size, pos.y - size, buildingPos.y + pos.z - size)); //bottom left near
+		buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y - size, buildingPos.y + pos.z - size)); //bottom right near
 
 		// TODO: Texture Coordinates instead of colors
 		for(int i = 0; i < 6; i++) {
@@ -125,7 +128,7 @@ private:
 		// Determine size
 		float size = curSize / 3;
 		if(!copyP) {
-			size = findSize(curSize / 3);
+			size = findSize(size);
 		}
 		// Adjust height
 		curHeight += size;
@@ -139,44 +142,83 @@ private:
 		curSize = size * 3;
 	}
 
-	void diagonalPattern(float& curSize, float& curHeight, bool copyP) {
-		// TODO: Fix
-
-		// Determine size
-		float size = curSize / 2;
+	void diagonalOrHalfPattern(float& curSize, float& curHeight, bool copyP) {
+		// Determine size and pattern
+		float size;
 		if(!copyP) {
 			size = findSize(curSize / 2);
+			diagNumber = randNumber(1, 6); // Number to determine which pattern we use
+		}
+		else {
+			size = curSize / 2;
 		}
 		// Adjust height
 		curHeight += size;
 		// Build pattern
-		buildCube(size, vec3(-size, curHeight, -size));
-		buildCube(size, vec3( size, curHeight,  size));
-		
-		//buildCube(size, vec3( size, curHeight, -size));
-		//buildCube(size, vec3(-size, curHeight,  size));
-
+		switch(diagNumber) {
+			case 1 :
+				buildCube(size, vec3(-size, curHeight, -size));
+				buildCube(size, vec3( size, curHeight,  size));
+				break;
+			case 2 :
+				buildCube(size, vec3( size, curHeight, -size));
+				buildCube(size, vec3(-size, curHeight,  size));
+				break;
+			case 3 :
+				buildCube(size, vec3(-size, curHeight, -size));
+				buildCube(size, vec3(-size, curHeight,  size));
+				break;
+			case 4 :
+				buildCube(size, vec3( size, curHeight, -size));
+				buildCube(size, vec3( size, curHeight,  size));
+				break;
+			case 5 :
+				buildCube(size, vec3(-size, curHeight, -size));
+				buildCube(size, vec3( size, curHeight, -size));
+				break;
+			case 6 :
+				buildCube(size, vec3( size, curHeight,  size));
+				buildCube(size, vec3( size, curHeight, -size));
+				break;
+		}
 		// Adjust current size and height
 		curHeight += size;
 		curSize = size * 2;
 	}
 
 	void anglePattern(float& curSize, float& curHeight, bool copyP) {
-		// TODO: Fix
-
 		// Determine size
-		float size = curSize / 2;
+		float size;
 		if(!copyP) {
 			size = findSize(curSize / 2);
+			angleNumber = randNumber(1, 4);
+		}
+		else {
+			size = curSize / 2;
 		}
 		// Adjust height
 		curHeight += size;
 		// Build pattern
-		buildCube(size, vec3(-size, curHeight, -size));
-		buildCube(size, vec3( size, curHeight,  size));
-		buildCube(size, vec3( size, curHeight, -size));
-		//buildCube(size, vec3(-size, curHeight,  size));
-
+		for(int i = 0; i < 3; i++)
+		{
+			if(i == angleNumber) {
+				break;
+			}
+			switch(angleNumber) {
+				case 1 :
+					buildCube(size, vec3(-size, curHeight, -size));
+					break;
+				case 2 :
+					buildCube(size, vec3( size, curHeight,  size));
+					break;
+				case 3 :
+					buildCube(size, vec3( size, curHeight, -size));
+					break;
+				case 4 :
+					buildCube(size, vec3(-size, curHeight,  size));
+					break;
+			}
+		}
 		// Adjust current size and height
 		curHeight += size;
 		curSize = size * 2;
@@ -201,50 +243,49 @@ private:
 
 	int randNumber(int min, int max)
 	{
-		//return glm::linearRand(min, max);
-		//return GLM_FUNC_DECL(lowRange, highRange);
 		int xRand;
-		//srand(time(0));
 		xRand = min + (rand() % max); // Randomizing the number between lowRange and highRange.
 		return xRand;
 	}
 
 public:
-	Building(int buildingH) {
-		// TODO: Add more patterns
-
+	Building(int buildingH, float buildingS, glm::vec2 buildingP) {
 		// TODO: Add texture mapping
 
-		// TODO: Decide which patterns can't go above other patterns. AKA FourPillarsPattern
-
+		// Set the random generator seed
 		srand(time(0));
 
-		//int buildingH = 6;
+		bool copyPattern, patternWasPillars = false;
 		int switchPattern = randNumber(1, 6);
-
-		bool copyPattern;
+		// Initialize building position on the plane (x and z coordinates)
+		buildingPos = buildingP;
 		// Initial height
 		curHeight = 0;
 		// Initialize default curSize and curHeight
-		curSize = 0.25f;
-		curHeight -= 3 * curSize; // Change this to: curHeight += curSize; (for it to be at a height of 0.0)
+		curSize = buildingS; // Initialize the building size (1.0f = 1 meter)
+		curHeight += curSize; // Initialize the building at a height of 0.0f on the y axis
 
 		// Algorithm to make a building
-		for(int countBuildingH = 0; countBuildingH < buildingH; countBuildingH++)
-		{
+		for(int countBuildingH = 0; countBuildingH < buildingH; countBuildingH++) {
 			copyPattern = false;
 			// 66.67% chance to copy last pattern
-			if(randNumber(1, 3) != 3)
-			{
+			if(randNumber(1, 3) != 3) {
 				copyPattern = true;
 			}
 			// Random a new pattern
-			if(!copyPattern)
-			{
-				switchPattern = randNumber(1, 6);
+			if(!copyPattern) {
+				// Make sure you don't rambom non compatible patterns to go over fou pillar pattern
+				if(patternWasPillars)
+				{
+					switchPattern = randNumber(1, 4);
+				}
+				else {
+					switchPattern = randNumber(1, 6);
+				}
 			}
 			switch(switchPattern) {
 				case 1 :
+					patternWasPillars = true;
 					fourPillarsPattern(curSize, curHeight, copyPattern);
 					break;
 				case 2 :
@@ -257,7 +298,7 @@ public:
 					plusSignPattern(curSize, curHeight, copyPattern);
 					break;
 				case 5 :
-					diagonalPattern(curSize, curHeight, copyPattern);
+					diagonalOrHalfPattern(curSize, curHeight, copyPattern);
 					break;
 				case 6 :
 					anglePattern(curSize, curHeight, copyPattern);
@@ -270,7 +311,7 @@ public:
 		mesh.setVertices(buildingVertices);
 		mesh.setVertexColor(colors);
 
-		Model = mat4(1.f);
+		Model = mat4(1.0f);
 	}
 
 	~Building() {}
