@@ -56,7 +56,8 @@ void WorldEngine::DrawFrame()
 	camera->Update(deltaTime);
 	mat4 view = camera->GetView();
 	mat4 projection = camera->GetProjection(engineWindow);
-	renderer->RenderSkyBox();
+
+	renderer->RenderSkyBox(camera);
 
 	renderer->UpdateCamera(view, projection);
 	for (auto* object : drawables) {

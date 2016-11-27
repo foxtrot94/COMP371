@@ -2,6 +2,8 @@
 #include "base\Objects.h"
 #include "base\Shader.h"
 
+#include "Camera.h"
+
 Renderer* Renderer::singleton = NULL;
 
 Renderer::Renderer()
@@ -134,7 +136,7 @@ void Renderer::Render(std::vector<WorldGenericObject*> Objects)
 	glBindVertexArray(NULL);
 }
 
-void Renderer::RenderSkyBox() {
+void Renderer::RenderSkyBox(Camera* camera) {
 	if (skybox == NULL) 
 	{
 		InitSkyBox();
@@ -144,9 +146,9 @@ void Renderer::RenderSkyBox() {
 		uint skyboxShaderProgram = skyBoxShader->getShaderProgram();
 		glUseProgram(skyboxShaderProgram);
 		
-		glm::mat4 skybox_view = glm::mat4(1.f); // TODO set it to whatever updateCamera has
-		glm::mat4 skybox_transform = glm::mat4(1.f);
-		glm::mat4 projection_matrix = glm::perspective(45.0f, (GLfloat)this->GetMainWindow()->width / (GLfloat)this->GetMainWindow()->height, 0.1f, 100.0f);
+		glm::mat4 skybox_view = camera->GetView(); // TODO set it to whatever updateCamera has
+		glm::mat4 skybox_transform = glm::scale(glm::mat4(1.f),vec3(1000.f));
+		glm::mat4 projection_matrix = camera->GetProjection(mainWindow);
 
 		Shader::Uniforms uniform = skyBoxShader->getUniforms();
 

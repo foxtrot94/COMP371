@@ -17,6 +17,7 @@
 
 
 class WorldGenericObject;
+class Camera;
 class Shader;
 class GLMesh;
 
@@ -103,5 +104,5 @@ public:
 	void Render(std::vector<WorldGenericObject*> Objects);
 
 	//Draw the skybox cube
-	void RenderSkyBox();
+	void RenderSkyBox(Camera* camera);
 };
