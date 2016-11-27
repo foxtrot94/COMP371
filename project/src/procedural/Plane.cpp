@@ -1,10 +1,10 @@
 #include "procedural/Plane.h"
 
-void Plane::Generate()
+void Plane::Generate(Bounds perimeter)
 {
 	//Make a new plane. Fixed size for now
-	vec3 topRight(500.f,0.f, 500.f);
-	vec3 bottomLeft(-topRight);
+	vec3 topRight(perimeter.getXmax(),0.f, perimeter.getYmax());
+	vec3 bottomLeft(perimeter.getXmin(), 0.f, perimeter.getYmin());
 	
 	std::vector<vec3> vertices;
 	vertices.push_back(vec3(bottomLeft));

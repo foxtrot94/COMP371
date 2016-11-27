@@ -6,6 +6,8 @@
 #include "base/Engine.h"
 #include "procedural/TriangleTest.h"
 #include "procedural/Plane.h"
+#include "procedural/Building.h"
+#include "procedural/LayerManager.h"
 
 WorldEngine::WorldEngine()
 {
@@ -96,6 +98,8 @@ void WorldEngine::LoadWorld()
 {
 	//TODO: Place all the world loading here.
 	//We can fire off a thread to keep the screen drawing while this method begins loading the world
+	WorldLayerManager layerMaker;
+	layerMaker.CreateCity();
 }
 
 void WorldEngine::Run()
@@ -110,9 +114,11 @@ void WorldEngine::Run()
 	//@foxtrot94: DEBUG CODE - Remove or Comment in Master
 	WorldGenericObject* triangle = new TriangleTest();
 	ProceduralObject* plane = new Plane();
-	plane->Generate();
+	//WorldGenericObject* building = new Building(12);
+	plane->Generate(Bounds(0.f,50.f,0.f,50.f));
+	plane->translate(-25.f, 0.f, -25.f);
 	drawables.push_back(plane);
-
+	//drawables.push_back(building);
 	//Game loop
 	std::cout << "Initialization complete, starting game" << std::endl;
 	while (!glfwWindowShouldClose(engineWindow->glfwContext)) {
@@ -121,9 +127,11 @@ void WorldEngine::Run()
 		this->DrawFrame();
 	}
 
+	//drawables.pop_back();
 	drawables.pop_back();
 	delete triangle;
 	delete plane;
+	//delete building;
 
 	glfwTerminate();
 }

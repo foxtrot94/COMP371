@@ -9,7 +9,7 @@ float Camera::GetCameraSpeed()
 
 void Camera::Update(const float& deltaTime)
 {
-	cameraSpeed = deltaTime * CAM_SPEED_CONSTANT;
+	cameraSpeed = (deltaTime) * CAM_SPEED_CONSTANT;
 }
 
 GLfloat Camera::GetYaw()

@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "base/Mesh.h"
+#include "Bounds.h"
 #include "Utils.h"
 
 //Just an object that can be handled by the engine and placed in world
@@ -79,16 +80,18 @@ private:
 	//TODO: Incorporate RNG here
 
 protected:
-
+	//Bounds perimeter;
 
 public:
 	//Function that should be called to instance this object
 	//Override and place procedural logic
-	virtual void Generate() = 0;
+	virtual void Generate(Bounds perimeter) = 0;
 
 	//Default ctor
-	ProceduralObject(); //TODO: Remove and replace with ctor that takes bounds
+	ProceduralObject(/*Bounds bounds, vec3 center*/);
 
 	//Virt dtor
 	virtual ~ProceduralObject();
+
+	virtual bool wasGenerated();
 };

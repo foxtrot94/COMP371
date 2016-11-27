@@ -186,6 +186,7 @@
     <ClInclude Include="include\base\Grid.h" />
     <ClInclude Include="include\base\Mesh.h" />
     <ClInclude Include="include\base\Modulator.h" />
+    <ClInclude Include="include\Bounds.h" />
     <ClInclude Include="include\procedural\Grid.h" />
     <ClInclude Include="include\procedural\Building.h" />
     <ClInclude Include="include\base\Engine.h" />
@@ -197,6 +198,7 @@
     <ClInclude Include="include\CImg.h" />
     <ClInclude Include="include\base\Renderer.h" />
     <ClInclude Include="include\base\Shader.h" />
+    <ClInclude Include="include\procedural\Road.h" />
     <ClInclude Include="include\Terrain.h" />
     <ClInclude Include="include\procedural\TriangleTest.h" />
     <ClInclude Include="include\Utils.h" />
@@ -206,6 +208,7 @@
     <ClInclude Include="include\base\Objects.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Bounds.cpp" />
     <ClCompile Include="src\procedural\Building.cpp" />
     <ClCompile Include="src\procedural\Grid.cpp" />
     <ClCompile Include="src\procedural\Plane.cpp" />
@@ -217,6 +220,7 @@
     <ClCompile Include="src\base\Shader.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\procedural\LayerManager.cpp" />
+    <ClCompile Include="src\procedural\Roads.cpp" />
     <ClCompile Include="src\Utils.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp">

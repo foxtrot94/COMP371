@@ -5,7 +5,7 @@
 //#include <stdlib.h>
 #include <time.h>
 
-class Building : ProceduralObject {
+class Building : public ProceduralObject {
 private:
 	// Variables useful for this class
 	std::vector<vec3> buildingVertices, colors;
@@ -275,4 +275,6 @@ public:
 	}
 
 	~Building() {}
+	
+	void Generate(Bounds perimeter){}
 };

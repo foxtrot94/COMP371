@@ -5,13 +5,18 @@
 
 long ProceduralObject::ID = 0;
 
-ProceduralObject::ProceduralObject() {
+ProceduralObject::ProceduralObject(/*Bounds bounds, vec3 center*/)/* : perimeter(bounds)*/ {
 	ID += 1;
 	seed = time(NULL) + ID;
 }
 
 ProceduralObject::~ProceduralObject() {
 
+}
+
+bool ProceduralObject::wasGenerated()
+{
+	return this->mesh.isInitialized();
 }
 
 GLMesh * WorldGenericObject::getMesh()

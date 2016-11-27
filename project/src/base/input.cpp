@@ -93,45 +93,46 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 
 	static char lastKey = 0;
 	char pressKey = 0;
-	//if (action == GLFW_PRESS) {
-	switch (key)
 	{
-	case GLFW_KEY_W:
-	case GLFW_KEY_UP:
-		instance->moveFwd();
-		break;
-	case GLFW_KEY_S:
-	case GLFW_KEY_DOWN:
-		instance->moveBwd();
-		break;
-	case GLFW_KEY_LEFT:
-		instance->turnLeft();
-		break;
-	case GLFW_KEY_RIGHT:
-		instance->turnRight();
-		break;
-	case GLFW_KEY_A:
-		instance->strafeLeft();
-		break;
-	case GLFW_KEY_D:
-		instance->strafeRight();
-		break;
-	case GLFW_KEY_R:
-		instance->resetCamera();
-		break;
-		
-	case GLFW_KEY_ESCAPE:
-		glfwSetWindowShouldClose(window, GL_TRUE);
-		break;
+		switch (key)
+		{
+		case GLFW_KEY_W:
+		case GLFW_KEY_UP:
+			instance->moveFwd();
+			break;
+		case GLFW_KEY_S:
+		case GLFW_KEY_DOWN:
+			instance->moveBwd();
+			break;
+		case GLFW_KEY_LEFT:
+			instance->turnLeft();
+			break;
+		case GLFW_KEY_RIGHT:
+			instance->turnRight();
+			break;
+		case GLFW_KEY_A:
+			instance->strafeLeft();
+			break;
+		case GLFW_KEY_D:
+			instance->strafeRight();
+			break;
+		case GLFW_KEY_R:
+			instance->resetCamera();
+			break;
 
-	case GLFW_KEY_LEFT_SHIFT:
-	case GLFW_KEY_RIGHT_SHIFT:
-		instance->setShiftBtnPressStatus(true);
-		break;
+		case GLFW_KEY_ESCAPE:
+			glfwSetWindowShouldClose(window, GL_TRUE);
+			break;
 
-	default:
-		//std::cout << "Unhandled input" << std::endl;
-		break;
+		case GLFW_KEY_LEFT_SHIFT:
+		case GLFW_KEY_RIGHT_SHIFT:
+			instance->setShiftBtnPressStatus(true);
+			break;
+
+		default:
+			//std::cout << "Unhandled input" << std::endl;
+			break;
+		}
 	}
 
 	if (action == GLFW_RELEASE) {
@@ -142,12 +143,6 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 			break;
 		}
 	}
-	if (pressKey && lastKey!=pressKey) {
-		std::cout << "pressed " << pressKey << std::endl;
-		lastKey = pressKey;
-	}
-
-	//}  // IF (action==press)
 }
 
 void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
@@ -210,7 +205,7 @@ void CursorPositionCallback(GLFWwindow * window, double x, double y){
 	//get the deltas
 	double deltaX = x - lastX;
 	double deltaY = y - lastY;
-
+	//if(instance->leftMouseClicked())
 	instance->moveCamera(glm::vec2(deltaX, deltaY));
 	
 

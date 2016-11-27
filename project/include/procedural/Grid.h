@@ -1,5 +1,8 @@
 #pragma once
 
+#include <iostream>
+
+#include "Bounds.h"
 #include "Utils.h"
 
 class Grid {
@@ -34,6 +37,7 @@ public:
 		bool isValid() {
 			return x > 0 && x < WIDTH && y>0 && y < HEIGHT;
 		}
+		friend std::ostream& operator<<(std::ostream& os, const Grid::Coordinate& coord);
 	};
 
 private:
@@ -53,4 +57,8 @@ public:
 
 	//Recursively fills the grid starting at x,y with the fill value
 	void FillRecursive(int x, int y, Grid::Type fillValue);
+
+	void TerminalPrint();
+
+	Bounds GetRealBounds();
 };

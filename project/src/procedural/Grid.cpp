@@ -3,7 +3,11 @@
 
 #include "procedural\Grid.h"
 
-
+std::ostream& operator<<(std::ostream& os, const Grid::Coordinate& coord)
+{
+	os <<'('<<coord.x << ',' << coord.y<< ')';
+	return os;
+}
 
 Grid::Grid()
 {
@@ -27,22 +31,23 @@ void Grid::FillLine(int start, int end, int axisPoint, Grid::Axis axis, Grid::Ty
 {
 	//Error checking
 	#if _DEBUG
-	if (start<0||start>WIDTH||end<0||end<start||end>WIDTH||axis>Y||axis<X) {
+	if (start<0||start>=WIDTH||end<0||end<start||end>=WIDTH||axis>Y||axis<X) {
 		__debugbreak();
 	}
 	#endif
 
-	//Grid::Type* splitAxis = (axis == Axis::X) ? &(Cells[0]) : &(Cells[0][0]);
 	if (axis == Axis::X) {
-		for (int i = 0; i < HEIGHT; i++){
-			Cells[axisPoint][i] = fillValue;
-		}
-	}
-	else if (axis == Axis::Y) {
-		for (int i = 0; i < WIDTH; i++)	{
+		for (int i = start; i < end; i++){
 			Cells[i][axisPoint] = fillValue;
 		}
 	}
+	else if (axis == Axis::Y) {
+		for (int i = start; i < end; i++)	{
+			Cells[axisPoint][i] = fillValue;
+		}
+	}
+
+	//TODO: perhaps record all the segments in here...
 }
 
 void Grid::FillRecursive(int x, int y, Grid::Type fillValue)
@@ -80,4 +85,33 @@ void Grid::FillRecursive(int x, int y, Grid::Type fillValue)
 			stack.push_back(Coordinate(x, y - 1));
 		}
 	}
+}
+
+void Grid::TerminalPrint()
+{
+	for (int i = 0; i < WIDTH; i++)
+	{
+		std::cout << "_";
+	}
+	std::cout << std::endl;
+	for (int i = 0; i < WIDTH; ++i) {
+		for (int j = 0; j < HEIGHT; j++)
+		{
+			if (Cells[i][j] == Grid::Type::Road)
+				std::cout << '#';
+			else
+				std::cout << ' ';
+		}
+		std::cout << std::endl;
+	}
+	for (int i = 0; i < WIDTH; i++)
+	{
+		std::cout << "=";
+	}
+	std::cout << std::endl;
+}
+
+Bounds Grid::GetRealBounds()
+{
+	return Bounds(0.f,realWidth,0.f,realHeight);
 }

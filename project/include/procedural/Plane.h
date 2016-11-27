@@ -6,5 +6,5 @@ class Plane : public ProceduralObject {
 private:
 
 public:
-	virtual void Generate() override;
+	virtual void Generate(Bounds perimeter) override;
 };
