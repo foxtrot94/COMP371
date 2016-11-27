@@ -13,11 +13,13 @@ void Input::resetCamera(){
 
 void Input::moveFwd()
 {
+	mainCamera->chooseDirection('p','z');
 	std::cout << "going fwd" << std::endl;
 }
 
 void Input::moveBwd()
 {
+	mainCamera->chooseDirection('n', 'z');
 	std::cout << "going bwd" << std::endl;
 }
 
@@ -33,11 +35,13 @@ void Input::turnRight()
 
 void Input::strafeLeft()
 {
+	mainCamera->chooseDirection('n', 'x');
 	std::cout << "dodge left" << std::endl;
 }
 
 void Input::strafeRight()
 {
+	mainCamera->chooseDirection('p', 'x');
 	std::cout << "dodge right" << std::endl;
 }
 
@@ -51,7 +55,28 @@ void Input::rightMouseClick()
 	std::cout << "aim" << std::endl;
 }
 
-void Input::moveCamera(glm::vec2 direction){
+void Input::moveCamera(glm::vec2 direction)
+{
+	mainCamera->SetYaw(direction.x*mainCamera->GetCameraSensitivity() + mainCamera->GetYaw());
+	mainCamera->SetPitch(direction.y*mainCamera->GetCameraSensitivity() + mainCamera->GetPitch());
+	
+
+	if (mainCamera->GetPitch() > 89.0f)
+		mainCamera->SetPitch(89.0f);
+	if (mainCamera->GetPitch() < -89.0f)
+		mainCamera->SetPitch(-89.0f);
+
+
+	glm::vec3 front;
+	front.x = cos(glm::radians(mainCamera->GetYaw())) * cos(glm::radians(mainCamera->GetPitch()));
+	front.y = sin(glm::radians(-mainCamera->GetPitch()));
+	front.z = sin(glm::radians(mainCamera->GetYaw())) * cos(glm::radians(mainCamera->GetPitch()));
+	mainCamera ->SetCameraFront(glm::normalize(front));
+
+	//DEBUGGING FOR CAMERA 
+	/*std::cout << "PITCH : " << mainCamera->GetPitch()<<"  ";
+	std::cout << "YAW : " << mainCamera->GetYaw()<<"\n";
+	std::cout << "Front: X: " << front.x<< " Y: "<<front.y<< " Z: " << front.z << "\n";*/
 	std::cout << "x : " << direction.x;
 	std::cout << "y : " << direction.y << std::endl;
 
@@ -68,7 +93,7 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 
 	static char lastKey = 0;
 	char pressKey = 0;
-	if (action == GLFW_PRESS) {
+	//if (action == GLFW_PRESS) {
 	switch (key)
 	{
 	case GLFW_KEY_W:
@@ -99,7 +124,6 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 		glfwSetWindowShouldClose(window, GL_TRUE);
 		break;
 
-	
 	case GLFW_KEY_LEFT_SHIFT:
 	case GLFW_KEY_RIGHT_SHIFT:
 		instance->setShiftBtnPressStatus(true);
@@ -123,7 +147,7 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 		lastKey = pressKey;
 	}
 
-	}  // IF (action==press)
+	//}  // IF (action==press)
 }
 
 void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
@@ -192,6 +216,8 @@ void CursorPositionCallback(GLFWwindow * window, double x, double y){
 
 	lastX = x;
 	lastY = y;
+
+	
 
 }
 

@@ -1,10 +1,14 @@
+#include "gtc/matrix_transform.hpp"
+
 #include "base/Engine.h"
 #include "TriangleTest.h"
+#include "Plane.h"
 
-LightweightEngine::LightweightEngine()
+WorldEngine::WorldEngine()
 {
 	renderer = Renderer::GetInstance();
 	input = Input::GetInstance();
+
 
 	thisFrame = 0.f;
 	deltaTime = 0.1f;
@@ -14,11 +18,11 @@ LightweightEngine::LightweightEngine()
 	//Check for possible issues
 }
 
-LightweightEngine::~LightweightEngine()
+WorldEngine::~WorldEngine()
 {
 	Cleanup();
 }
-void LightweightEngine::UpdateTime()
+void WorldEngine::UpdateTime()
 {
 	//Get framerate and time
 	thisFrame = (float)glfwGetTime();
@@ -30,24 +34,23 @@ void LightweightEngine::UpdateTime()
 	//std::cout << framerate << std::endl;
 }
 
-void LightweightEngine::ProcessInputs()
+void WorldEngine::ProcessInputs()
 {
 	glfwPollEvents();
 	glfwGetFramebufferSize(engineWindow->glfwContext, &engineWindow->width, &engineWindow->height);
 	glViewport(0, 0, engineWindow->width, engineWindow->height);
 }
 
-void LightweightEngine::DrawFrame()
+void WorldEngine::DrawFrame()
 {
-	//@foxtrot94: DEBUG CODE - Remove or Comment in Master
-	mat4 view(1.f), projection(1.f);
-	//@foxtrot94
-
-	//Draw on buffer
+	//Clear screen buffer
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //Black Background
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	//Update the camera, the objects and render once
-	
+	camera->Update(deltaTime);
+	mat4 view = camera->GetView();
+	mat4 projection = camera->GetProjection(engineWindow);
 	renderer->RenderSkyBox();
 
 	renderer->UpdateCamera(view, projection);
@@ -61,13 +64,13 @@ void LightweightEngine::DrawFrame()
 	glfwSwapBuffers(engineWindow->glfwContext);
 }
 
-void LightweightEngine::Cleanup()
+void WorldEngine::Cleanup()
 {
 	delete renderer;
 	delete input;
 }
 
-void LightweightEngine::Init(std::string WindowTitle)
+void WorldEngine::Init(std::string WindowTitle)
 {
 	//Initialize GLFW and the renderer
 	std::cout << "Starting OpenGL 3.3 using GLFW" << std::endl;
@@ -83,6 +86,11 @@ void LightweightEngine::Init(std::string WindowTitle)
 
 	//Initialize (load) skybox
 	renderer->InitSkyBox();
+	
+	//Initialize Camera and pass width and height from engine window
+	camera = Camera::GetInstance(engineWindow);
+	//Pass camera to Input
+	input->setCamera(camera);
 
 	//Also initialize the Input
 	glfwSetKeyCallback(engineWindow->glfwContext, &KeyInputCallback);
@@ -90,13 +98,13 @@ void LightweightEngine::Init(std::string WindowTitle)
 	glfwSetMouseButtonCallback(engineWindow->glfwContext, &MouseButtonCallback);
 }
 
-void LightweightEngine::LoadWorld()
+void WorldEngine::LoadWorld()
 {
 	//TODO: Place all the world loading here.
 	//We can fire off a thread to keep the screen drawing while this method begins loading the world
 }
 
-void LightweightEngine::Run()
+void WorldEngine::Run()
 {
 	//Check init
 	if (engineWindow == NULL) {
@@ -107,7 +115,9 @@ void LightweightEngine::Run()
 	glfwSwapInterval(0);
 	//@foxtrot94: DEBUG CODE - Remove or Comment in Master
 	WorldGenericObject* triangle = new TriangleTest();
-	drawables.push_back(triangle);
+	ProceduralObject* plane = new Plane();
+	plane->Generate();
+	drawables.push_back(plane);
 
 	//Game loop
 	std::cout << "Initialization complete, starting game" << std::endl;
@@ -119,6 +129,7 @@ void LightweightEngine::Run()
 
 	drawables.pop_back();
 	delete triangle;
+	delete plane;
 
 	glfwTerminate();
 }

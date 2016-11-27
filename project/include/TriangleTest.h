@@ -28,8 +28,9 @@ public:
 	~TriangleTest() {}
 
 	//Example update function
-	virtual void Update(const float& deltaTime) override {
-		this->translate(deltaTime * glm::sin(totalTime+glm::radians(90.f)), 0.f, 0.f);
-		totalTime += deltaTime;
+	virtual void Update(const float& deltaTime) override 
+	{
+		//this->translate(deltaTime * glm::sin(totalTime+glm::radians(90.f)), 0.f, 0.f);
+		//totalTime += deltaTime;
 	}
 };

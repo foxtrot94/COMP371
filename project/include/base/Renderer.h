@@ -28,12 +28,20 @@ public:
 	struct Window {
 		GLFWwindow* glfwContext;
 		int width, height;
+		float fov;
 		std::string name;
+		//Ctor
 		Window(GLFWwindow* window, int w, int h, std::string str) {
 			glfwContext = window;
 			width = w;
 			height = h;
 			name = str;
+			//Default 
+			fov = 90.f;
+		}
+		//Calculate Aspect Ratio
+		inline float AspectRatio() {
+			return ((float)width) / ((float)height);
 		}
 	};
 
