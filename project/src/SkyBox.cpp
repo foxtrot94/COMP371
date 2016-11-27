@@ -87,7 +87,7 @@ uint SkyBox::loadCubeMap(std::vector<const char*> faces)
 	glGenTextures(1, &textureID);
 
 	//int width, height;
-	cimg_library::CImg<> image;
+	cimg_library::CImg<unsigned char> image;
 	//unsigned char* image;
 
 	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
@@ -102,13 +102,16 @@ uint SkyBox::loadCubeMap(std::vector<const char*> faces)
 		*/
 
 		//load image from memory
-		image = cimg_library::CImg<>(faces[i]);
+		image = cimg_library::CImg<unsigned char>(faces[i]);
+		std::cout << image.spectrum() << std::endl;
+		image.display();
 
 		/*
 		//debug only
 		cimg_library::CImgDisplay main_disp(image, "Render");
 		while (!main_disp.is_closed())
-			main_disp.wait();		*/
+			main_disp.wait();
+		*/
 
 		//send image to cubemap 
 		glTexImage2D(
