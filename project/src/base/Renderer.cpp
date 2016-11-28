@@ -241,8 +241,8 @@ bool Renderer::AddToRenderingContext(GLMesh * mesh, GLTexture* texture)
 
 		glGenBuffers(1, &textureBO);
 		glBindBuffer(GL_ARRAY_BUFFER, textureBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size * 3, &texels[0], GL_STATIC_DRAW);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size * 2, &texels[0], GL_STATIC_DRAW);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 12 * sizeof(GLfloat), 0);
 		glEnableVertexAttribArray(2); //TODO: abstract into shader
 		glGenerateMipmap(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, NULL);
