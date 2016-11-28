@@ -105,17 +105,17 @@ void Renderer::Render(WorldGenericObject* Object)
 {
 	GLMesh* mesh = Object->getMesh();
 	GLTexture* texture = Object->getTexture();
-	if (shader==NULL || mesh==NULL || !mesh->isInitialized()) {
+	/*if (shader==NULL || mesh==NULL || !mesh->isInitialized()) {
 		//nothing to do here
 		return;
-	}
+	}*/
 
-	/* **** REPLACE WHEN SENDING A TEXTURE ****
+	// **** REPLACE WHEN SENDING A TEXTURE ****
 	if (shader == NULL || mesh == NULL || !mesh->isInitialized() || texture == NULL || !texture->isInitialized()) {
 		//nothing to do here
 		return;
 	}
-	*/
+	
 
 	if (!mesh->isInRenderingContext() && !texture->isInRenderingContext()) {
 		//Send it off to the GPU Video Memory
@@ -125,6 +125,10 @@ void Renderer::Render(WorldGenericObject* Object)
 
 	Shader::Uniforms uniform = shader->getUniforms(); //TODO: optimize in the future. Get uniforms outside or something
 	glUniformMatrix4fv(uniform.transformMatrixPtr, 1, GL_FALSE, glm::value_ptr(*(Object->getModel())));
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->readContextTexture());
+	glUniform1i(glGetUniformLocation(shader->getShaderProgram(), "imageTexture"), 0);
 
 	glBindVertexArray(mesh->getContextArray());
 	//Basically, draw RenderTarget

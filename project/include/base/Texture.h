@@ -62,6 +62,9 @@ public:
 	//Assign the mesh a VAO Pointer
 	void setContextTexture(uint glTex);
 
+	//Assign the mesh a VAO Pointer
+	uint readContextTexture();
+
 	//Destroy the mesh glContext
 	void DestroyContext();
 

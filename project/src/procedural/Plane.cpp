@@ -1,4 +1,6 @@
 #include "procedural/Plane.h"
+#include <fstream>
+#include <iostream>
 
 void Plane::Generate(Bounds perimeter)
 {
@@ -9,21 +11,36 @@ void Plane::Generate(Bounds perimeter)
 	std::vector<vec3> vertices;
 	vertices.push_back(vec3(bottomLeft));
 	vertices.push_back(vec3(topRight));
-	vertices.push_back(vec3(bottomLeft.x, 0.f, topRight.z));
+	vertices.push_back(vec3(bottomLeft.x, 0.f, topRight.z)); //top left
 	vertices.push_back(vec3(bottomLeft));
-	vertices.push_back(vec3(topRight.x, 0.f, bottomLeft.z));
-	vertices.push_back(vec3(topRight));
+	vertices.push_back(vec3(topRight.x, 0.f, bottomLeft.z)); //bottom right
+	vertices.push_back(vec3(topRight)); 
 
 	std::vector<vec2> texels;
-	texels.push_back(vec2(1.0f, 1.0f));
-	texels.push_back(vec2(1.0f, 0.0f));
-	texels.push_back(vec2(0.0f, 0.0f));
+	texels.push_back(vec2(0.0f, 0.0f)); //BL
+	texels.push_back(vec2(1.0f, 1.0f)); //TR
 	texels.push_back(vec2(0.0f, 1.0f));
-	
-	int width, height;
-	unsigned char* image = SOIL_load_image("grass.jpg", &width, &height, 0, SOIL_LOAD_RGB);
-	std::vector<unsigned char*> imageVector; imageVector.push_back(image);
 
+	texels.push_back(vec2(0.0f, 0.0f));
+	texels.push_back(vec2(1.0f, 0.0f));
+	texels.push_back(vec2(1.0f, 1.0f));
+	
+	system("cd");
+	int width, height;
+
+
+	std::ifstream f("grass.jpg");
+	if (!f.is_open()) {
+		#if _DEBUG
+			//Made this debug break to avoid debugging missing files. Check them to see what's wrong
+			__debugbreak();
+		#endif
+	}
+	f.close();
+
+	unsigned char* image = SOIL_load_image("grass2.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+	std::vector<unsigned char*> imageVector; imageVector.push_back(image);
+	
 	vec3 brown(87.f/255.f, 59.f/255.f, 12.f/255.f);
 	
 	std::vector<vec3> colors(vertices.size(), brown);

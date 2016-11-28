@@ -67,6 +67,11 @@ void GLTexture::setContextTexture(uint glTex)
 	glTexture = glTex;
 }
 
+uint GLTexture::readContextTexture()
+{
+	return glTexture;
+}
+
 void GLTexture::DestroyContext()
 {
 	//TODO: This should destroy the object and cleanup
