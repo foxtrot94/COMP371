@@ -6,7 +6,7 @@ GLTexture::GLTexture()
 	ImageData = NULL;
 	width = 0;
 	height = 0;
-	glTexture = NULL;
+	glTexture = -1;
 }
 
 GLTexture::~GLTexture()
@@ -15,7 +15,7 @@ GLTexture::~GLTexture()
 
 bool GLTexture::isInRenderingContext()
 {
-	return glTexture!=NULL;
+	return glTexture!=-1;
 }
 
 

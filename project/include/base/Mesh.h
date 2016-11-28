@@ -66,8 +66,10 @@ public:
 
 	//Assign the mesh buffers - Both are expected to be of the same size
 	void setContextBuffer(uint vertexBuffer, uint colorBuffer, uint size);
-	//
+	//Sets the Texel Buffer
 	void setTexelBuffer(uint texelBuffer, uint size);
+	//Adjusts the UV mapping so textures can be fitted correctly
+	void adjustTexelMappingConstant(float amt);
 
 	//Destroy the mesh glContext
 	void DestroyContext();

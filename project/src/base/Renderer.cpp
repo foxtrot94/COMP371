@@ -110,10 +110,13 @@ void Renderer::Render(WorldGenericObject* Object)
 		return;
 	}
 
-	if (!mesh->isInRenderingContext() && !texture->isInRenderingContext()) {
+	if (!mesh->isInRenderingContext()) {
 		//Send it off to the GPU Video Memory
 		//FUTURE: Right now all meshes are taken as static, change some day...
 		AddToRenderingContext(mesh);
+	}
+	if (!texture->isInRenderingContext()) {
+		AddToRenderingContext(texture);
 	}
 
 	Shader::Uniforms uniform = shader->getUniforms(); //TODO: optimize in the future. Get uniforms outside or something
@@ -121,10 +124,18 @@ void Renderer::Render(WorldGenericObject* Object)
 
 	glBindVertexArray(mesh->getContextArray());
 
+	//Check the texture
+	if (texture->isInRenderingContext()) {
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture->getContext());
+		glUniform1i(glGetUniformLocation(shader->getShaderProgram(), "objectTexture"), 0);
+	}
+
 	//Basically, draw RenderTarget
 	glDrawArrays(GL_TRIANGLES, 0, mesh->getBufferSize());
 	
-	glBindVertexArray(0); //TODO: Optimize. Put this outside
+	glBindTexture(GL_TEXTURE_2D,NULL);
+	glBindVertexArray(NULL);
 }
 
 void Renderer::Render(std::vector<WorldGenericObject*> Objects)
@@ -245,6 +256,9 @@ bool Renderer::AddToRenderingContext(GLTexture * texture)
 {
 	uint textureBuff;
 	uchar* img = texture->readImageData();
+	if (img == NULL) {
+		return false;
+	}
 
 	glGenTextures(1, &textureBuff);
 	glBindTexture(GL_TEXTURE_2D, textureBuff);

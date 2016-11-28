@@ -11,6 +11,11 @@ void WorldLayerManager::GenerateTerrain()
 	Bounds terrainBounds= worldGrid->GetRealBounds();
 	terrain = new Plane();
 	terrain->Generate(terrainBounds);
+	
+	GLTexture grass;
+	grass.loadImageData("textures\\grass.jpg");
+	terrain->assignTexture(&grass);
+	terrain->getMesh()->adjustTexelMappingConstant(512.f);
 }
 
 void WorldLayerManager::GenerateRoads(Grid::Coordinate min, Grid::Coordinate max, int levels)

@@ -76,6 +76,13 @@ void GLMesh::setTexelBuffer(uint texelBuffer, uint size)
 	texelBufferSize = size;
 }
 
+void GLMesh::adjustTexelMappingConstant(float amt)
+{
+	for (vec2& texelDescriptor : Texels) {
+		texelDescriptor *= amt;
+	}
+}
+
 void GLMesh::DestroyContext()
 {
 	//TODO: This should destroy the object and cleanup

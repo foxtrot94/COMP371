@@ -40,4 +40,7 @@ public:
 	//Retrieve dimensions of the window.
 	int getWidth();
 	int getHeight();
+
+	//Get the context
+	uint getContext() { return glTexture; }
 };
