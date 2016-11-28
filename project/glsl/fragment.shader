@@ -1,7 +1,7 @@
 #version 330 core
 
 in vec3 customColor;
-//in vec2 textureCoordinates;
+in vec2 textureCoordinates;
 
 out vec4 color;
 

@@ -180,7 +180,7 @@ bool Renderer::AddToRenderingContext(GLMesh * mesh)
 
 	glGenBuffers(1, &vertexBO);
 	glGenBuffers(1, &colorBO);
-	//glGenBuffers(1, &texelBO);
+	glGenBuffers(1, &texelBO);
 
 	//synthesize the mesh data since it's been stored as a vec3
 	std::vector<vec3> vertices = mesh->readLocalVertices();
@@ -220,10 +220,10 @@ bool Renderer::AddToRenderingContext(GLMesh * mesh)
 	glEnableVertexAttribArray(1); //TODO: abstract into shader
 
 	// Texel Attribute
-	//glBindBuffer(GL_ARRAY_BUFFER, texelBO);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size * 3, &flatTexels[0], GL_STATIC_DRAW);
-	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (GLvoid*)0);
-	//glEnableVertexAttribArray(2); //TODO: abstract into shader
+	glBindBuffer(GL_ARRAY_BUFFER, texelBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size * 3, &flatTexels[0], GL_STATIC_DRAW);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (GLvoid*)0);
+	glEnableVertexAttribArray(2); //TODO: abstract into shader
 
 	glBindVertexArray(NULL);
 
