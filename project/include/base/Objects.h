@@ -61,9 +61,11 @@ class WorldGenericObject : public EngineObject {
 protected:
 	//Primary mesh which makes up this object
 	GLMesh mesh;
+	
 
 public:
 	GLMesh* getMesh();
+
 
 	void assignMesh(GLMesh* newMesh);
 };

@@ -33,6 +33,16 @@ std::vector<vec3> GLMesh::readLocalVertices()
 	return this->Vertices;
 }
 
+void GLMesh::setColor(glm::vec3 color)
+{
+	colorObject = color;
+}
+
+glm::vec3 GLMesh::getColor()
+{
+	return glm::vec3(colorObject);
+}
+
 void GLMesh::setVertexColor(std::vector<vec3> colors)
 {
 	if(!isInitialized())

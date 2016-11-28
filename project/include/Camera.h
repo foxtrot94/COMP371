@@ -61,6 +61,8 @@ public:
 	void SetCameraSensitivity(float sens);
 
 	
+
+	glm::vec3 Camera::getCameraPosition();
 	//Allows for free roam and fast movement
 	void debugMode(bool isOn);
 
@@ -124,6 +126,7 @@ private:
 	//Strafe Left and Right Operations
 	void Camera::decreaseX(float camSpeed);
 	void Camera::increaseX(float camSpeed);
+
 
 	void freezeY();
 	//void turnLeft();

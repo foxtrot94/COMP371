@@ -24,6 +24,13 @@ class GLMesh {
 	//Local Array of Color
 	std::vector<vec3> Colors;
 
+	//TESTING
+	glm::vec3 colorObject;
+
+	//TESTING
+	//std::vector<vec3> Normals;
+
+
 public:
 	//ctor
 	GLMesh();
@@ -42,6 +49,12 @@ public:
 	void setVertices(std::vector<vec3> vertices);
 	//Read the set of vertices kept in Main Memory
 	std::vector<vec3> readLocalVertices();
+
+
+
+	//TESTING
+	void setColor(glm::vec3 color);
+	glm::vec3 GLMesh::getColor();
 
 	//Set Colors for each vertex being sampled
 	void setVertexColor(std::vector<vec3> colors);

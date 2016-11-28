@@ -90,11 +90,18 @@ void Renderer::UseSkyBoxShader(Shader * shader)
 	this->skyBoxShader = shader;
 }
 
+void Renderer::UseLightShader(Shader* shader)
+{
+	this->lightShader = shader;
+}
+
 void Renderer::UpdateCamera(mat4 & view, mat4 & projection)
 {
 	if (shader == NULL) {
 		return;
 	}
+
+	
 	Shader::Uniforms uniforms = shader->getUniforms();
 
 	glUniformMatrix4fv(uniforms.viewMatrixPtr, 1, GL_FALSE, glm::value_ptr(view));
@@ -135,6 +142,91 @@ void Renderer::Render(std::vector<WorldGenericObject*> Objects)
 	glBindVertexArray(NULL);
 }
 
+
+void Renderer::RenderLight(WorldGenericObject* Object, Camera* camera, std::vector<glm::vec3> lightpos)
+{
+	GLMesh* mesh = Object->getMesh();
+	if (lightShader == NULL || mesh == NULL || !mesh->isInitialized()) {
+		//nothing to do here
+		return;
+	}
+	
+	if (!mesh->isInRenderingContext()) {
+		//Send it off to the GPU Video Memory
+		//FUTURE: Right now all meshes are taken as static, change some day...
+		AddToRenderingContext(mesh);
+	}
+	uint lightShaderProgram = lightShader->getShaderProgram();
+	glUseProgram(lightShaderProgram);
+
+	Shader::Uniforms uniform = lightShader->getUniforms(); //TODO: optimize in the future. Get uniforms outside or something
+	
+	GLint objectColorLoc = glGetUniformLocation(lightShaderProgram, "objectColor");
+	GLint lightColorLoc = glGetUniformLocation(lightShaderProgram, "lightColor");
+
+	GLint viewPosLoc = glGetUniformLocation(lightShaderProgram, "viewPos");
+
+	//GLint lightPosLoc = glGetUniformLocation(lightShaderProgram, "lightPos");
+
+	GLint NumOfLightsLoc = glGetUniformLocation(lightShaderProgram, "NumOfLights");
+	//Object's designated color
+	//OVERRIDER MADE EVERY OBJECT PASS ME A SINGLE RGB INSTEAD OF A VBO OF RBGS
+	glUniform3f(objectColorLoc, Object->getMesh()->getColor().x, Object->getMesh()->getColor().y, Object->getMesh()->getColor().z);
+	//Light color, usually white
+	glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
+	glUniform1i(NumOfLightsLoc, lightpos.size());
+	//position of light
+	//NEED TO PASS EVERY LIGHT TO ADD THE POSITIONS HERE
+	
+	std::vector<glm::vec3> lightTester;
+	lightTester.push_back(glm::vec3(0.0f, 5.0f, 0.0f));
+	lightTester.push_back(glm::vec3(10.0f, 5.0f, 0.0f));
+
+
+	/*glUniform3fv(glGetUniformLocation(lightShaderProgram, "lightPositions"), 1,
+		glm::value_ptr(lightTester[0]));*/
+	
+	GLint lightPosLoc = glGetUniformLocation(lightShaderProgram, "lightpositions[0]");
+	glUniform3f(lightPosLoc, lightTester[0].x, lightTester[0].y, lightTester[0].z);
+
+	GLint lightPosLoc1 = glGetUniformLocation(lightShaderProgram, "lightpositions[1]");
+	glUniform3f(lightPosLoc1, lightTester[1].x, lightTester[1].y, lightTester[1].z);
+
+
+	glUniform3f(viewPosLoc, camera->getCameraPosition().x, camera->getCameraPosition().y, camera->getCameraPosition().z);
+
+
+
+	
+
+	glm::mat4 light_view = camera->GetView(); // TODO set it to whatever updateCamera has;
+	glm::mat4 projection_matrix = camera->GetProjection(mainWindow);
+
+	glUniformMatrix4fv(uniform.transformMatrixPtr, 1, GL_FALSE, glm::value_ptr(*(Object->getModel())));
+	glUniformMatrix4fv(uniform.viewMatrixPtr, 1, GL_FALSE, glm::value_ptr(light_view));
+	glUniformMatrix4fv(uniform.projectMatrixPtr, 1, GL_FALSE, glm::value_ptr(projection_matrix));
+
+	glBindVertexArray(mesh->getContextArray());
+	//Basically, draw RenderTarget
+	glDrawArrays(GL_TRIANGLES, 0, mesh->getBufferSize());
+	//glDrawElements(GL_TRIANGLES, mesh->getBufferSize(), GL_UNSIGNED_INT, 0);//TODO?
+
+	glBindVertexArray(0); //TODO: Optimize. Put this outside
+}
+
+void Renderer::RenderLights(std::vector<WorldGenericObject*> Objects, Camera* camera, std::vector<glm::vec3> lightspos)
+{
+	
+	glBindVertexArray(NULL);
+	for (WorldGenericObject* object : Objects) {
+		RenderLight(object,camera, lightspos);
+	}
+	glBindVertexArray(NULL);
+}
+
+
+
+
 void Renderer::RenderSkyBox(Camera* camera) {
 	if (skybox == NULL) 
 	{
@@ -154,9 +246,9 @@ void Renderer::RenderSkyBox(Camera* camera) {
 		//might not be necessary, sends to regular shader, view matrix of the skybox
 		//glUniformMatrix4fv(shader->getUniforms().viewMatrixPtr, 1, GL_FALSE, glm::value_ptr(skybox_view));
 
-		glUniformMatrix4fv(skyBoxShader->getUniforms().transformMatrixPtr, 1, GL_FALSE, glm::value_ptr(skybox_transform));
-		glUniformMatrix4fv(skyBoxShader->getUniforms().viewMatrixPtr, 1, GL_FALSE, glm::value_ptr(skybox_view));
-		glUniformMatrix4fv(skyBoxShader->getUniforms().projectMatrixPtr, 1, GL_FALSE, glm::value_ptr(projection_matrix));
+		glUniformMatrix4fv(uniform.transformMatrixPtr, 1, GL_FALSE, glm::value_ptr(skybox_transform));
+		glUniformMatrix4fv(uniform.viewMatrixPtr, 1, GL_FALSE, glm::value_ptr(skybox_view));
+		glUniformMatrix4fv(uniform.projectMatrixPtr, 1, GL_FALSE, glm::value_ptr(projection_matrix));
 
 		glUniform1i(glGetUniformLocation(skyboxShaderProgram, "skyboxTexture"), 1); //use texture unit 1
 

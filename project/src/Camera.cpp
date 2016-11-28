@@ -121,6 +121,12 @@ void Camera::freezeY()
 
 }
 
+//get pos
+glm::vec3 Camera::getCameraPosition()
+{
+	return camPam.cameraPos;
+}
+
 
 // Front and Back Operations
 void Camera::increaseZ(float camSpeed)

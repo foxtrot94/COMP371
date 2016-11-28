@@ -15,9 +15,16 @@ void Plane::Generate(Bounds perimeter)
 	vertices.push_back(vec3(topRight));
 
 	vec3 brown(87.f/255.f, 59.f/255.f, 12.f/255.f);
-	
-	std::vector<vec3> colors(vertices.size(), brown);
+	//NOT ACTUALLY COLORS BUT NORMALS
+	std::vector<vec3> colors;
+	colors.push_back(vec3(0.0f, 1.0f, 0.0f));
+	colors.push_back(vec3(0.0f, 1.0f, 0.0f));
+	colors.push_back(vec3(0.0f, 1.0f, 0.0f));
+	colors.push_back(vec3(0.0f, 1.0f, 0.0f));
+	colors.push_back(vec3(0.0f, 1.0f, 0.0f));
+	colors.push_back(vec3(0.0f, 1.0f, 0.0f));
 
+	mesh.setColor(brown);
 	mesh.setVertices(vertices);
 	mesh.setVertexColor(colors);
 }

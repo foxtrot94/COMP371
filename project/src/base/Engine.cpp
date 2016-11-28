@@ -9,13 +9,15 @@
 #include "procedural/Plane.h"
 #include "procedural/Building.h"
 #include "procedural/LayerManager.h"
+#include "Light.h"
+#include"procedural\CubeTest.h"
 
 WorldEngine::WorldEngine()
 {
 	renderer = Renderer::GetInstance();
 	input = Input::GetInstance();
 
-
+	
 	thisFrame = 0.f;
 	deltaTime = 0.1f;
 	framerate = 0.f;
@@ -65,6 +67,7 @@ void WorldEngine::DrawFrame()
 		object->Update(deltaTime);
 	}
 	renderer->Render(drawables);
+	renderer->RenderLights(lights,camera, lightPositions);
 
 	//Show to screen
 	glfwSwapBuffers(engineWindow->glfwContext);
@@ -123,6 +126,12 @@ void WorldEngine::LoadWorld()
 	Shader* skyBoxShaderBuilder = new Shader("glsl\\skybox_vertex.shader", "glsl\\skybox_fragment.shader");
 	renderer->UseSkyBoxShader(skyBoxShaderBuilder);
 
+	//Build Flashlight shader
+
+	//Build Light Shader
+	Shader* LightShaderBuilder = new Shader("glsl\\lightingvertex.shader", "glsl\\lightingfragment.shader");
+	renderer->UseLightShader(LightShaderBuilder);
+
 	//Initialize (load) skybox
 	renderer->InitSkyBox();
 
@@ -143,12 +152,36 @@ void WorldEngine::Run()
 	//Unlock framerate
 	glfwSwapInterval(0);
 	//@foxtrot94: DEBUG CODE - Remove or Comment in Master
-	WorldGenericObject* triangle = new TriangleTest();
+	//WorldGenericObject* triangle = new TriangleTest();
 	ProceduralObject* plane = new Plane();
+	ProceduralObject* cube = new CubeTest();
+	ProceduralObject* light = new Light();
+	ProceduralObject* light1 = new Light();
+
+	
+
+
 	//WorldGenericObject* building = new Building(12);
 	plane->Generate(Bounds(0.f,50.f,0.f,50.f));
+	light->Generate(Bounds(0.0f, 2.0f, 0.0f, 2.0f));
+	light1->Generate(Bounds(0.0f, 2.0f, 0.0f, 2.0f));
+	cube->Generate(Bounds(0.0f,0.0f,0.0f,0.0f));
 	plane->translate(-25.f, 0.f, -25.f);
-	drawables.push_back(plane);
+
+	light->translate(0.f, 5.0f, 0.f);
+	lightPositions.push_back(glm::vec3(0.f, 5.0f, 0.f));
+	light1->translate(5.f, 5.0f, 0.f);
+	lightPositions.push_back(glm::vec3(10.f, 5.0f, 0.f));
+
+	cube->translate(0.0f, 2.0f, 0.f);
+	lights.push_back(plane);
+	lights.push_back(cube);
+	drawables.push_back(light);
+	drawables.push_back(light1);
+
+
+	lights.push_back(light);
+	//drawables.push_back(light);
 	//drawables.push_back(building);
 	//Game loop
 	std::cout << "Initialization complete, starting game" << std::endl;
@@ -160,7 +193,7 @@ void WorldEngine::Run()
 
 	//drawables.pop_back();
 	drawables.pop_back();
-	delete triangle;
+	//delete triangle;
 	delete plane;
 	//delete building;
 

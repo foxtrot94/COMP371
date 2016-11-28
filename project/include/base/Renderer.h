@@ -58,6 +58,7 @@ protected:
 
 	//OpenGL SkyBox Shader
 	Shader* skyBoxShader;
+	Shader* lightShader;
 	
 	//SkyBox in use
 	SkyBox* skybox;
@@ -92,6 +93,9 @@ public:
 	//Use a particular, compiled skybox shader
 	void UseSkyBoxShader(Shader* shader);
 
+	////Use a particular, compiled light shader
+	void UseLightShader(Shader* shader);
+
 	void InitSkyBox();
 
 	//Takes new parameters from camera before rendering - TODO: Replace with actual Camera class
@@ -102,6 +106,10 @@ public:
 
 	//Batch draw of WorldGenericObjects on screen
 	void Render(std::vector<WorldGenericObject*> Objects);
+
+	void RenderLight(WorldGenericObject* Object, Camera* camera, std::vector<glm::vec3> lights);
+	//Render Lights
+	void RenderLights(std::vector<WorldGenericObject*> Objects,Camera* camera, std::vector<glm::vec3> lights);
 
 	//Draw the skybox cube
 	void RenderSkyBox(Camera* camera);

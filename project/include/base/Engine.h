@@ -28,6 +28,12 @@ private:
 	std::vector<EngineObject*> engineObjects;
 	//List of all renderable, in-world objects
 	std::vector<WorldGenericObject*> drawables;
+	//List of all objects hit by light
+	std::vector<WorldGenericObject*> lights;
+
+	//List of light positions
+	std::vector<vec3> lightPositions;
+
 	//Time related variables
 	float lastFrame, thisFrame, framerate, deltaTime, totalTime;
 
