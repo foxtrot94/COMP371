@@ -37,6 +37,7 @@ private:
 	int randNumber(int min, int max);
 
 public:
+	
 	Building();
 
 	~Building();

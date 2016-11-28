@@ -155,7 +155,7 @@ void Camera::debugMode(bool isOn)
 {
 	if (isOn == true)
 	{
-		CAM_SPEED_CONSTANT = 8000;
+		CAM_SPEED_CONSTANT = 1000;
 		isYFrozen = false;
 	}
 	else if (isOn == false)

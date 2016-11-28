@@ -5,17 +5,23 @@ Building::Building() {}
 Building::~Building() {}
 
 void Building::Generate(Bounds perimeter) {
-	float cellSize = 10.0f;
+	//buildingVertices.clear();
+	//buildingColors.clear();
+	//buildingUV.clear();
+	//buildingNormals.clear();
+
+	float cellSize = perimeter.getXmax() - perimeter.getXmin();
 	float xNumCells = (perimeter.getXmax() - perimeter.getXmin()) / cellSize;
 	float yNumCells = (perimeter.getYmax() - perimeter.getYmin()) / cellSize;
 	// Create a building in every cell within the bounds
-	for (float x = 0; x < xNumCells; x++) {
-		for (float y = 0; y < yNumCells; yNumCells++) {
+	//for (float x = 0; x < xNumCells; x++) {
+		//for (float y = 0; y < yNumCells; yNumCells++) {
 			// Useful variables
-			bool copyPattern, patternWasPillars = false;
+			bool copyPattern, lastPattern = false;
 			int switchPattern = randNumber(1, 6);
 			// Initialize building position on the plane (x and z coordinates)
-			buildingPos = glm::vec2(x + (cellSize / 2), y + (cellSize / 2));
+			//buildingPos = glm::vec2(x + (cellSize / 2), y + (cellSize / 2));
+			buildingPos = glm::vec2(0.0f, 0.0f);
 
 			// Initial height
 			curHeight = 0;
@@ -28,7 +34,7 @@ void Building::Generate(Bounds perimeter) {
 			else {
 			curSize = perimeter.getXmax - perimeter.getXmin;
 			}*/
-			curHeight += curSize; // Initialize the building at a height of 0.0f on the y axis
+			//curHeight += curSize; // Initialize the building at a height of 0.0f on the y axis
 			// Get a random building height between 2 and 10
 			int buildingH = randNumber(2, 10);
 
@@ -36,24 +42,20 @@ void Building::Generate(Bounds perimeter) {
 			for (int countBuildingH = 0; countBuildingH < buildingH; countBuildingH++) {
 				copyPattern = false;
 				// 66.67% chance to copy last pattern
-				if (randNumber(1, 3) != 3) {
+				if (randNumber(1, 2) != 2) {
 					copyPattern = true;
 				}
-				// Random a new pattern
-				if (!copyPattern) {
-					// Make sure you don't rambom non compatible patterns to go above four pillar pattern
-					if (patternWasPillars) {
-						switchPattern = randNumber(1, 4);
-					}
-					else {
+				if (!lastPattern) {
+					// Random a new pattern
+					if (!copyPattern) {
 						switchPattern = randNumber(1, 6);
 					}
 				}
 				// Create the chosen pattern
 				switch (switchPattern) {
 				case 1:
-					patternWasPillars = true;
-					fourPillarsPattern(curSize, curHeight, copyPattern);
+					//patternWasPillars = true;
+					//fourPillarsPattern(curSize, curHeight, copyPattern);
 					break;
 				case 2:
 					cubePattern(curSize, curHeight, copyPattern);
@@ -65,17 +67,19 @@ void Building::Generate(Bounds perimeter) {
 					plusSignPattern(curSize, curHeight, copyPattern);
 					break;
 				case 5:
+					lastPattern = true;
 					diagonalOrHalfPattern(curSize, curHeight, copyPattern);
 					break;
 				case 6:
+					lastPattern = true;
 					anglePattern(curSize, curHeight, copyPattern);
 					break;
 				default:
 					break;
 				}
 			}
-		}
-	}
+		//}
+	//}
 
 	// Calculate normals
 	// TODO: fix error occured here when trying to build (uncomment underneath to create normals array)
@@ -100,10 +104,14 @@ void Building::Generate(Bounds perimeter) {
 
 	// Load and set the tree texture
 	// TODO:
+    vec3 aColor(125.f / 255.f, 125 / 255.f, 125.f / 255.f);
+
+	std::vector<vec3> aColors(buildingVertices.size(), aColor);
 
 	// Set the building mesh
 	mesh.setVertices(buildingVertices);
-	mesh.setVertexColor(buildingColors);
+	mesh.setVertexColor(aColors);
+	//mesh.setVertexColor(buildingColors);
 
 	// Send in mesh normals
 	//mesh.setNormals(buildingNormals);
@@ -380,16 +388,6 @@ void Building::buildCube(float size, vec3 pos) { // pos is the offset
 	buildingUV.push_back(vec2(1.0f, 0.0f));
 	buildingVertices.push_back(vec3(buildingPos.x + pos.x + size, pos.y + size, buildingPos.y + pos.z - size)); //top right near
 	buildingUV.push_back(vec2(1.0f, 1.0f));
-
-	// Rainbow colors (when we have no working textures)
-	for (int i = 0; i < 6; i++) {
-		buildingColors.push_back(vec3(1.f, 0.f, 0.f));
-		buildingColors.push_back(vec3(0.f, 1.f, 0.f));
-		buildingColors.push_back(vec3(0.f, 0.f, 1.f));
-		buildingColors.push_back(vec3(1.f, 0.f, 0.f));
-		buildingColors.push_back(vec3(0.f, 1.f, 0.f));
-		buildingColors.push_back(vec3(0.f, 0.f, 1.f));
-	}
 }
 
 
