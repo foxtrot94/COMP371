@@ -11,6 +11,11 @@
 class GLTexture {
 	//OpenGL Vertex Array Object
 	uint glTexture;
+	//Texture Buffer Object
+	uint glTextureBuffer;
+
+	////Size of the texture buffer. This is set when assigning the OpenGL buffer
+	uint bufferSize;
 
 	//Texture Pixel Vertices
 	std::vector<float> Texels;
@@ -19,6 +24,9 @@ class GLTexture {
 	std::vector<const char*> ImageData;
 	//Original dimensions of the texture
 	int width, height;
+
+	//Private method used by the public setTexels method which uses a vector of vec2 as an input
+	void convertVec2ToVecFloat(std::vector<vec2> &inputVector, std::vector<float> &outputVector);
 
 public:
 	//ctor
@@ -36,6 +44,8 @@ public:
 
 	//Populate this with a set of texels (expects a tuple)
 	void setTexels(std::vector<float> texels);
+	void setTexels(std::vector<vec2> vec2Texels);
+
 	//Read the set of vertices kept in Main Memory
 	std::vector<float> readLocalTexels();
 
@@ -55,5 +65,4 @@ public:
 
 	//Assign the mesh buffers - Both are expected to be of the same size
 	void setContextBuffer(uint texelBuffer, uint size);
-
 };
