@@ -110,6 +110,13 @@ void Renderer::Render(WorldGenericObject* Object)
 		return;
 	}
 
+	/* **** REPLACE WHEN SENDING A TEXTURE ****
+	if (shader == NULL || mesh == NULL || !mesh->isInitialized() || texture == NULL || !texture->isInitialized()) {
+		//nothing to do here
+		return;
+	}
+	*/
+
 	if (!mesh->isInRenderingContext() && !texture->isInRenderingContext()) {
 		//Send it off to the GPU Video Memory
 		//FUTURE: Right now all meshes are taken as static, change some day...
