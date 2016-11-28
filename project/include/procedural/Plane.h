@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base/Objects.h"
+#include "..\Utils.h"
 
 class Plane : public ProceduralObject {
 private:

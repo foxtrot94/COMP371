@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-
+#include "..\..\soil\SOIL.h"
 #include "glm.hpp"
 
 //Simple representation of an image. Data should be a 3-tuple of floats such that dataSize is width*height*pixelCount

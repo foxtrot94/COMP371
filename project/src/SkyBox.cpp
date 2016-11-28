@@ -1,5 +1,4 @@
 #include "..\include\SkyBox.h"
-#include "..\..\soil\SOIL.h"
 #include <fstream>
 #include <iostream>
 

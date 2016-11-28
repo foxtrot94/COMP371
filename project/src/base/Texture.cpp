@@ -40,14 +40,14 @@ std::vector<float> GLTexture::readLocalTexels()
 	return this->Texels;
 }
 
-void GLTexture::setImageData(std::vector<const char*> pixels, int width, int height)
+void GLTexture::setImageData(std::vector<unsigned char*> pixels, int width, int height)
 {
 	this->ImageData = pixels;
 	this->width = width;
 	this->height = height;
 }
 
-std::vector<const char*> GLTexture::readImageData()
+std::vector<unsigned char*> GLTexture::readImageData()
 {
 	return this->ImageData;
 }

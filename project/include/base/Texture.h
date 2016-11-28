@@ -21,7 +21,7 @@ class GLTexture {
 	std::vector<float> Texels;
 
 	//Texture image data
-	std::vector<const char*> ImageData;
+	std::vector<unsigned char*> ImageData;
 	//Original dimensions of the texture
 	int width, height;
 
@@ -50,9 +50,11 @@ public:
 	std::vector<float> readLocalTexels();
 
 	//Populate this with a set of texels
-	void setImageData(std::vector<const char*> pixels, int width, int height);
+	void setImageData(std::vector<unsigned char*> pixels, int width, int height);
+
 	//Read the set of vertices kept in Main Memory
-	std::vector<const char*> readImageData();
+	std::vector<unsigned char*> readImageData();
+	
 	//Retrieve dimensions of the window.
 	int getWidth();
 	int getHeight();

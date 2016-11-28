@@ -14,10 +14,23 @@ void Plane::Generate(Bounds perimeter)
 	vertices.push_back(vec3(topRight.x, 0.f, bottomLeft.z));
 	vertices.push_back(vec3(topRight));
 
+	std::vector<vec2> texels;
+	texels.push_back(vec2(1.0f, 1.0f));
+	texels.push_back(vec2(1.0f, 0.0f));
+	texels.push_back(vec2(0.0f, 0.0f));
+	texels.push_back(vec2(0.0f, 1.0f));
+	
+	int width, height;
+	unsigned char* image = SOIL_load_image("grass.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+	std::vector<unsigned char*> imageVector; imageVector.push_back(image);
+
 	vec3 brown(87.f/255.f, 59.f/255.f, 12.f/255.f);
 	
 	std::vector<vec3> colors(vertices.size(), brown);
-
+	
 	mesh.setVertices(vertices);
 	mesh.setVertexColor(colors);
+	texture.setTexels(texels);
+	texture.setImageData(imageVector, width, height);
+
 }

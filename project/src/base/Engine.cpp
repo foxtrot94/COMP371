@@ -148,8 +148,12 @@ void WorldEngine::Run()
 	//WorldGenericObject* building = new Building(12);
 	plane->Generate(Bounds(0.f,50.f,0.f,50.f));
 	plane->translate(-25.f, 0.f, -25.f);
+	
 	drawables.push_back(plane);
+	//drawables.push_back(triangle);
+
 	//drawables.push_back(building);
+
 	//Game loop
 	std::cout << "Initialization complete, starting game" << std::endl;
 	while (!glfwWindowShouldClose(engineWindow->glfwContext)) {

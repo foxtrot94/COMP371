@@ -224,17 +224,23 @@ bool Renderer::AddToRenderingContext(GLMesh * mesh, GLTexture* texture)
 	if (texture != NULL) {
 		glGenTextures(1, &glTexture);
 		glBindTexture(GL_TEXTURE_2D, glTexture);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		
-		std::vector<const char*> img=texture->readImageData();
+		std::vector<unsigned char*> img=texture->readImageData();
 		std::vector<float> texels = texture->readLocalTexels();
 		
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture->getWidth(), texture->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, &(img[0]));
+
 		glGenBuffers(1, &textureBO);
 		glBindBuffer(GL_ARRAY_BUFFER, textureBO);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size * 3, &texels[0], GL_STATIC_DRAW);
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
 		glEnableVertexAttribArray(2); //TODO: abstract into shader
-
+		glGenerateMipmap(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, NULL);
 	}
 
