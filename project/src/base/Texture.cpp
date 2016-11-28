@@ -42,8 +42,6 @@ void GLTexture::cleanImageData(uchar * img)
 void GLTexture::setContextTexture(uint glTex)
 {
 	glTexture = glTex;
-	//SOIL_free_image_data(ImageData);
-	//ImageData = NULL;
 }
 
 void GLTexture::loadImageData(std::string filename)

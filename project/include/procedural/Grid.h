@@ -57,6 +57,9 @@ private:
 
 	//Free Spaces after drawing roads
 	std::vector<Bounds> OpenSpaces;
+
+	//Checks if a point is free and returns the bounds corresponding to all of it's neighbors
+	bool ObtainFreeBoundsFromPoint(int x, int y, Bounds& outBound);
 	
 public:
 	//ctor
@@ -68,7 +71,7 @@ public:
 	void FillLine(int start, int end, int axisPoint, Grid::Axis axis, Grid::Type fillValue);
 
 	//Recursively fills the grid starting at x,y with the fill value
-	std::pair<Coordinate,Coordinate> FillRecursive(int x, int y, Grid::Type fillValue);
+	void FillRecursive(int x, int y, Grid::Type fillValue);
 
 	void TerminalPrint(std::ostream& out=std::cout);
 

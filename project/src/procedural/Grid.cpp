@@ -10,6 +10,33 @@ std::ostream& operator<<(std::ostream& os, const Grid::Coordinate& coord)
 	return os;
 }
 
+bool Grid::ObtainFreeBoundsFromPoint(int x, int y, Bounds & outBound)
+{
+	Grid::Type value = Cells[x][y];
+	//This must've been visited once
+	if (value != Grid::Type::Empty) {
+		return false;
+	}
+
+	//If not visited, mark this as the low point
+	vec2 low(x, y);
+	vec2 high(x, y);
+	//Expand in x & y
+	for (int i = x, j=y; Cells[x][j]==value || Cells[i][y]==value; ++i, ++j)
+	{
+		if (Cells[x][j] != value && high.y==y) {
+			high.y = j;
+		}
+		if (Cells[i][y] != value && high.x == x) {
+			high.x = i;
+		}
+	}
+
+	outBound = Bounds(low, high);
+
+	return true;
+}
+
 Grid::Grid()
 {
 	realWidth = ((float)WIDTH)*CELL;
@@ -59,12 +86,12 @@ void Grid::FillLine(int start, int end, int axisPoint, Grid::Axis axis, Grid::Ty
 
 	//Record the segment
 	if (fillValue == Grid::Type::Road) {
-		Bounds debug(higher, lower);
+		Bounds debug(lower, higher);
 		DrawnRoads.push_back(debug);
 	}
 }
 
-std::pair<Grid::Coordinate, Grid::Coordinate> Grid::FillRecursive(int x, int y, Grid::Type fillValue)
+void Grid::FillRecursive(int x, int y, Grid::Type fillValue)
 {
 	//Check bounds
 	if (x < 0 || x >= WIDTH || y<0 || y>HEIGHT) {
@@ -74,12 +101,6 @@ std::pair<Grid::Coordinate, Grid::Coordinate> Grid::FillRecursive(int x, int y, 
 		#endif
 	}
 	Grid::Type value = Cells[x][y];
-	Coordinate lowest(Grid::WIDTH, Grid::HEIGHT), highest(-1, -1);
-	if (value == fillValue) {
-		return std::pair<Coordinate, Coordinate>(lowest, highest);
-	}
-	
-	//std::ofstream gridLog("grid.log");
 
 	std::vector<Coordinate> stack;
 	stack.push_back(Coordinate(x, y));
@@ -103,19 +124,8 @@ std::pair<Grid::Coordinate, Grid::Coordinate> Grid::FillRecursive(int x, int y, 
 
 			stack.push_back(Coordinate(x, y + 1));
 			stack.push_back(Coordinate(x, y - 1));
-
-			if (currCell.x < lowest.x || currCell.y < lowest.y) {
-				lowest = currCell;
-			}
-			if (currCell.x > highest.x || currCell.y > highest.y) {
-				highest = currCell;
-			}
 		}
 	}
-
-	//TerminalPrint(gridLog);
-
-	return std::pair<Coordinate, Coordinate>(lowest, highest);
 }
 
 void Grid::TerminalPrint(std::ostream& out)
@@ -165,32 +175,23 @@ std::vector<Bounds> Grid::GetFreeSpaces()
 {
 	if (OpenSpaces.size() < 1) {
 		//This is whatever is left free on the grid
-		std::vector<std::pair<Coordinate, Coordinate>> prototypeBounds;
 		Coordinate invalid(-1, -1);
 
-		for (int i = 0; i < WIDTH; i++)
-		{
-			for (int j = 0; j < HEIGHT; j++)
-			{
-				if (Cells[i][j] != Grid::Road) {
-					std::pair<Coordinate, Coordinate> filledBounds = FillRecursive(i, j, Grid::Free);
-					if (filledBounds.first != invalid && filledBounds.second != invalid) {
-						prototypeBounds.push_back(filledBounds);
-					}
-				}
-			}
-		}
+		//Do an exhaustive visit of the entire grid
+		//for (int i = 0; i < WIDTH; i++)
+		//{
+		//	for (int j = 0; j < HEIGHT; j++)
+		//	{
+		//		if (Cells[i][j] != Grid::Road) {
+		//			//TODO: make method to check and obtain bounds
+		//			FillRecursive(i, j, Grid::Free);
 
-		for (int i = 0; i < prototypeBounds.size(); ++i) {
-			auto& proto = prototypeBounds[i];
-			vec2 min(GridPointTo2DPoint(proto.first)), max(GridPointTo2DPoint(proto.second));
-			min.x -= 0.5f*CELL;
-			min.y -= 0.5f*CELL;
-			max.x += 0.5f*CELL;
-			max.y += 0.5f*CELL;
-			OpenSpaces.push_back(Bounds(max,min));
-		}
+		//		}
+		//	}
+		//}
 
+
+		//debug
 		this->TerminalPrint();
 	}
 

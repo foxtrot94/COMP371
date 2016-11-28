@@ -42,7 +42,7 @@ void WorldLayerManager::GenerateRoads()
 		newRoad->paintColor(black);
 
 		newRoad->assignTexture(
-			(bounds.getXlength() > bounds.getYlength())? &streetVertical : &streetHorizontal
+			(bounds.getXlength() > bounds.getYlength())? &streetHorizontal : &streetVertical
 		);
 
 		//newRoad->getMesh()->adjustTexelMappingConstant(128.f);
