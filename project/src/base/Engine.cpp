@@ -129,6 +129,13 @@ void WorldEngine::LoadWorld()
 	WorldLayerManager layerMaker;
 	layerMaker.CreateCity();
 
+	drawables.push_back(layerMaker.GetTerrain());
+
+	std::vector<ProceduralObject*> objects = layerMaker.GetGeneratedRoads();
+	drawables.insert(drawables.end(), objects.begin(), objects.end());
+
+	camera->SetArbitraryPosition(layerMaker.GetStartCameraPos());
+
 	hasLoaded = true;
 	loadScreen.join();
 }
@@ -147,7 +154,7 @@ void WorldEngine::Run()
 	ProceduralObject* plane = new Plane();
 	//WorldGenericObject* building = new Building(12);
 	plane->Generate(Bounds(0.f,50.f,0.f,50.f));
-	plane->translate(-25.f, 0.f, -25.f);
+	//plane->translate(-25.f, 0.f, -25.f);
 	drawables.push_back(plane);
 	//drawables.push_back(building);
 	//Game loop

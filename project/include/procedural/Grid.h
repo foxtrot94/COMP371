@@ -13,7 +13,7 @@ public:
 	static const int HEIGHT = 50;
 	static const int NUM_CELLS = WIDTH*HEIGHT;
 	// The x and y length, in meters, of each cell
-	const float CELL = 10.f; //10 meters is the average street width
+	const float CELL = 20.f; //10 meters is the average street width
 	
 	// What element occupies a cell currently
 	enum Type {
@@ -45,6 +45,9 @@ private:
 	Grid::Type Cells[Grid::WIDTH][Grid::HEIGHT];
 	//Actual dimensions defined by the grid
 	float realWidth, realHeight;
+
+	//Roads
+	std::vector<Bounds> DrawnRoads;
 	
 public:
 	//ctor
@@ -61,4 +64,10 @@ public:
 	void TerminalPrint();
 
 	Bounds GetRealBounds();
+
+	vec2 GridPointTo2DPoint(Coordinate Point);
+
+	std::vector<Bounds> GetKnownRoads();
+
+	std::vector<Bounds> GetFreeSpaces();
 };

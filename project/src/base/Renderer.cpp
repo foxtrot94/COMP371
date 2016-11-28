@@ -146,8 +146,8 @@ void Renderer::RenderSkyBox(Camera* camera) {
 		uint skyboxShaderProgram = skyBoxShader->getShaderProgram();
 		glUseProgram(skyboxShaderProgram);
 		
-		glm::mat4 skybox_view = camera->GetView(); // TODO set it to whatever updateCamera has
-		glm::mat4 skybox_transform = glm::scale(glm::mat4(1.f),vec3(1000.f));
+		glm::mat4 skybox_view = camera->GetView();
+		glm::mat4 skybox_transform = glm::scale(glm::mat4(1.f),vec3(10000.f));
 		glm::mat4 projection_matrix = camera->GetProjection(mainWindow);
 
 		Shader::Uniforms uniform = skyBoxShader->getUniforms();

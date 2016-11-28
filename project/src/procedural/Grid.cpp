@@ -36,18 +36,31 @@ void Grid::FillLine(int start, int end, int axisPoint, Grid::Axis axis, Grid::Ty
 	}
 	#endif
 
+	vec2 lower, higher;
 	if (axis == Axis::X) {
 		for (int i = start; i < end; i++){
 			Cells[i][axisPoint] = fillValue;
 		}
+		lower = GridPointTo2DPoint(Coordinate(axisPoint,start));
+		lower.x -= 0.5f*CELL;
+		higher = GridPointTo2DPoint(Coordinate(axisPoint, end));
+		higher.x += 0.5f*CELL;
 	}
 	else if (axis == Axis::Y) {
 		for (int i = start; i < end; i++)	{
 			Cells[axisPoint][i] = fillValue;
 		}
+		lower = GridPointTo2DPoint(Coordinate(start, axisPoint));
+		lower.y -= 0.5f*CELL;
+		higher = GridPointTo2DPoint(Coordinate(end, axisPoint));
+		higher.y += 0.5f*CELL;
 	}
 
-	//TODO: perhaps record all the segments in here...
+	//Record the segment
+	if (fillValue == Grid::Type::Road) {
+		Bounds debug(higher, lower);
+		DrawnRoads.push_back(debug);
+	}
 }
 
 void Grid::FillRecursive(int x, int y, Grid::Type fillValue)
@@ -114,4 +127,22 @@ void Grid::TerminalPrint()
 Bounds Grid::GetRealBounds()
 {
 	return Bounds(0.f,realWidth,0.f,realHeight);
+}
+
+vec2 Grid::GridPointTo2DPoint(Coordinate Point)
+{
+	float x = ((Point.x)*CELL) + (0.5f*CELL);
+	float y = ((Point.y)*CELL) + (0.5f*CELL);
+	return vec2(x, y);
+}
+
+std::vector<Bounds> Grid::GetKnownRoads()
+{
+	return DrawnRoads;
+}
+
+std::vector<Bounds> Grid::GetFreeSpaces()
+{
+	//TODO:
+	return std::vector<Bounds>();
 }

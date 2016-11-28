@@ -111,16 +111,57 @@ void WorldLayerManager::CreateCity()
 {
 	worldGrid = new Grid();
 
+	//Make a plane
 	GenerateTerrain();
 
+	//Recursively generate and draw all roads
 	GenerateRoads(
 		Grid::Coordinate(0,0),
 		Grid::Coordinate(worldGrid->WIDTH-1,worldGrid->HEIGHT-1),
 		WorldLayerManager::MAX_RECURSIVE_DEPTH
 		);
+	std::vector<Bounds> RoadLengths = worldGrid->GetKnownRoads();
+	vec3 black = vec3(0.1f);
+	for (Bounds& bounds : RoadLengths) {
+		//Only for debugging purposes... hopefully
+		ProceduralObject* newRoad = new Plane();
+		newRoad->Generate(bounds);
+		newRoad->paintColor(black);
+		newRoad->translate(0.f, 0.1f, 0.f);
+		roads.push_back(newRoad);
+	}
+
 
 	worldGrid->TerminalPrint();
 	GenerateBuildings();
 	
 	GenerateVegetation();
+}
+
+WorldGenericObject * WorldLayerManager::GetTerrain()
+{
+	return terrain;
+}
+
+std::vector<ProceduralObject*> WorldLayerManager::GetGeneratedRoads()
+{
+	std::vector<ProceduralObject*> retVal(roads);
+	//retVal.reserve(roads.size()+buildings.size());
+	//retVal.insert(retVal.end(), roads.front(), roads.back());
+	//retVal.insert(retVal.end(), buildings.front(), buildings.back());
+
+	return retVal;
+}
+
+vec3 WorldLayerManager::GetStartCameraPos()
+{
+	int low = 0, high = roads.size();
+	int index = GetRandomRange(low, high);
+	Bounds selectedRoads = worldGrid->GetKnownRoads()[index];
+	vec3 pos;
+	pos.x = (selectedRoads.getXmax() + selectedRoads.getXmin()) / 2.f;
+	pos.z = (selectedRoads.getYmax() + selectedRoads.getYmin()) / 2.f;
+	pos.y = 1.5f;
+
+	return pos;
 }

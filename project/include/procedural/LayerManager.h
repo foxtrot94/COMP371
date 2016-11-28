@@ -27,9 +27,9 @@ private:
 	Plane* terrain;
 
 	//Colletion of roads in the city
-	std::vector<Road*> roads;
+	std::vector<ProceduralObject*> roads;
 	//All generated buildings
-	std::vector<Building*> buildings;
+	std::vector<ProceduralObject*> buildings;
 	//Any vegetation items around the city
 	//std::vector<Plants*> vegetation;
 
@@ -54,4 +54,10 @@ public:
 
 	//Generate a city. Step by step
 	void CreateCity();
+
+	WorldGenericObject* GetTerrain();
+
+	std::vector<ProceduralObject*> GetGeneratedRoads();
+
+	vec3 GetStartCameraPos();
 };

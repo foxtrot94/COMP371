@@ -71,6 +71,9 @@ public:
 
 	void assignMesh(GLMesh* newMesh);
 	void assignTexture(GLTexture* newTexture);
+
+	//Assign this object a particular color
+	void paintColor(vec3 Color);
 };
 
 //Base Procedural Class for creating any Procedural Object

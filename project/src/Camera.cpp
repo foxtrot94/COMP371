@@ -101,7 +101,13 @@ mat4 Camera::GetSpaceView()
 mat4 Camera::GetProjection(EngWindPtr engineWindow)
 {
 	//TODO: Put near and far place as members of the camera internals
-	return glm::perspective(camPam.fov, engineWindow->AspectRatio(), 0.1f, 2000.0f);
+	return glm::perspective(camPam.fov, engineWindow->AspectRatio(), 0.1f, 20000.0f);
+}
+
+void Camera::SetArbitraryPosition(vec3 pos)
+{
+	camPam.cameraPos.x = pos.x;
+	camPam.cameraPos.z = pos.z;
 }
 
 
@@ -112,7 +118,7 @@ void Camera::freezeY()
 	
 	if (isYFrozen == true)
 	{
-		camPam.cameraPos.y = 5;
+		camPam.cameraPos.y = 1.7f;
 	}
 	else if (isYFrozen == false)
 	{

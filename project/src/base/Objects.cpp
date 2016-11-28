@@ -39,6 +39,13 @@ void WorldGenericObject::assignTexture(GLTexture * newTexture)
 	texture = *newTexture;
 }
 
+void WorldGenericObject::paintColor(vec3 Color)
+{
+	uint count = mesh.readLocalVertices().size();
+	std::vector<vec3> colors(count, Color);
+	mesh.setVertexColor(colors);
+}
+
 void EngineObject::translate(float x, float y, float z)
 {
 	vec3 translation(x, y, z);
