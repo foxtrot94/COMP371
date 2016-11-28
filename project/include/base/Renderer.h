@@ -71,7 +71,9 @@ protected:
 	Renderer();
 
 	//Send a mesh object to the GPU memory and renderer context
-	bool AddToRenderingContext(GLMesh* mesh, GLTexture* texture);
+	bool AddToRenderingContext(GLMesh* mesh);
+
+	bool AddToRenderingContext(GLTexture* texture);
 
 public:
 	//Singleton point of entry

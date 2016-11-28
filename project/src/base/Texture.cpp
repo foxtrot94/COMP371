@@ -1,7 +1,12 @@
-#include "..\..\include\base\Texture.h"
+#include "base\Texture.h"
+#include "..\..\soil\SOIL.h"
 
 GLTexture::GLTexture()
 {
+	ImageData = NULL;
+	width = 0;
+	height = 0;
+	glTexture = NULL;
 }
 
 GLTexture::~GLTexture()
@@ -10,52 +15,33 @@ GLTexture::~GLTexture()
 
 bool GLTexture::isInRenderingContext()
 {
-	return false;
+	return glTexture!=NULL;
 }
 
-bool GLTexture::isInitialized()
-{
-	return false;
-}
 
-void GLTexture::setTexels(std::vector<float> texels)
+uchar* GLTexture::readImageData()
 {
-}
-
-std::vector<float> GLTexture::readLocalTexels()
-{
-	return std::vector<float>();
-}
-
-void GLTexture::setImageData(std::vector<const char*> pixels, int width, int height)
-{
-	return;
-}
-
-std::vector<const char*> GLTexture::readImageData()
-{
-	return std::vector<const char*>();
+	return ImageData;
 }
 
 int GLTexture::getWidth()
 {
-	return 0;
+	return width;
 }
 
 int GLTexture::getHeight()
 {
-	return 0;
+	return height;
 }
 
 void GLTexture::setContextTexture(uint glTex)
 {
 	glTexture = glTex;
+	SOIL_free_image_data(ImageData);
+	ImageData = NULL;
 }
 
-void GLTexture::DestroyContext()
+void GLTexture::loadImageData(std::string filename)
 {
-}
-
-void GLTexture::setContextBuffer(uint texelBuffer, uint size)
-{
+	ImageData = SOIL_load_image(filename.c_str(), &width, &height, NULL, SOIL_LOAD_RGB);
 }

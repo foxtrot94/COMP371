@@ -113,7 +113,7 @@ void Renderer::Render(WorldGenericObject* Object)
 	if (!mesh->isInRenderingContext() && !texture->isInRenderingContext()) {
 		//Send it off to the GPU Video Memory
 		//FUTURE: Right now all meshes are taken as static, change some day...
-		AddToRenderingContext(mesh, texture->isInitialized()? texture:NULL);
+		AddToRenderingContext(mesh);
 	}
 
 	Shader::Uniforms uniform = shader->getUniforms(); //TODO: optimize in the future. Get uniforms outside or something
@@ -173,7 +173,7 @@ void Renderer::RenderSkyBox(Camera* camera) {
 	
 }
 
-bool Renderer::AddToRenderingContext(GLMesh * mesh, GLTexture* texture)
+bool Renderer::AddToRenderingContext(GLMesh * mesh)
 {
 	uint VAO, colorBO, vertexBO;
 	glGenVertexArrays(1, &VAO);
@@ -198,54 +198,38 @@ bool Renderer::AddToRenderingContext(GLMesh * mesh, GLTexture* texture)
 		flatVertices.push_back(vertex.z);
 		flatColor.push_back(color.z);
 	}
-	
+
 	glBindVertexArray(VAO);
 
 	// Position attribute
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size*3, &flatVertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size * 3, &flatVertices[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0); //TODO: Abstract into shader
 
 	// Color Attribute
 	glBindBuffer(GL_ARRAY_BUFFER, colorBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size*3, &flatColor[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size * 3, &flatColor[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (GLvoid*)0);
 	glEnableVertexAttribArray(1); //TODO: abstract into shader
-
-	uint glTexture=0, textureBO=0;
-	if (texture != NULL) {
-		glGenTextures(1, &glTexture);
-		glBindTexture(GL_TEXTURE_2D, glTexture);
-		
-		std::vector<const char*> img=texture->readImageData();
-		std::vector<float> texels = texture->readLocalTexels();
-		
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture->getWidth(), texture->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, &(img[0]));
-		glGenBuffers(1, &textureBO);
-		glBindBuffer(GL_ARRAY_BUFFER, textureBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size * 3, &texels[0], GL_STATIC_DRAW);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
-		glEnableVertexAttribArray(2); //TODO: abstract into shader
-
-		glBindTexture(GL_TEXTURE_2D, NULL);
-	}
 
 	glBindVertexArray(NULL);
 
 	//Register and Add to object again
 	ContextArrays.push_back(VAO);
 	mesh->setContextArray(VAO);
-	
-	if (texture) {
-		texture->setContextTexture(glTexture);
-	}
 
 	ContextBuffers.push_back(vertexBO);
 	ContextBuffers.push_back(colorBO);
 	mesh->setContextBuffer(vertexBO, colorBO, size);
 
 	return true;
+}
+
+bool Renderer::AddToRenderingContext(GLTexture * texture)
+{
+	//TODO
+	return false;
 }
 
 
