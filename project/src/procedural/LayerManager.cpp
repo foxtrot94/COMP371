@@ -134,9 +134,18 @@ int WorldLayerManager::GetRandomRange(int a, int b)
 
 void WorldLayerManager::GenerateBuildings(std::vector<Bounds> blockBounds)
 {
+	GLTexture glass;
+	glass.loadImageData("textures\\highrise1.jpg");
+
 	for (int i = 0; i < blockBounds.size(); i++)
 	{
-		
+		Bounds& bounds = blockBounds[i];
+		ProceduralObject* newTower = new Plane();
+		newTower->Generate(bounds);
+		newTower->assignTexture(&glass);
+		//newTower->getMesh()->adjustTexelMappingConstant(1024.f);
+		newTower->translate(0.f, 0.5f + (0.01f*((float)i)), 0.f);
+		buildings.push_back(newTower);
 	}
 }
 
@@ -162,7 +171,7 @@ void WorldLayerManager::CreateCity()
 	std::vector<Bounds> buildingBlocks, parkBlocks;
 	for (Bounds& freeBlock : freeZones) {
 		int choice = GetRandomRange(0, 100);
-
+		choice = 100;
 		if (choice<25) { //0-25%
 			parkBlocks.push_back(freeBlock);
 		}
@@ -180,14 +189,19 @@ WorldGenericObject * WorldLayerManager::GetTerrain()
 	return terrain;
 }
 
-std::vector<ProceduralObject*> WorldLayerManager::GetGeneratedRoads()
+std::vector<ProceduralObject*> WorldLayerManager::GetRoads()
 {
-	std::vector<ProceduralObject*> retVal(roads);
-	//retVal.reserve(roads.size()+buildings.size());
-	//retVal.insert(retVal.end(), roads.front(), roads.back());
-	//retVal.insert(retVal.end(), buildings.front(), buildings.back());
+	return roads;
+}
 
-	return retVal;
+std::vector<ProceduralObject*> WorldLayerManager::GetBuildings()
+{
+	return buildings;
+}
+
+std::vector<ProceduralObject*> WorldLayerManager::GetParks()
+{
+	return vegetation;
 }
 
 vec3 WorldLayerManager::GetStartCameraPos()

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
 
 #include "procedural\Grid.h"
 
@@ -38,7 +39,7 @@ void Grid::FillLine(int start, int end, int axisPoint, Grid::Axis axis, Grid::Ty
 
 	vec2 lower, higher;
 	if (axis == Axis::X) {
-		for (int i = start; i < end; i++){
+		for (int i = start; i <= end; i++){
 			Cells[i][axisPoint] = fillValue;
 		}
 		lower = GridPointTo2DPoint(Coordinate(axisPoint,start));
@@ -47,7 +48,7 @@ void Grid::FillLine(int start, int end, int axisPoint, Grid::Axis axis, Grid::Ty
 		higher.x += 0.5f*CELL;
 	}
 	else if (axis == Axis::Y) {
-		for (int i = start; i < end; i++)	{
+		for (int i = start; i <= end; i++)	{
 			Cells[axisPoint][i] = fillValue;
 		}
 		lower = GridPointTo2DPoint(Coordinate(start, axisPoint));
@@ -78,6 +79,7 @@ std::pair<Grid::Coordinate, Grid::Coordinate> Grid::FillRecursive(int x, int y, 
 		return std::pair<Coordinate, Coordinate>(lowest, highest);
 	}
 	
+	//std::ofstream gridLog("grid.log");
 
 	std::vector<Coordinate> stack;
 	stack.push_back(Coordinate(x, y));
@@ -102,42 +104,44 @@ std::pair<Grid::Coordinate, Grid::Coordinate> Grid::FillRecursive(int x, int y, 
 			stack.push_back(Coordinate(x, y + 1));
 			stack.push_back(Coordinate(x, y - 1));
 
-			if (currCell.x < lowest.x && currCell.y < lowest.y) {
+			if (currCell.x < lowest.x || currCell.y < lowest.y) {
 				lowest = currCell;
 			}
-			if (currCell.x > highest.x && currCell.y > highest.y) {
+			if (currCell.x > highest.x || currCell.y > highest.y) {
 				highest = currCell;
 			}
 		}
 	}
 
+	//TerminalPrint(gridLog);
+
 	return std::pair<Coordinate, Coordinate>(lowest, highest);
 }
 
-void Grid::TerminalPrint()
+void Grid::TerminalPrint(std::ostream& out)
 {
 	for (int i = 0; i < WIDTH; i++)
 	{
-		std::cout << "_";
+		out << "_";
 	}
-	std::cout << std::endl;
+	out << std::endl;
 	for (int i = 0; i < WIDTH; ++i) {
 		for (int j = 0; j < HEIGHT; j++)
 		{
 			if (Cells[i][j] == Grid::Type::Road)
-				std::cout << '#';
+				out << '#';
 			else if (Cells[i][j] == Grid::Type::Free)
-				std::cout << '-';
+				out << '-';
 			else
-				std::cout << ' ';
+				out << ' ';
 		}
-		std::cout << std::endl;
+		out << std::endl;
 	}
 	for (int i = 0; i < WIDTH; i++)
 	{
-		std::cout << "=";
+		out << "=";
 	}
-	std::cout << std::endl;
+	out << std::endl;
 }
 
 Bounds Grid::GetRealBounds()
@@ -168,18 +172,26 @@ std::vector<Bounds> Grid::GetFreeSpaces()
 		{
 			for (int j = 0; j < HEIGHT; j++)
 			{
-				std::pair<Coordinate, Coordinate> filledBounds = FillRecursive(i, j, Grid::Free);
-				if (filledBounds.first != invalid && filledBounds.second != invalid) {
-					prototypeBounds.push_back(filledBounds);
+				if (Cells[i][j] != Grid::Road) {
+					std::pair<Coordinate, Coordinate> filledBounds = FillRecursive(i, j, Grid::Free);
+					if (filledBounds.first != invalid && filledBounds.second != invalid) {
+						prototypeBounds.push_back(filledBounds);
+					}
 				}
 			}
 		}
 
 		for (int i = 0; i < prototypeBounds.size(); ++i) {
 			auto& proto = prototypeBounds[i];
-			Coordinate min(proto.first), max(proto.second);
-			OpenSpaces.push_back(Bounds(GridPointTo2DPoint(min), GridPointTo2DPoint(max)));
+			vec2 min(GridPointTo2DPoint(proto.first)), max(GridPointTo2DPoint(proto.second));
+			min.x -= 0.5f*CELL;
+			min.y -= 0.5f*CELL;
+			max.x += 0.5f*CELL;
+			max.y += 0.5f*CELL;
+			OpenSpaces.push_back(Bounds(max,min));
 		}
+
+		this->TerminalPrint();
 	}
 
 	return OpenSpaces;

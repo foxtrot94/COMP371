@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "procedural\Grid.h"
 
 
 //Get delta time from update and use it for operations
@@ -108,6 +109,18 @@ void Camera::SetArbitraryPosition(vec3 pos)
 {
 	camPam.cameraPos.x = pos.x;
 	camPam.cameraPos.z = pos.z;
+}
+
+void Camera::toggleOverview()
+{
+	static bool toggleOn = false;
+	if (toggleOn) {
+		camPam.cameraPos = vec3(0.5f*(float)Grid::WIDTH*15.f, 
+			((float)Grid::HEIGHT)* glm::tan(glm::radians(camPam.fov)), 
+			0.5f*(float)Grid::HEIGHT*15.f);
+		camPam.cameraFront = vec3(0.f, -1.f, 0.f);
+	}
+	toggleOn = !toggleOn;
 }
 
 

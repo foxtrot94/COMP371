@@ -70,7 +70,7 @@ public:
 	//Recursively fills the grid starting at x,y with the fill value
 	std::pair<Coordinate,Coordinate> FillRecursive(int x, int y, Grid::Type fillValue);
 
-	void TerminalPrint();
+	void TerminalPrint(std::ostream& out=std::cout);
 
 	Bounds GetRealBounds();
 

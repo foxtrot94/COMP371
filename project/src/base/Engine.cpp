@@ -128,11 +128,20 @@ void WorldEngine::LoadWorld()
 
 	WorldLayerManager layerMaker;
 	layerMaker.CreateCity();
+	
+	//Insert all the procedurally generated objects
+	std::vector<ProceduralObject*> objects;
 
 	drawables.push_back(layerMaker.GetTerrain());
 
-	std::vector<ProceduralObject*> objects = layerMaker.GetGeneratedRoads();
+	objects = layerMaker.GetRoads();
 	drawables.insert(drawables.end(), objects.begin(), objects.end());
+	objects.clear();
+
+	//Uncomment when done
+	//objects = layerMaker.GetBuildings();
+	//drawables.insert(drawables.end(), objects.begin(), objects.end());
+	//objects.clear();
 
 	camera->SetArbitraryPosition(layerMaker.GetStartCameraPos());
 

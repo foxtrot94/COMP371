@@ -76,6 +76,7 @@ public:
 	mat4 GetProjection(EngWindPtr engineWindow);
 
 	void SetArbitraryPosition(vec3 pos);
+	void toggleOverview();
 
 private:
 	int width, height;

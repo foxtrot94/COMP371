@@ -105,6 +105,11 @@ void Input::placeOnPlane()
 	}
 }
 
+void Input::overviewCamera()
+{
+	mainCamera->toggleOverview();
+}
+
 void Input::moveCamera(glm::vec2 direction)
 {
 	mainCamera->SetYaw(direction.x*mainCamera->GetCameraSensitivity() + mainCamera->GetYaw());
@@ -168,6 +173,9 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 		break;
 	case GLFW_KEY_R:
 		instance->resetCamera();
+		break;
+	case GLFW_KEY_T:
+		instance->overviewCamera();
 		break;
 		
 		
