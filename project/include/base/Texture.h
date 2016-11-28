@@ -43,4 +43,6 @@ public:
 
 	//Get the context
 	uint getContext() { return glTexture; }
+
+	static void cleanImageData(uchar* img);
 };

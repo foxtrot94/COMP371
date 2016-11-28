@@ -37,7 +37,8 @@ private:
 	void GenerateTerrain();
 	
 	//Make roads recursively
-	void GenerateRoads(Grid::Coordinate min, Grid::Coordinate max, int levels);
+	void GenerateRoads();
+	void DrawRoadsRecursively(Grid::Coordinate min, Grid::Coordinate max, int levels);
 	//Returns a random number between 'a' and 'b'
 	//TODO: move this to a random number generator class. This really shouldn't be here
 	int GetRandomRange(int a, int b);

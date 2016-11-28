@@ -25,6 +25,11 @@ Renderer::~Renderer()
 	}
 	ContextBuffers.clear();
 
+	for (uchar* img : RawTextureData) {
+		GLTexture::cleanImageData(img);
+	}
+	RawTextureData.clear();
+
 	delete shader;
 	delete skyBoxShader;
 	delete skybox;
@@ -273,6 +278,7 @@ bool Renderer::AddToRenderingContext(GLTexture * texture)
 	glBindTexture(GL_TEXTURE_2D, NULL);
 
 	//Finish and set the texture context
+	RawTextureData.insert(img);
 	texture->setContextTexture(textureBuff);
 
 	return true;

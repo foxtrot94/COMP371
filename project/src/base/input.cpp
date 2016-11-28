@@ -14,13 +14,11 @@ void Input::resetCamera(){
 void Input::moveFwd()
 {
 	mainCamera->chooseDirection('p','z');
-	std::cout << "going fwd" << std::endl;
 }
 
 void Input::moveBwd()
 {
 	mainCamera->chooseDirection('n', 'z');
-	std::cout << "going bwd" << std::endl;
 
 }
 
@@ -37,13 +35,11 @@ void Input::turnRight()
 void Input::strafeLeft()
 {
 	mainCamera->chooseDirection('n', 'x');
-	std::cout << "dodge left" << std::endl;
 }
 
 void Input::strafeRight()
 {
 	mainCamera->chooseDirection('p', 'x');
-	std::cout << "dodge right" << std::endl;
 }
 
 void Input::leftMouseClick()

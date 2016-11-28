@@ -41,9 +41,19 @@ float Bounds::getYmin()
 	return bottomLeft.y;
 }
 
+float Bounds::getXlength()
+{
+	return (topRight.x - bottomLeft.x);
+}
+
+float Bounds::getYlength()
+{
+	return (topRight.y - bottomLeft.y);
+}
+
 float Bounds::getArea()
 {
-	return (topRight.x-bottomLeft.x)*(topRight.y-bottomLeft.x);
+	return (topRight.x-bottomLeft.x)*(topRight.y-bottomLeft.y);
 }
 
 void Bounds::setCenter(vec3 point)

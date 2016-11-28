@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <set>
 
 #include "..\glew\glew.h"	// include GL Extension Wrangler
 #include "..\glfw\glfw3.h"	// include GLFW helper library
@@ -66,6 +67,7 @@ protected:
 	//List of elements being tracked in the OpenGL context
 	std::vector<uint> ContextArrays;
 	std::vector<uint> ContextBuffers;
+	std::set<uchar*> RawTextureData;
 
 	//Protected Ctor
 	Renderer();

@@ -34,11 +34,16 @@ int GLTexture::getHeight()
 	return height;
 }
 
+void GLTexture::cleanImageData(uchar * img)
+{
+	SOIL_free_image_data(img);
+}
+
 void GLTexture::setContextTexture(uint glTex)
 {
 	glTexture = glTex;
-	SOIL_free_image_data(ImageData);
-	ImageData = NULL;
+	//SOIL_free_image_data(ImageData);
+	//ImageData = NULL;
 }
 
 void GLTexture::loadImageData(std::string filename)

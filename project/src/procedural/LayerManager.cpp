@@ -18,7 +18,42 @@ void WorldLayerManager::GenerateTerrain()
 	terrain->getMesh()->adjustTexelMappingConstant(512.f);
 }
 
-void WorldLayerManager::GenerateRoads(Grid::Coordinate min, Grid::Coordinate max, int levels)
+void WorldLayerManager::GenerateRoads()
+{
+	//Recursively generate and draw all roads
+	DrawRoadsRecursively(
+		Grid::Coordinate(0, 0),
+		Grid::Coordinate(Grid::WIDTH - 1, Grid::HEIGHT - 1),
+		WorldLayerManager::MAX_RECURSIVE_DEPTH
+	);
+
+	std::vector<Bounds> RoadLengths = worldGrid->GetKnownRoads();
+	vec3 black = vec3(0.01f);
+
+	GLTexture streetVertical, streetHorizontal;
+	streetVertical.loadImageData("textures\\streetVertical.jpg");
+	streetHorizontal.loadImageData("textures\\streetHorizontal.jpg");
+
+	for (int i = 0; i < RoadLengths.size(); ++i) {
+		Bounds& bounds = RoadLengths[i];
+		//Only for debugging purposes... hopefully
+		ProceduralObject* newRoad = new Plane();
+		newRoad->Generate(bounds);
+		newRoad->paintColor(black);
+
+		newRoad->assignTexture(
+			(bounds.getXlength() > bounds.getYlength())? &streetVertical : &streetHorizontal
+		);
+
+		//newRoad->getMesh()->adjustTexelMappingConstant(128.f);
+		newRoad->translate(0.f, 0.01f+(0.01f*((float)i)), 0.f);
+		roads.push_back(newRoad);
+	}
+
+	worldGrid->TerminalPrint();
+}
+
+void WorldLayerManager::DrawRoadsRecursively(Grid::Coordinate min, Grid::Coordinate max, int levels)
 {
 	//Run some checks before proceeding
 	int xLength = max.x - min.x, yLength = max.y - min.y;
@@ -73,9 +108,9 @@ void WorldLayerManager::GenerateRoads(Grid::Coordinate min, Grid::Coordinate max
 		worldGrid->FillLine(min.x, max.x, splitPoint, axisToDivide, Grid::Road);
 
 		//Down box
-		GenerateRoads(Grid::Coordinate(min.x, min.y), Grid::Coordinate(max.x, splitPoint), levels - 1);
+		DrawRoadsRecursively(Grid::Coordinate(min.x, min.y), Grid::Coordinate(max.x, splitPoint), levels - 1);
 		//Up box
-		GenerateRoads(Grid::Coordinate(min.x, splitPoint), Grid::Coordinate(max.x, max.y), levels - 1);
+		DrawRoadsRecursively(Grid::Coordinate(min.x, splitPoint), Grid::Coordinate(max.x, max.y), levels - 1);
 	}
 	else if (Grid::Axis::X == axisToDivide) {
 		//splitPoint = (min.x + max.x) / 2;
@@ -83,9 +118,9 @@ void WorldLayerManager::GenerateRoads(Grid::Coordinate min, Grid::Coordinate max
 		worldGrid->FillLine(min.y, max.y, splitPoint, axisToDivide, Grid::Road);
 
 		//Left box
-		GenerateRoads(Grid::Coordinate(min.x, min.y), Grid::Coordinate(splitPoint, max.y), levels - 1);
+		DrawRoadsRecursively(Grid::Coordinate(min.x, min.y), Grid::Coordinate(splitPoint, max.y), levels - 1);
 		//Right box
-		GenerateRoads(Grid::Coordinate(splitPoint, min.y), Grid::Coordinate(max.x, max.y), levels - 1);
+		DrawRoadsRecursively(Grid::Coordinate(splitPoint, min.y), Grid::Coordinate(max.x, max.y), levels - 1);
 	}
 }
 
@@ -116,28 +151,10 @@ void WorldLayerManager::CreateCity()
 {
 	worldGrid = new Grid();
 
-	//Make a plane
 	GenerateTerrain();
 
-	//Recursively generate and draw all roads
-	GenerateRoads(
-		Grid::Coordinate(0,0),
-		Grid::Coordinate(worldGrid->WIDTH-1,worldGrid->HEIGHT-1),
-		WorldLayerManager::MAX_RECURSIVE_DEPTH
-		);
-	std::vector<Bounds> RoadLengths = worldGrid->GetKnownRoads();
-	vec3 black = vec3(0.1f);
-	for (Bounds& bounds : RoadLengths) {
-		//Only for debugging purposes... hopefully
-		ProceduralObject* newRoad = new Plane();
-		newRoad->Generate(bounds);
-		newRoad->paintColor(black);
-		newRoad->translate(0.f, 0.1f, 0.f);
-		roads.push_back(newRoad);
-	}
+	GenerateRoads();
 
-
-	worldGrid->TerminalPrint();
 	GenerateBuildings();
 	
 	GenerateVegetation();

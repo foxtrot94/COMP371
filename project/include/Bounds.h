@@ -18,6 +18,9 @@ public:
 	float getXmin();
 	float getYmin();
 
+	float getXlength();
+	float getYlength();
+
 	float getArea();
 
 	void setCenter(vec3 point);
