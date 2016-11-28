@@ -120,9 +120,9 @@ void Renderer::Render(WorldGenericObject* Object)
 	glUniformMatrix4fv(uniform.transformMatrixPtr, 1, GL_FALSE, glm::value_ptr(*(Object->getModel())));
 
 	glBindVertexArray(mesh->getContextArray());
+
 	//Basically, draw RenderTarget
 	glDrawArrays(GL_TRIANGLES, 0, mesh->getBufferSize());
-	//glDrawElements(GL_TRIANGLES, mesh->getBufferSize(), GL_UNSIGNED_INT, 0);//TODO?
 	
 	glBindVertexArray(0); //TODO: Optimize. Put this outside
 }
@@ -175,21 +175,24 @@ void Renderer::RenderSkyBox(Camera* camera) {
 
 bool Renderer::AddToRenderingContext(GLMesh * mesh)
 {
-	uint VAO, colorBO, vertexBO;
+	uint VAO, colorBO, vertexBO, texelBO;
 	glGenVertexArrays(1, &VAO);
 
 	glGenBuffers(1, &vertexBO);
 	glGenBuffers(1, &colorBO);
+	//glGenBuffers(1, &texelBO);
 
 	//synthesize the mesh data since it's been stored as a vec3
 	std::vector<vec3> vertices = mesh->readLocalVertices();
 	std::vector<vec3> colors = mesh->readLocalVertexColor();
+	std::vector<vec2> texels = mesh->readLocalMeshTexels();
 	uint size = vertices.size();
-	std::vector<float> flatVertices, flatColor;
+	std::vector<float> flatVertices, flatColor, flatTexels;
 	for (uint i = 0; i < size; i++)
 	{
 		vec3& vertex = vertices[i];
 		vec3& color = colors[i];
+		vec2& texel = texels[i];
 
 		flatVertices.push_back(vertex.x);
 		flatColor.push_back(color.x);
@@ -197,6 +200,9 @@ bool Renderer::AddToRenderingContext(GLMesh * mesh)
 		flatColor.push_back(color.y);
 		flatVertices.push_back(vertex.z);
 		flatColor.push_back(color.z);
+
+		flatTexels.push_back(texel.x);
+		flatTexels.push_back(texel.y);
 	}
 
 	glBindVertexArray(VAO);
@@ -213,6 +219,12 @@ bool Renderer::AddToRenderingContext(GLMesh * mesh)
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (GLvoid*)0);
 	glEnableVertexAttribArray(1); //TODO: abstract into shader
 
+	// Texel Attribute
+	//glBindBuffer(GL_ARRAY_BUFFER, texelBO);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size * 3, &flatTexels[0], GL_STATIC_DRAW);
+	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (GLvoid*)0);
+	//glEnableVertexAttribArray(2); //TODO: abstract into shader
+
 	glBindVertexArray(NULL);
 
 	//Register and Add to object again
@@ -221,15 +233,35 @@ bool Renderer::AddToRenderingContext(GLMesh * mesh)
 
 	ContextBuffers.push_back(vertexBO);
 	ContextBuffers.push_back(colorBO);
+	ContextBuffers.push_back(texelBO);
+
 	mesh->setContextBuffer(vertexBO, colorBO, size);
+	mesh->setTexelBuffer(texelBO, size);
 
 	return true;
 }
 
 bool Renderer::AddToRenderingContext(GLTexture * texture)
 {
-	//TODO
-	return false;
+	uint textureBuff;
+	uchar* img = texture->readImageData();
+
+	glGenTextures(1, &textureBuff);
+	glBindTexture(GL_TEXTURE_2D, textureBuff);
+
+	//TECH DEBT: We're hardcoding this because we're 6 hours away from submission
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture->getWidth(), texture->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, img);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	
+	glBindTexture(GL_TEXTURE_2D, NULL);
+
+	//Finish and set the texture context
+	texture->setContextTexture(textureBuff);
+
+	return true;
 }
 
 

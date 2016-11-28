@@ -43,6 +43,16 @@ std::vector<vec3> GLMesh::readLocalVertexColor()
 	return this->Colors;
 }
 
+void GLMesh::setMeshTexels(std::vector<vec2> texels)
+{
+	Texels = texels;
+}
+
+std::vector<vec2> GLMesh::readLocalMeshTexels()
+{
+	return Texels;
+}
+
 void GLMesh::setContextArray(uint VAO)
 {
 	if(glArray==NULL)
@@ -58,6 +68,12 @@ void GLMesh::setContextBuffer(uint vertexBuffer, uint colorBuffer, uint size)
 	glVertexBuffer = vertexBuffer;
 	glColorBuffer = colorBuffer;
 	commonBufferSize = size;
+}
+
+void GLMesh::setTexelBuffer(uint texelBuffer, uint size)
+{
+	glTexelBuffer = texelBuffer;
+	texelBufferSize = size;
 }
 
 void GLMesh::DestroyContext()

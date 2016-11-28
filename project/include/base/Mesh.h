@@ -13,16 +13,24 @@ class GLMesh {
 	uint glVertexBuffer;
 	//Color Buffer Object
 	uint glColorBuffer;
+	//Texel Buffer Object
+	uint glTexelBuffer;
 
 	//Size of the mesh buffers. It is assumed they all correspond among each other
 	//This set when assigning the OpenGL buffers
 	uint commonBufferSize;
+
+	//Size of the Texel Buffer
+	uint texelBufferSize;
 
 	//Local Array of Vertices
 	std::vector<vec3> Vertices;
 
 	//Local Array of Color
 	std::vector<vec3> Colors;
+
+	//Local Array of Texels
+	std::vector<vec2> Texels;
 
 public:
 	//ctor
@@ -48,11 +56,18 @@ public:
 	//Read all colors of the vertex being sampled
 	std::vector<vec3> readLocalVertexColor();
 
+	//Set Texels for the mesh
+	void setMeshTexels(std::vector<vec2> texels);
+	//Read all colors of the vertex being sampled
+	std::vector<vec2> readLocalMeshTexels();
+
 	//Assign the mesh a VAO Pointer
 	void setContextArray(uint VAO);
 
 	//Assign the mesh buffers - Both are expected to be of the same size
 	void setContextBuffer(uint vertexBuffer, uint colorBuffer, uint size);
+	//
+	void setTexelBuffer(uint texelBuffer, uint size);
 
 	//Destroy the mesh glContext
 	void DestroyContext();
