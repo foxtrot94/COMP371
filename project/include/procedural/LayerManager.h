@@ -43,9 +43,9 @@ private:
 	//TODO: move this to a random number generator class. This really shouldn't be here
 	int GetRandomRange(int a, int b);
 
-	void GenerateBuildings();
+	void GenerateBuildings(std::vector<Bounds> blockBounds);
 
-	void GenerateVegetation();
+	void GenerateVegetation(std::vector<Bounds> parkBounds);
 
 	//void PlaceExtraProps();
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <utility>
 
 #include "Bounds.h"
 #include "Utils.h"
@@ -13,7 +14,7 @@ public:
 	static const int HEIGHT = 50;
 	static const int NUM_CELLS = WIDTH*HEIGHT;
 	// The x and y length, in meters, of each cell
-	const float CELL = 20.f; //10 meters is the average street width
+	const float CELL = 10.f; //10 meters is the average street width
 	
 	// What element occupies a cell currently
 	enum Type {
@@ -35,8 +36,13 @@ public:
 			y = Y;
 		}
 		bool isValid() {
-			return x > 0 && x < WIDTH && y>0 && y < HEIGHT;
+			return x >= 0 && x < WIDTH && y>=0 && y < HEIGHT;
 		}
+
+		inline bool operator!=(const Coordinate& rhs) {
+			return this->x != rhs.x && this->y != rhs.y;
+		}
+
 		friend std::ostream& operator<<(std::ostream& os, const Grid::Coordinate& coord);
 	};
 
@@ -48,6 +54,9 @@ private:
 
 	//Roads
 	std::vector<Bounds> DrawnRoads;
+
+	//Free Spaces after drawing roads
+	std::vector<Bounds> OpenSpaces;
 	
 public:
 	//ctor
@@ -59,7 +68,7 @@ public:
 	void FillLine(int start, int end, int axisPoint, Grid::Axis axis, Grid::Type fillValue);
 
 	//Recursively fills the grid starting at x,y with the fill value
-	void FillRecursive(int x, int y, Grid::Type fillValue);
+	std::pair<Coordinate,Coordinate> FillRecursive(int x, int y, Grid::Type fillValue);
 
 	void TerminalPrint();
 

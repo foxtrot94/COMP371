@@ -63,7 +63,7 @@ void Grid::FillLine(int start, int end, int axisPoint, Grid::Axis axis, Grid::Ty
 	}
 }
 
-void Grid::FillRecursive(int x, int y, Grid::Type fillValue)
+std::pair<Grid::Coordinate, Grid::Coordinate> Grid::FillRecursive(int x, int y, Grid::Type fillValue)
 {
 	//Check bounds
 	if (x < 0 || x >= WIDTH || y<0 || y>HEIGHT) {
@@ -72,8 +72,13 @@ void Grid::FillRecursive(int x, int y, Grid::Type fillValue)
 		__debugbreak();
 		#endif
 	}
-
 	Grid::Type value = Cells[x][y];
+	Coordinate lowest(Grid::WIDTH, Grid::HEIGHT), highest(-1, -1);
+	if (value == fillValue) {
+		return std::pair<Coordinate, Coordinate>(lowest, highest);
+	}
+	
+
 	std::vector<Coordinate> stack;
 	stack.push_back(Coordinate(x, y));
 	while (stack.size()>0)
@@ -96,8 +101,17 @@ void Grid::FillRecursive(int x, int y, Grid::Type fillValue)
 
 			stack.push_back(Coordinate(x, y + 1));
 			stack.push_back(Coordinate(x, y - 1));
+
+			if (currCell.x < lowest.x && currCell.y < lowest.y) {
+				lowest = currCell;
+			}
+			if (currCell.x > highest.x && currCell.y > highest.y) {
+				highest = currCell;
+			}
 		}
 	}
+
+	return std::pair<Coordinate, Coordinate>(lowest, highest);
 }
 
 void Grid::TerminalPrint()
@@ -112,6 +126,8 @@ void Grid::TerminalPrint()
 		{
 			if (Cells[i][j] == Grid::Type::Road)
 				std::cout << '#';
+			else if (Cells[i][j] == Grid::Type::Free)
+				std::cout << '-';
 			else
 				std::cout << ' ';
 		}
@@ -143,6 +159,28 @@ std::vector<Bounds> Grid::GetKnownRoads()
 
 std::vector<Bounds> Grid::GetFreeSpaces()
 {
-	//TODO:
-	return std::vector<Bounds>();
+	if (OpenSpaces.size() < 1) {
+		//This is whatever is left free on the grid
+		std::vector<std::pair<Coordinate, Coordinate>> prototypeBounds;
+		Coordinate invalid(-1, -1);
+
+		for (int i = 0; i < WIDTH; i++)
+		{
+			for (int j = 0; j < HEIGHT; j++)
+			{
+				std::pair<Coordinate, Coordinate> filledBounds = FillRecursive(i, j, Grid::Free);
+				if (filledBounds.first != invalid && filledBounds.second != invalid) {
+					prototypeBounds.push_back(filledBounds);
+				}
+			}
+		}
+
+		for (int i = 0; i < prototypeBounds.size(); ++i) {
+			auto& proto = prototypeBounds[i];
+			Coordinate min(proto.first), max(proto.second);
+			OpenSpaces.push_back(Bounds(GridPointTo2DPoint(min), GridPointTo2DPoint(max)));
+		}
+	}
+
+	return OpenSpaces;
 }

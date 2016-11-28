@@ -150,13 +150,7 @@ void WorldEngine::Run()
 	//Unlock framerate
 	glfwSwapInterval(0);
 	//@foxtrot94: DEBUG CODE - Remove or Comment in Master
-	WorldGenericObject* triangle = new TriangleTest();
-	ProceduralObject* plane = new Plane();
-	//WorldGenericObject* building = new Building(12);
-	plane->Generate(Bounds(0.f,50.f,0.f,50.f));
-	//plane->translate(-25.f, 0.f, -25.f);
-	drawables.push_back(plane);
-	//drawables.push_back(building);
+
 	//Game loop
 	std::cout << "Initialization complete, starting game" << std::endl;
 	while (!glfwWindowShouldClose(engineWindow->glfwContext)) {
@@ -164,12 +158,6 @@ void WorldEngine::Run()
 		this->ProcessInputs();
 		this->DrawFrame();
 	}
-
-	//drawables.pop_back();
-	drawables.pop_back();
-	delete triangle;
-	delete plane;
-	//delete building;
 
 	glfwTerminate();
 }

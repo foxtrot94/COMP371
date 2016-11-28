@@ -132,12 +132,15 @@ int WorldLayerManager::GetRandomRange(int a, int b)
 	return distribution(generator);
 }
 
-void WorldLayerManager::GenerateBuildings()
+void WorldLayerManager::GenerateBuildings(std::vector<Bounds> blockBounds)
 {
-
+	for (int i = 0; i < blockBounds.size(); i++)
+	{
+		
+	}
 }
 
-void WorldLayerManager::GenerateVegetation()
+void WorldLayerManager::GenerateVegetation(std::vector<Bounds> parkBounds)
 {
 
 }
@@ -152,12 +155,24 @@ void WorldLayerManager::CreateCity()
 	worldGrid = new Grid();
 
 	GenerateTerrain();
-
 	GenerateRoads();
 
-	GenerateBuildings();
-	
-	GenerateVegetation();
+	//Get whatever is free and divide it between buildings and parks
+	std::vector<Bounds> freeZones = worldGrid->GetFreeSpaces();
+	std::vector<Bounds> buildingBlocks, parkBlocks;
+	for (Bounds& freeBlock : freeZones) {
+		int choice = GetRandomRange(0, 100);
+
+		if (choice<25) { //0-25%
+			parkBlocks.push_back(freeBlock);
+		}
+		else { //26-100%
+			buildingBlocks.push_back(freeBlock);
+		}
+	}
+
+	GenerateBuildings(buildingBlocks);
+	GenerateVegetation(parkBlocks);
 }
 
 WorldGenericObject * WorldLayerManager::GetTerrain()
