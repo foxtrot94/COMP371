@@ -129,6 +129,16 @@ void WorldEngine::LoadWorld()
 	WorldLayerManager layerMaker;
 	layerMaker.CreateCity();
 
+	drawables.push_back(layerMaker.GetTerrain());
+
+	std::vector<ProceduralObject*> allBuildings = layerMaker.GetGeneratedBuildings();
+	drawables.insert(drawables.end(), allBuildings.begin(), allBuildings.end());
+
+	std::vector<ProceduralObject*> objects = layerMaker.GetGeneratedRoads();
+	drawables.insert(drawables.end(), objects.begin(), objects.end());
+
+	camera->SetArbitraryPosition(layerMaker.GetStartCameraPos());
+
 	hasLoaded = true;
 	loadScreen.join();
 }
@@ -143,17 +153,6 @@ void WorldEngine::Run()
 	//Unlock framerate
 	glfwSwapInterval(0);
 	//@foxtrot94: DEBUG CODE - Remove or Comment in Master
-	WorldGenericObject* triangle = new TriangleTest();
-	ProceduralObject* plane = new Plane();
-
-	ProceduralObject* building = new Building();
-	building->Generate(Bounds(0.f, 1.f, 0.f, 1.f));
-
-	plane->Generate(Bounds(0.f,50.f,0.f,50.f));
-	plane->translate(-25.f, 0.f, -25.f);
-	drawables.push_back(plane);
-
-	drawables.push_back(building);
 
 	//Game loop
 	std::cout << "Initialization complete, starting game" << std::endl;
@@ -162,13 +161,6 @@ void WorldEngine::Run()
 		this->ProcessInputs();
 		this->DrawFrame();
 	}
-
-	//drawables.pop_back();
-	drawables.pop_back();
-	delete triangle;
-	delete plane;
-
-	delete building;
 
 	glfwTerminate();
 }

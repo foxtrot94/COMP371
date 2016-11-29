@@ -1,126 +1,128 @@
 #include "procedural/Building.h"
 
+#include <iostream>
+
 Building::Building() {}
 
 Building::~Building() {}
 
 void Building::Generate(Bounds perimeter) {
-	//buildingVertices.clear();
-	//buildingColors.clear();
-	//buildingUV.clear();
-	//buildingNormals.clear();
+	float cellSize = 10.f;
 
-	float cellSize = perimeter.getXmax() - perimeter.getXmin();
 	float xNumCells = (perimeter.getXmax() - perimeter.getXmin()) / cellSize;
 	float yNumCells = (perimeter.getYmax() - perimeter.getYmin()) / cellSize;
+
 	// Create a building in every cell within the bounds
 	//for (float x = 0; x < xNumCells; x++) {
-		//for (float y = 0; y < yNumCells; yNumCells++) {
-			// Useful variables
-			bool copyPattern, lastPattern = false;
-			int switchPattern = randNumber(1, 6);
-			// Initialize building position on the plane (x and z coordinates)
-			//buildingPos = glm::vec2(x + (cellSize / 2), y + (cellSize / 2));
-			buildingPos = glm::vec2(0.0f, 0.0f);
+	//for (float y = 0; y < yNumCells; yNumCells++) {
+	// Useful variables
+	bool copyPattern, lastPattern = false;
+	int switchPattern = randNumber(1, 6);
 
-			// Initial height
-			curHeight = 0;
-			// Initialize default curSize and curHeight
-			// The building size scale is (1.0f = 1 meter)
-			curSize = cellSize;
-			/*if (perimeter.getXmax - perimeter.getXmin >= perimeter.getYmax - perimeter.getYmin) {
-			curSize = perimeter.getYmax - perimeter.getYmin;
-			}
-			else {
-			curSize = perimeter.getXmax - perimeter.getXmin;
-			}*/
-			//curHeight += curSize; // Initialize the building at a height of 0.0f on the y axis
-			// Get a random building height between 2 and 10
-			int buildingH = randNumber(2, 10);
+	// Initialize building position on the plane (x and z coordinates)
+	buildingPos = glm::vec2((perimeter.getXmax() - perimeter.getXmin() / 2, (perimeter.getYmax() - perimeter.getYmin()) / 2));
+	//std::cout << "\n" << buildingPos.x << "\n" << buildingPos.y << std::endl;
+	//buildingPos = glm::vec2(250.f, 250.f);
+	//buildingPos = glm::vec2(0.0f, 0.0f);
 
-			// Algorithm to make a singular building
-			for (int countBuildingH = 0; countBuildingH < buildingH; countBuildingH++) {
-				copyPattern = false;
-				// 66.67% chance to copy last pattern
-				if (randNumber(1, 2) != 2) {
-					copyPattern = true;
-				}
-				if (!lastPattern) {
-					// Random a new pattern
-					if (!copyPattern) {
-						switchPattern = randNumber(1, 6);
-					}
-				}
-				// Create the chosen pattern
-				switch (switchPattern) {
-				case 1:
-					//patternWasPillars = true;
-					//fourPillarsPattern(curSize, curHeight, copyPattern);
-					break;
-				case 2:
-					cubePattern(curSize, curHeight, copyPattern);
-					break;
-				case 3:
-					halfCubeHeightPattern(curSize, curHeight, copyPattern);
-					break;
-				case 4:
-					plusSignPattern(curSize, curHeight, copyPattern);
-					break;
-				case 5:
-					lastPattern = true;
-					diagonalOrHalfPattern(curSize, curHeight, copyPattern);
-					break;
-				case 6:
-					lastPattern = true;
-					anglePattern(curSize, curHeight, copyPattern);
-					break;
-				default:
-					break;
-				}
+	// Initial height
+	curHeight = 0;
+	// Initialize default curSize and curHeight
+	// The building size scale is (1.0f = 1 meter)
+	curSize = cellSize;
+	/*if (perimeter.getXmax - perimeter.getXmin >= perimeter.getYmax - perimeter.getYmin) {
+	curSize = perimeter.getYmax - perimeter.getYmin;
+	}
+	else {
+	curSize = perimeter.getXmax - perimeter.getXmin;
+	}*/
+
+	// Get a random building height between 2 and 10
+	int buildingH = randNumber(2, 10);
+
+	// Algorithm to make a singular building
+	for (int countBuildingH = 0; countBuildingH < buildingH; countBuildingH++) {
+		copyPattern = false;
+		// 66.67% chance to copy last pattern
+		if (randNumber(1, 2) != 2) {
+			copyPattern = true;
+		}
+		if (!lastPattern) {
+			// Random a new pattern
+			if (!copyPattern) {
+				switchPattern = randNumber(1, 6);
 			}
-		//}
+		}
+		else {
+			copyPattern = true;
+		}
+		// Create the chosen pattern
+		switch (switchPattern) {
+		case 1:
+			//patternWasPillars = true;
+			//fourPillarsPattern(curSize, curHeight, copyPattern);
+			break;
+		case 2:
+			cubePattern(curSize, curHeight, copyPattern);
+			break;
+		case 3:
+			halfCubeHeightPattern(curSize, curHeight, copyPattern);
+			break;
+		case 4:
+			plusSignPattern(curSize, curHeight, copyPattern);
+			break;
+		case 5:
+			lastPattern = true;
+			diagonalOrHalfPattern(curSize, curHeight, copyPattern);
+			break;
+		case 6:
+			lastPattern = true;
+			anglePattern(curSize, curHeight, copyPattern);
+			break;
+		default:
+			break;
+		}
+	}
+	//}
 	//}
 
 	// Calculate normals
 	// TODO: fix error occured here when trying to build (uncomment underneath to create normals array)
 	/*int buildingVertSize = buildingVertices.size();
 	for (int i = 0; i < buildingVertSize; i += 3) {
-		int a = i;
-		int b = i + 1;
-		int c = i + 2;
+	int a = i;
+	int b = i + 1;
+	int c = i + 2;
 
-		glm::vec3 v1(buildingVertices[a * 3], buildingVertices[a * 3 + 1], buildingVertices[a * 3 + 2]);
-		glm::vec3 v2(buildingVertices[b * 3], buildingVertices[b * 3 + 1], buildingVertices[b * 3 + 2]);
-		glm::vec3 v3(buildingVertices[c * 3], buildingVertices[c * 3 + 1], buildingVertices[c * 3 + 2]);
+	glm::vec3 v1(buildingVertices[a * 3], buildingVertices[a * 3 + 1], buildingVertices[a * 3 + 2]);
+	glm::vec3 v2(buildingVertices[b * 3], buildingVertices[b * 3 + 1], buildingVertices[b * 3 + 2]);
+	glm::vec3 v3(buildingVertices[c * 3], buildingVertices[c * 3 + 1], buildingVertices[c * 3 + 2]);
 
-		glm::vec3 v2v1 = v2 - v1;
-		glm::vec3 v3v1 = v3 - v1;
-		glm::vec3 normal = glm::cross(v2v1, v3v1);
-		// Assign Normals
-		buildingNormals.push_back(vec3(normal.x, normal.y, normal.z));
-		buildingNormals.push_back(vec3(normal.x, normal.y, normal.z));
-		buildingNormals.push_back(vec3(normal.x, normal.y, normal.z));
+	glm::vec3 v2v1 = v2 - v1;
+	glm::vec3 v3v1 = v3 - v1;
+	glm::vec3 normal = glm::cross(v2v1, v3v1);
+	// Assign Normals
+	buildingNormals.push_back(vec3(normal.x, normal.y, normal.z));
+	buildingNormals.push_back(vec3(normal.x, normal.y, normal.z));
+	buildingNormals.push_back(vec3(normal.x, normal.y, normal.z));
 	}*/
 
 	// Load and set the tree texture
 	// TODO:
-    vec3 aColor(125.f / 255.f, 125 / 255.f, 125.f / 255.f);
+	vec3 aColor(125.f / 255.f, 125 / 255.f, 125.f / 255.f);
 
 	std::vector<vec3> aColors(buildingVertices.size(), aColor);
 
 	// Set the building mesh
 	mesh.setVertices(buildingVertices);
 	mesh.setVertexColor(aColors);
-	//mesh.setVertexColor(buildingColors);
 
 	// Send in mesh normals
 	//mesh.setNormals(buildingNormals);
 
 	// Pass in buildingUV for texture coordinates
-	//mesh.setTexels(buildingUV);
+	mesh.setMeshTexels(buildingUV);
 	//mesh.setTexture(somethingsomething);
-
-	Model = mat4(1.0f);
 }
 
 void Building::fourPillarsPattern(float& curSize, float& curHeight, bool copyP) {
@@ -137,9 +139,9 @@ void Building::fourPillarsPattern(float& curSize, float& curHeight, bool copyP) 
 	curHeight += size;
 	// Build pattern
 	buildCube(size, vec3(-offSet, curHeight, -offSet));
-	buildCube(size, vec3(-offSet, curHeight,  offSet));
-	buildCube(size, vec3( offSet, curHeight, -offSet));
-	buildCube(size, vec3( offSet, curHeight,  offSet));
+	buildCube(size, vec3(-offSet, curHeight, offSet));
+	buildCube(size, vec3(offSet, curHeight, -offSet));
+	buildCube(size, vec3(offSet, curHeight, offSet));
 	// Adjust current size and height
 	curHeight += size;
 	curSize = size * 2;
@@ -170,9 +172,9 @@ void Building::halfCubeHeightPattern(float& curSize, float& curHeight, bool copy
 	curHeight += size;
 	// Build pattern
 	buildCube(size, vec3(-size, curHeight, -size));
-	buildCube(size, vec3(-size, curHeight,  size));
-	buildCube(size, vec3( size, curHeight, -size));
-	buildCube(size, vec3( size, curHeight,  size));
+	buildCube(size, vec3(-size, curHeight, size));
+	buildCube(size, vec3(size, curHeight, -size));
+	buildCube(size, vec3(size, curHeight, size));
 	// Adjust current size and height
 	curHeight += size;
 	curSize = size * 2;
@@ -188,9 +190,9 @@ void Building::plusSignPattern(float& curSize, float& curHeight, bool copyP) {
 	curHeight += size;
 	// Build pattern
 	buildCube(size, vec3(-2 * size, curHeight, 0));
-	buildCube(size, vec3( 2 * size, curHeight, 0));
+	buildCube(size, vec3(2 * size, curHeight, 0));
 	buildCube(size, vec3(0, curHeight, -2 * size));
-	buildCube(size, vec3(0, curHeight,  2 * size));
+	buildCube(size, vec3(0, curHeight, 2 * size));
 	// Adjust current size and height
 	curHeight += size;
 	curSize = size * 3;

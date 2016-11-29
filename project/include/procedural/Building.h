@@ -10,7 +10,7 @@
 class Building : public ProceduralObject {
 private:
 	// Variables useful for this class
-	std::vector<vec3> buildingVertices, buildingNormals, buildingColors;
+	std::vector<vec3> buildingVertices, buildingNormals;
 	std::vector<vec2> buildingUV;
 	float curHeight, curSize;
 	int angleNumber, diagNumber;
@@ -37,7 +37,7 @@ private:
 	int randNumber(int min, int max);
 
 public:
-	
+
 	Building();
 
 	~Building();
