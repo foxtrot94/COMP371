@@ -187,6 +187,7 @@
     <ClInclude Include="include\base\Grid.h" />
     <ClInclude Include="include\base\Mesh.h" />
     <ClInclude Include="include\base\Modulator.h" />
+    <ClInclude Include="include\base\Texture.h" />
     <ClInclude Include="include\Bounds.h" />
     <ClInclude Include="include\Light.h" />
     <ClInclude Include="include\procedural\CubeTest.h" />
@@ -213,7 +214,11 @@
     <ClInclude Include="include\base\Objects.h" />
   </ItemGroup>
   <ItemGroup>
+
     <ClCompile Include="include\procedural\CubeTest.cpp" />
+
+    <ClCompile Include="src\base\Texture.cpp" />
+
     <ClCompile Include="src\Bounds.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\procedural\Building.cpp" />

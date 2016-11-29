@@ -50,6 +50,7 @@ public:
 	void toggleFlashLight();
 	void placeOnPlane();
 
+	void overviewCamera();
 
 	void moveCamera(glm::vec2 direction);
 

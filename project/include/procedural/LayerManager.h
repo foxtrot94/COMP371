@@ -27,24 +27,25 @@ private:
 	Plane* terrain;
 
 	//Colletion of roads in the city
-	std::vector<Road*> roads;
+	std::vector<ProceduralObject*> roads;
 	//All generated buildings
-	std::vector<Building*> buildings;
+	std::vector<ProceduralObject*> buildings;
 	//Any vegetation items around the city
-	//std::vector<Plants*> vegetation;
+	std::vector<ProceduralObject*> vegetation;
 
 	//Construct the terrain
 	void GenerateTerrain();
 	
 	//Make roads recursively
-	void GenerateRoads(Grid::Coordinate min, Grid::Coordinate max, int levels);
+	void GenerateRoads();
+	void DrawRoadsRecursively(Grid::Coordinate min, Grid::Coordinate max, int levels);
 	//Returns a random number between 'a' and 'b'
 	//TODO: move this to a random number generator class. This really shouldn't be here
 	int GetRandomRange(int a, int b);
 
-	void GenerateBuildings();
+	void GenerateBuildings(std::vector<Bounds> blockBounds);
 
-	void GenerateVegetation();
+	void GenerateVegetation(std::vector<Bounds> parkBounds);
 
 	//void PlaceExtraProps();
 
@@ -54,4 +55,12 @@ public:
 
 	//Generate a city. Step by step
 	void CreateCity();
+
+	WorldGenericObject* GetTerrain();
+
+	std::vector<ProceduralObject*> GetRoads();
+	std::vector<ProceduralObject*> GetBuildings();
+	std::vector<ProceduralObject*> GetParks();
+
+	vec3 GetStartCameraPos();
 };

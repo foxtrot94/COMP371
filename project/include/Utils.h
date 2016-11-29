@@ -21,6 +21,7 @@ bool FileExists(std::string filename);
 ///////////////////////////////////////
 
 typedef unsigned int uint;
+typedef unsigned char uchar;
 
 //Common glm namespaced items being used
 using glm::mat4;

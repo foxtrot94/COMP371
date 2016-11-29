@@ -3,13 +3,14 @@ out vec4 color;
 
 in vec3 FragPos;  
 in vec3 Normal;  
-  
+in vec2 textureCoordinates;
+
 uniform vec3 lightPos; 
 uniform vec3 viewPos;
 uniform vec3 lightColor;
 uniform vec3 objectColor;
 
-
+uniform sampler2D objectTexture;
 uniform vec3 lightdirection; 
 uniform float cutoff;
 uniform float outtercutoff;
@@ -23,9 +24,10 @@ void main()
 	vec3 result;
    
 	
-    result = (CalcPointLight(lightPos) * objectColor);
+    result = CalcPointLight(lightPos);
 
-    color = vec4(result, 1.0f);
+	color = vec4(result * vec3(texture(objectTexture, textureCoordinates)),1.0f);
+    //color = vec4(result, 1.0f);
 } 
 
 

@@ -11,9 +11,49 @@ void WorldLayerManager::GenerateTerrain()
 	Bounds terrainBounds= worldGrid->GetRealBounds();
 	terrain = new Plane();
 	terrain->Generate(terrainBounds);
+	
+	GLTexture grass;
+	grass.loadImageData("textures\\grass.jpg");
+	terrain->assignTexture(&grass);
+	terrain->getMesh()->adjustTexelMappingConstant(512.f);
 }
 
-void WorldLayerManager::GenerateRoads(Grid::Coordinate min, Grid::Coordinate max, int levels)
+void WorldLayerManager::GenerateRoads()
+{
+	//Recursively generate and draw all roads
+	DrawRoadsRecursively(
+		Grid::Coordinate(0, 0),
+		Grid::Coordinate(Grid::WIDTH - 1, Grid::HEIGHT - 1),
+		WorldLayerManager::MAX_RECURSIVE_DEPTH
+	);
+
+	std::vector<Bounds> RoadLengths = worldGrid->GetKnownRoads();
+	vec3 black = vec3(0.01f);
+
+	GLTexture streetVertical, streetHorizontal;
+	streetVertical.loadImageData("textures\\streetVertical.jpg");
+	streetHorizontal.loadImageData("textures\\streetHorizontal.jpg");
+
+	for (int i = 0; i < RoadLengths.size(); ++i) {
+		Bounds& bounds = RoadLengths[i];
+		//Only for debugging purposes... hopefully
+		ProceduralObject* newRoad = new Plane();
+		newRoad->Generate(bounds);
+		newRoad->paintColor(black);
+
+		newRoad->assignTexture(
+			(bounds.getXlength() > bounds.getYlength())? &streetHorizontal : &streetVertical
+		);
+
+		//newRoad->getMesh()->adjustTexelMappingConstant(128.f);
+		newRoad->translate(0.f, 0.01f+(0.01f*((float)i)), 0.f);
+		roads.push_back(newRoad);
+	}
+
+	worldGrid->TerminalPrint();
+}
+
+void WorldLayerManager::DrawRoadsRecursively(Grid::Coordinate min, Grid::Coordinate max, int levels)
 {
 	//Run some checks before proceeding
 	int xLength = max.x - min.x, yLength = max.y - min.y;
@@ -68,9 +108,9 @@ void WorldLayerManager::GenerateRoads(Grid::Coordinate min, Grid::Coordinate max
 		worldGrid->FillLine(min.x, max.x, splitPoint, axisToDivide, Grid::Road);
 
 		//Down box
-		GenerateRoads(Grid::Coordinate(min.x, min.y), Grid::Coordinate(max.x, splitPoint), levels - 1);
+		DrawRoadsRecursively(Grid::Coordinate(min.x, min.y), Grid::Coordinate(max.x, splitPoint), levels - 1);
 		//Up box
-		GenerateRoads(Grid::Coordinate(min.x, splitPoint), Grid::Coordinate(max.x, max.y), levels - 1);
+		DrawRoadsRecursively(Grid::Coordinate(min.x, splitPoint), Grid::Coordinate(max.x, max.y), levels - 1);
 	}
 	else if (Grid::Axis::X == axisToDivide) {
 		//splitPoint = (min.x + max.x) / 2;
@@ -78,9 +118,9 @@ void WorldLayerManager::GenerateRoads(Grid::Coordinate min, Grid::Coordinate max
 		worldGrid->FillLine(min.y, max.y, splitPoint, axisToDivide, Grid::Road);
 
 		//Left box
-		GenerateRoads(Grid::Coordinate(min.x, min.y), Grid::Coordinate(splitPoint, max.y), levels - 1);
+		DrawRoadsRecursively(Grid::Coordinate(min.x, min.y), Grid::Coordinate(splitPoint, max.y), levels - 1);
 		//Right box
-		GenerateRoads(Grid::Coordinate(splitPoint, min.y), Grid::Coordinate(max.x, max.y), levels - 1);
+		DrawRoadsRecursively(Grid::Coordinate(splitPoint, min.y), Grid::Coordinate(max.x, max.y), levels - 1);
 	}
 }
 
@@ -92,12 +132,24 @@ int WorldLayerManager::GetRandomRange(int a, int b)
 	return distribution(generator);
 }
 
-void WorldLayerManager::GenerateBuildings()
+void WorldLayerManager::GenerateBuildings(std::vector<Bounds> blockBounds)
 {
+	GLTexture glass;
+	glass.loadImageData("textures\\highrise1.jpg");
 
+	for (int i = 0; i < blockBounds.size(); i++)
+	{
+		Bounds& bounds = blockBounds[i];
+		ProceduralObject* newTower = new Plane();
+		newTower->Generate(bounds);
+		newTower->assignTexture(&glass);
+		//newTower->getMesh()->adjustTexelMappingConstant(1024.f);
+		newTower->translate(0.f, 0.5f + (0.01f*((float)i)), 0.f);
+		buildings.push_back(newTower);
+	}
 }
 
-void WorldLayerManager::GenerateVegetation()
+void WorldLayerManager::GenerateVegetation(std::vector<Bounds> parkBounds)
 {
 
 }
@@ -112,15 +164,55 @@ void WorldLayerManager::CreateCity()
 	worldGrid = new Grid();
 
 	GenerateTerrain();
+	GenerateRoads();
 
-	GenerateRoads(
-		Grid::Coordinate(0,0),
-		Grid::Coordinate(worldGrid->WIDTH-1,worldGrid->HEIGHT-1),
-		WorldLayerManager::MAX_RECURSIVE_DEPTH
-		);
+	//Get whatever is free and divide it between buildings and parks
+	std::vector<Bounds> freeZones = worldGrid->GetFreeSpaces();
+	std::vector<Bounds> buildingBlocks, parkBlocks;
+	for (Bounds& freeBlock : freeZones) {
+		int choice = GetRandomRange(0, 100);
+		choice = 100;
+		if (choice<25) { //0-25%
+			parkBlocks.push_back(freeBlock);
+		}
+		else { //26-100%
+			buildingBlocks.push_back(freeBlock);
+		}
+	}
 
-	worldGrid->TerminalPrint();
-	GenerateBuildings();
-	
-	GenerateVegetation();
+	GenerateBuildings(buildingBlocks);
+	GenerateVegetation(parkBlocks);
+}
+
+WorldGenericObject * WorldLayerManager::GetTerrain()
+{
+	return terrain;
+}
+
+std::vector<ProceduralObject*> WorldLayerManager::GetRoads()
+{
+	return roads;
+}
+
+std::vector<ProceduralObject*> WorldLayerManager::GetBuildings()
+{
+	return buildings;
+}
+
+std::vector<ProceduralObject*> WorldLayerManager::GetParks()
+{
+	return vegetation;
+}
+
+vec3 WorldLayerManager::GetStartCameraPos()
+{
+	int low = 0, high = roads.size();
+	int index = GetRandomRange(low, high);
+	Bounds selectedRoads = worldGrid->GetKnownRoads()[index];
+	vec3 pos;
+	pos.x = (selectedRoads.getXmax() + selectedRoads.getXmin()) / 2.f;
+	pos.z = (selectedRoads.getYmax() + selectedRoads.getYmin()) / 2.f;
+	pos.y = 1.5f;
+
+	return pos;
 }

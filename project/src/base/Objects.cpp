@@ -24,9 +24,26 @@ GLMesh * WorldGenericObject::getMesh()
 	return &(this->mesh);
 }
 
+GLTexture * WorldGenericObject::getTexture()
+{
+	return &(this->texture);
+}
+
 void WorldGenericObject::assignMesh(GLMesh * newMesh)
 {
 	this->mesh = *newMesh;
+}
+
+void WorldGenericObject::assignTexture(GLTexture * newTexture)
+{
+	texture = *newTexture;
+}
+
+void WorldGenericObject::paintColor(vec3 Color)
+{
+	uint count = mesh.readLocalVertices().size();
+	std::vector<vec3> colors(count, Color);
+	mesh.setVertexColor(colors);
 }
 
 void EngineObject::translate(float x, float y, float z)

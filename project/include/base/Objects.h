@@ -3,6 +3,8 @@
 #include <vector>
 
 #include "base/Mesh.h"
+#include "base/Texture.h"
+
 #include "Bounds.h"
 #include "Utils.h"
 
@@ -61,13 +63,20 @@ class WorldGenericObject : public EngineObject {
 protected:
 	//Primary mesh which makes up this object
 	GLMesh mesh;
-	
+
+	GLTexture texture;
+
 
 public:
 	GLMesh* getMesh();
+	GLTexture* getTexture();
 
 
 	void assignMesh(GLMesh* newMesh);
+	void assignTexture(GLTexture* newTexture);
+
+	//Assign this object a particular color
+	void paintColor(vec3 Color);
 };
 
 //Base Procedural Class for creating any Procedural Object

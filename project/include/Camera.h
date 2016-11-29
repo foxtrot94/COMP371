@@ -15,22 +15,20 @@ typedef Renderer::Window* EngWindPtr;
 class Camera : public EngineObject
 {
 public:
-	const glm::vec3 INITIAL_CAMERA_POS = glm::vec3(0.0f, 1.7f, 3.0f);
+	const glm::vec3 INITIAL_CAMERA_POS = glm::vec3(0.0f, 1.5f, 3.0f);
 	const glm::vec3 CAMERA_FRONT = glm::vec3(1.0f, 0.0f, 1.0f);
 	const glm::vec3 CAMERA_UP = glm::vec3(0.0f, 1.0f, 0.0f);
 	const GLfloat INITIAL_YAW = -90.0f;	// Yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right (due to how Eular angles work) so we initially rotate a bit to the left.
 	const GLfloat INITIAL_PITCH = 0.0f;
 	const GLfloat DEFAULT_FOV = 45.0f;
 	//TODO: Change so we have more adaptive speed, acceleration and other
+
 	float CAM_SPEED_CONSTANT = 125.0f;
 	float isYFrozen = true;
+
+
     float cameraSensitivity = 0.5f;
 	float cameraSpeed = 0.0f;
-
-
-
- 	
-
 
 	static Camera* GetInstance(EngWindPtr givenEngineWindow)
 	{
@@ -85,6 +83,9 @@ public:
 	mat4 GetView();
 	//Get the projection matrix
 	mat4 GetProjection(EngWindPtr engineWindow);
+
+	void SetArbitraryPosition(vec3 pos);
+	void toggleOverview();
 
 private:
 	int width, height;

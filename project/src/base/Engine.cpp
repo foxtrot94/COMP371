@@ -66,8 +66,8 @@ void WorldEngine::DrawFrame()
 	for (auto* object : drawables) {
 		object->Update(deltaTime);
 	}
-	renderer->Render(drawables);
-	renderer->RenderLights(lights,camera, lightPositions);
+	//renderer->Render(drawables);
+	renderer->RenderLights(drawables,camera);
 
 	//Show to screen
 	glfwSwapBuffers(engineWindow->glfwContext);
@@ -137,6 +137,22 @@ void WorldEngine::LoadWorld()
 
 	WorldLayerManager layerMaker;
 	layerMaker.CreateCity();
+	
+	//Insert all the procedurally generated objects
+	std::vector<ProceduralObject*> objects;
+
+	drawables.push_back(layerMaker.GetTerrain());
+
+	objects = layerMaker.GetRoads();
+	drawables.insert(drawables.end(), objects.begin(), objects.end());
+	objects.clear();
+
+	//Uncomment when done
+	//objects = layerMaker.GetBuildings();
+	//drawables.insert(drawables.end(), objects.begin(), objects.end());
+	//objects.clear();
+
+	camera->SetArbitraryPosition(layerMaker.GetStartCameraPos());
 
 	hasLoaded = true;
 	loadScreen.join();
@@ -152,37 +168,41 @@ void WorldEngine::Run()
 	//Unlock framerate
 	glfwSwapInterval(0);
 	//@foxtrot94: DEBUG CODE - Remove or Comment in Master
+
 	//WorldGenericObject* triangle = new TriangleTest();
 	ProceduralObject* plane = new Plane();
-	ProceduralObject* cube = new CubeTest();
-	ProceduralObject* light = new Light();
-	ProceduralObject* light1 = new Light();
+	//ProceduralObject* cube = new CubeTest();
+	//ProceduralObject* light = new Light();
+	//ProceduralObject* light1 = new Light();
 
 	
 
 
 	//WorldGenericObject* building = new Building(12);
 	plane->Generate(Bounds(0.f,50.f,0.f,50.f));
-	light->Generate(Bounds(0.0f, 2.0f, 0.0f, 2.0f));
-	light1->Generate(Bounds(0.0f, 2.0f, 0.0f, 2.0f));
-	cube->Generate(Bounds(0.0f,0.0f,0.0f,0.0f));
+	//light->Generate(Bounds(0.0f, 2.0f, 0.0f, 2.0f));
+	//light1->Generate(Bounds(0.0f, 2.0f, 0.0f, 2.0f));
+	//cube->Generate(Bounds(0.0f,0.0f,0.0f,0.0f));
 	plane->translate(-25.f, 0.f, -25.f);
 
-	light->translate(0.f, 5.0f, 0.f);
-	lightPositions.push_back(glm::vec3(0.f, 5.0f, 0.f));
-	light1->translate(5.f, 5.0f, 0.f);
-	lightPositions.push_back(glm::vec3(10.f, 5.0f, 0.f));
+	//light->translate(0.f, 5.0f, 0.f);
+	//lightPositions.push_back(glm::vec3(0.f, 5.0f, 0.f));
+	//light1->translate(5.f, 5.0f, 0.f);
+	//lightPositions.push_back(glm::vec3(10.f, 5.0f, 0.f));
 
-	cube->translate(0.0f, 2.0f, 0.f);
-	lights.push_back(plane);
-	lights.push_back(cube);
-	drawables.push_back(light);
-	drawables.push_back(light1);
+	//cube->translate(0.0f, 2.0f, 0.f);
+	//lights.push_back(plane);
+	//lights.push_back(cube);
+	//drawables.push_back(light);
+	//drawables.push_back(light1);
 
 
-	lights.push_back(light);
+	//lights.push_back(light);
 	//drawables.push_back(light);
 	//drawables.push_back(building);
+
+
+
 	//Game loop
 	std::cout << "Initialization complete, starting game" << std::endl;
 	while (!glfwWindowShouldClose(engineWindow->glfwContext)) {
@@ -190,6 +210,7 @@ void WorldEngine::Run()
 		this->ProcessInputs();
 		this->DrawFrame();
 	}
+
 
 	//drawables.pop_back();
 	drawables.pop_back();

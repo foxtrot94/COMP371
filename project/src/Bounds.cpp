@@ -16,8 +16,9 @@ Bounds::Bounds(vec2 min, vec2 max)
 
 Bounds::Bounds(vec3 min, vec3 max)
 {
-	//Not yet implemented
-	__debugbreak();
+	bottomLeft = vec2(min.x, min.z);
+	topRight = vec2(max.x, max.z);
+	center = vec3(0.f);
 }
 
 float Bounds::getXmax()
@@ -40,9 +41,19 @@ float Bounds::getYmin()
 	return bottomLeft.y;
 }
 
+float Bounds::getXlength()
+{
+	return (topRight.x - bottomLeft.x);
+}
+
+float Bounds::getYlength()
+{
+	return (topRight.y - bottomLeft.y);
+}
+
 float Bounds::getArea()
 {
-	return (topRight.x-bottomLeft.x)*(topRight.y-bottomLeft.x);
+	return (topRight.x-bottomLeft.x)*(topRight.y-bottomLeft.y);
 }
 
 void Bounds::setCenter(vec3 point)

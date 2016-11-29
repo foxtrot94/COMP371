@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <utility>
 
 #include "Bounds.h"
 #include "Utils.h"
@@ -35,8 +36,13 @@ public:
 			y = Y;
 		}
 		bool isValid() {
-			return x > 0 && x < WIDTH && y>0 && y < HEIGHT;
+			return x >= 0 && x < WIDTH && y>=0 && y < HEIGHT;
 		}
+
+		inline bool operator!=(const Coordinate& rhs) {
+			return this->x != rhs.x && this->y != rhs.y;
+		}
+
 		friend std::ostream& operator<<(std::ostream& os, const Grid::Coordinate& coord);
 	};
 
@@ -45,6 +51,15 @@ private:
 	Grid::Type Cells[Grid::WIDTH][Grid::HEIGHT];
 	//Actual dimensions defined by the grid
 	float realWidth, realHeight;
+
+	//Roads
+	std::vector<Bounds> DrawnRoads;
+
+	//Free Spaces after drawing roads
+	std::vector<Bounds> OpenSpaces;
+
+	//Checks if a point is free and returns the bounds corresponding to all of it's neighbors
+	bool ObtainFreeBoundsFromPoint(int x, int y, Bounds& outBound);
 	
 public:
 	//ctor
@@ -58,7 +73,13 @@ public:
 	//Recursively fills the grid starting at x,y with the fill value
 	void FillRecursive(int x, int y, Grid::Type fillValue);
 
-	void TerminalPrint();
+	void TerminalPrint(std::ostream& out=std::cout);
 
 	Bounds GetRealBounds();
+
+	vec2 GridPointTo2DPoint(Coordinate Point);
+
+	std::vector<Bounds> GetKnownRoads();
+
+	std::vector<Bounds> GetFreeSpaces();
 };

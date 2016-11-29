@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <set>
 
 #include "..\glew\glew.h"	// include GL Extension Wrangler
 #include "..\glfw\glfw3.h"	// include GLFW helper library
@@ -20,6 +21,7 @@ class WorldGenericObject;
 class Camera;
 class Shader;
 class GLMesh;
+class GLTexture;
 
 //Main class for dealing with the OpenGL renderer and displaying stuff on screen
 //tech debt: switch it up and put this as an interface for an underlying DirectX, OpenGL and Vulkan renderer
@@ -66,12 +68,15 @@ protected:
 	//List of elements being tracked in the OpenGL context
 	std::vector<uint> ContextArrays;
 	std::vector<uint> ContextBuffers;
+	std::set<uchar*> RawTextureData;
 
 	//Protected Ctor
 	Renderer();
 
 	//Send a mesh object to the GPU memory and renderer context
 	bool AddToRenderingContext(GLMesh* mesh);
+
+	bool AddToRenderingContext(GLTexture* texture);
 
 public:
 	//Singleton point of entry
@@ -107,9 +112,9 @@ public:
 	//Batch draw of WorldGenericObjects on screen
 	void Render(std::vector<WorldGenericObject*> Objects);
 
-	void RenderLight(WorldGenericObject* Object, Camera* camera, std::vector<glm::vec3> lights);
+	void RenderLight(WorldGenericObject* Object, Camera* camera);
 	//Render Lights
-	void RenderLights(std::vector<WorldGenericObject*> Objects,Camera* camera, std::vector<glm::vec3> lights);
+	void RenderLights(std::vector<WorldGenericObject*> Objects,Camera* camera);
 
 	//Draw the skybox cube
 	void RenderSkyBox(Camera* camera);

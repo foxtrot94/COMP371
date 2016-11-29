@@ -101,4 +101,4 @@ void CubeTest::Generate(Bounds perimeter)
 	mesh.setColor(glm::vec3(0.f / 255.f, 0.f / 255.f, 200.f / 255.f));
 
 	Model = mat4(1.f);
-}
+};

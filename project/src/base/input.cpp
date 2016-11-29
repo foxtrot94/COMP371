@@ -14,13 +14,11 @@ void Input::resetCamera(){
 void Input::moveFwd()
 {
 	mainCamera->chooseDirection('p','z');
-	std::cout << "going fwd" << std::endl;
 }
 
 void Input::moveBwd()
 {
 	mainCamera->chooseDirection('n', 'z');
-	std::cout << "going bwd" << std::endl;
 
 }
 
@@ -37,13 +35,11 @@ void Input::turnRight()
 void Input::strafeLeft()
 {
 	mainCamera->chooseDirection('n', 'x');
-	std::cout << "dodge left" << std::endl;
 }
 
 void Input::strafeRight()
 {
 	mainCamera->chooseDirection('p', 'x');
-	std::cout << "dodge right" << std::endl;
 }
 
 void Input::leftMouseClick()
@@ -138,6 +134,11 @@ void Input::placeOnPlane()
 	}
 }
 
+void Input::overviewCamera()
+{
+	mainCamera->toggleOverview();
+}
+
 void Input::moveCamera(glm::vec2 direction)
 {
 	mainCamera->SetYaw(direction.x*mainCamera->GetCameraSensitivity() + mainCamera->GetYaw());
@@ -201,6 +202,9 @@ void KeyInputCallback(GLFWwindow * window, int key, int scancode, int action, in
 		break;
 	case GLFW_KEY_R:
 		instance->resetCamera();
+		break;
+	case GLFW_KEY_T:
+		instance->overviewCamera();
 		break;
 		
 		

@@ -1,4 +1,4 @@
-#include "..\include\SkyBox.h"
+#include "SkyBox.h"
 #include "..\..\soil\SOIL.h"
 #include <fstream>
 #include <iostream>
@@ -63,12 +63,12 @@ std::vector<const char*> SkyBox::loadTextureImages()
 {
 		//prepare skybox cubemap
 		std::vector<const char*> faces;
-		faces.push_back("right.bmp");
-		faces.push_back("left.bmp");
-		faces.push_back("top.bmp");
-		faces.push_back("bottom.bmp");
-		faces.push_back("back.bmp");
-		faces.push_back("front.bmp");
+		faces.push_back("textures\\skybox\\right.jpg");
+		faces.push_back("textures\\skybox\\left.jpg");
+		faces.push_back("textures\\skybox\\top.jpg");
+		faces.push_back("textures\\skybox\\bottom.jpg");
+		faces.push_back("textures\\skybox\\back.jpg");
+		faces.push_back("textures\\skybox\\front.jpg");
 
 		glActiveTexture(GL_TEXTURE1);
 
@@ -88,44 +88,18 @@ uint SkyBox::loadCubeMap(std::vector<const char*> faces)
 	glGenTextures(1, &textureID);
 
 	int width, height;
-	//cimg_library::CImg<unsigned char> image;
 	unsigned char* image;
 
 	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 	for (uint i = 0; i < faces.size(); ++i)
 	{
-		/*
-		//debug only
-		if (!std::ifstream(faces[i])) {
-			std::cout << "File " << faces[i] << "  does not exist in current path" << std::endl;
-			return 0;
-		}
-		*/
-
-		//load image from memory
-		//image = cimg_library::CImg<unsigned char>(faces[i]);
-
 		image = SOIL_load_image(faces[i], &width, &height, 0, SOIL_LOAD_RGB);
-		/*
-		//debug only
-		cimg_library::CImgDisplay main_disp(image, "Render");
-		while (!main_disp.is_closed())
-			main_disp.wait();
-		*/
-		
-		/**** CIMG version
-			
+
 		glTexImage2D(
 			GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0,
-			GL_RGB, image.width(), image.height(), 0, GL_RGB, GL_UNSIGNED_BYTE, image
-			); **** CIMG version *****/
-		
-		glTexImage2D(
-			GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0,
-			GL_RGB, /*image.width()*/ width, /*image.height()*/ height, 0, GL_RGB, GL_UNSIGNED_BYTE, image
+			GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image
 			);
 
-		//image.assign();
 		SOIL_free_image_data(image);
 	}
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
