@@ -8,8 +8,11 @@ uniform vec3 lightPos;
 uniform vec3 viewPos;
 uniform vec3 lightColor;
 uniform vec3 objectColor;
-uniform int NumOfLights; 
-uniform vec3 lightpositions[100];
+
+
+uniform vec3 lightdirection; 
+uniform float cutoff;
+uniform float outtercutoff;
 
 
 
@@ -19,8 +22,8 @@ void main()
 {
 	vec3 result;
    
-		 for(int i = 0; i < NumOfLights; i++)
-    result += (CalcPointLight(lightpositions[i]) * objectColor);
+	
+    result = (CalcPointLight(lightPos) * objectColor);
 
     color = vec4(result, 1.0f);
 } 
@@ -28,18 +31,17 @@ void main()
 
 vec3 CalcPointLight(vec3 lightP)
 {
+	vec3 lightDir = normalize(lightP - FragPos);
 
- // Attenuation
-    float distance = length(lightP - FragPos);
-    float attenuation = 1.0f / (1.0f + 0.09f * distance + 0.032 * (distance * distance));   
-
-    // Ambient
-    float ambientStrength = 0.1f;
+	
+	// Ambient
+    float ambientStrength = 0.5f;
     vec3 ambient = ambientStrength * lightColor;
+    
+   
   	
     // Diffuse 
     vec3 norm = normalize(Normal);
-    vec3 lightDir = normalize(lightP - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = diff * lightColor;
     
@@ -49,6 +51,18 @@ vec3 CalcPointLight(vec3 lightP)
     vec3 reflectDir = reflect(-lightDir, norm);  
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
     vec3 specular = specularStrength * spec * lightColor;  
+	
+	    // Spotlight (soft edges)
+    float theta = dot(lightDir, normalize(-lightdirection)); 
+    float epsilon = (cutoff- outtercutoff);
+    float intensity = clamp((theta - outtercutoff) / epsilon, 0.0, 1.0);
+    diffuse  *= intensity;
+    specular *= intensity;
+	
+	// Attenuation
+    float distance = length(lightP - FragPos);
+    float attenuation = 1.0f / (1.0f + 0.09f * distance + 0.032 * (distance * distance));   
+
         
 		
 		ambient*=attenuation;
@@ -56,5 +70,6 @@ vec3 CalcPointLight(vec3 lightP)
 		specular*=attenuation;
 		
 		return(ambient+diffuse+specular);
+		
 
 }

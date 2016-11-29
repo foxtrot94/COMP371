@@ -22,7 +22,7 @@ public:
 	const GLfloat INITIAL_PITCH = 0.0f;
 	const GLfloat DEFAULT_FOV = 45.0f;
 	//TODO: Change so we have more adaptive speed, acceleration and other
-	float CAM_SPEED_CONSTANT = 1000.0f;
+	float CAM_SPEED_CONSTANT = 125.0f;
 	float isYFrozen = true;
     float cameraSensitivity = 0.5f;
 	float cameraSpeed = 0.0f;
@@ -63,9 +63,13 @@ public:
 	
 
 	glm::vec3 Camera::getCameraPosition();
+
 	//Allows for free roam and fast movement
 	void debugMode(bool isOn);
 
+
+	glm::vec3 GetCameraFrontForLight();
+	void Camera::LightSwitch(bool isOnOrOff);
 	
 	void startRoam();
 
@@ -85,6 +89,7 @@ public:
 private:
 	int width, height;
 	bool isRoamStarted = false;
+	bool isLightOn = false;
 
 	Camera(int width, int height) :
 		width(width), height(height)

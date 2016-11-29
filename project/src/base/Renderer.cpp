@@ -17,7 +17,7 @@ Renderer::~Renderer()
 	//Clear the context objects
 	for (uint i = 0; i < ContextArrays.size(); ++i) {
 		glDeleteVertexArrays(1, &(ContextArrays[i]));
-}
+	}
 	ContextArrays.clear();
 
 	for (uint i = 0; i < ContextBuffers.size(); ++i) {
@@ -101,7 +101,7 @@ void Renderer::UpdateCamera(mat4 & view, mat4 & projection)
 		return;
 	}
 
-	
+
 	Shader::Uniforms uniforms = shader->getUniforms();
 
 	glUniformMatrix4fv(uniforms.viewMatrixPtr, 1, GL_FALSE, glm::value_ptr(view));
@@ -111,7 +111,7 @@ void Renderer::UpdateCamera(mat4 & view, mat4 & projection)
 void Renderer::Render(WorldGenericObject* Object)
 {
 	GLMesh* mesh = Object->getMesh();
-	if (shader==NULL || mesh==NULL || !mesh->isInitialized()) {
+	if (shader == NULL || mesh == NULL || !mesh->isInitialized()) {
 		//nothing to do here
 		return;
 	}
@@ -129,7 +129,7 @@ void Renderer::Render(WorldGenericObject* Object)
 	//Basically, draw RenderTarget
 	glDrawArrays(GL_TRIANGLES, 0, mesh->getBufferSize());
 	//glDrawElements(GL_TRIANGLES, mesh->getBufferSize(), GL_UNSIGNED_INT, 0);//TODO?
-	
+
 	glBindVertexArray(0); //TODO: Optimize. Put this outside
 }
 
@@ -150,7 +150,7 @@ void Renderer::RenderLight(WorldGenericObject* Object, Camera* camera, std::vect
 		//nothing to do here
 		return;
 	}
-	
+
 	if (!mesh->isInRenderingContext()) {
 		//Send it off to the GPU Video Memory
 		//FUTURE: Right now all meshes are taken as static, change some day...
@@ -160,44 +160,34 @@ void Renderer::RenderLight(WorldGenericObject* Object, Camera* camera, std::vect
 	glUseProgram(lightShaderProgram);
 
 	Shader::Uniforms uniform = lightShader->getUniforms(); //TODO: optimize in the future. Get uniforms outside or something
-	
+
 	GLint objectColorLoc = glGetUniformLocation(lightShaderProgram, "objectColor");
 	GLint lightColorLoc = glGetUniformLocation(lightShaderProgram, "lightColor");
 
 	GLint viewPosLoc = glGetUniformLocation(lightShaderProgram, "viewPos");
 
-	//GLint lightPosLoc = glGetUniformLocation(lightShaderProgram, "lightPos");
 
-	GLint NumOfLightsLoc = glGetUniformLocation(lightShaderProgram, "NumOfLights");
+	GLint lightSpotdirLoc = glGetUniformLocation(lightShaderProgram, "lightdirection");
+	GLint lightSpotCutOffLoc = glGetUniformLocation(lightShaderProgram, "cutoff");
+	GLint lightSpotOutterCutOffLoc = glGetUniformLocation(lightShaderProgram, "outtercutoff");
+
 	//Object's designated color
 	//OVERRIDER MADE EVERY OBJECT PASS ME A SINGLE RGB INSTEAD OF A VBO OF RBGS
 	glUniform3f(objectColorLoc, Object->getMesh()->getColor().x, Object->getMesh()->getColor().y, Object->getMesh()->getColor().z);
 	//Light color, usually white
 	glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
-	glUniform1i(NumOfLightsLoc, lightpos.size());
-	//position of light
-	//NEED TO PASS EVERY LIGHT TO ADD THE POSITIONS HERE
+	glUniform3f(lightSpotdirLoc, camera->GetCameraFrontForLight().x, camera->GetCameraFrontForLight().y, camera->GetCameraFrontForLight().z);
+	glUniform1f(lightSpotCutOffLoc, glm::cos(glm::radians(25.5f)));
+	glUniform1f(lightSpotOutterCutOffLoc, glm::cos(glm::radians(30.5f)));
+
+
+	GLint lightPosLoc = glGetUniformLocation(lightShaderProgram, "lightPos");
+	glUniform3f(lightPosLoc, camera->getCameraPosition().x, camera->getCameraPosition().y, camera->getCameraPosition().z);
+
+
 	
-	std::vector<glm::vec3> lightTester;
-	lightTester.push_back(glm::vec3(0.0f, 5.0f, 0.0f));
-	lightTester.push_back(glm::vec3(10.0f, 5.0f, 0.0f));
-
-
-	/*glUniform3fv(glGetUniformLocation(lightShaderProgram, "lightPositions"), 1,
-		glm::value_ptr(lightTester[0]));*/
-	
-	GLint lightPosLoc = glGetUniformLocation(lightShaderProgram, "lightpositions[0]");
-	glUniform3f(lightPosLoc, lightTester[0].x, lightTester[0].y, lightTester[0].z);
-
-	GLint lightPosLoc1 = glGetUniformLocation(lightShaderProgram, "lightpositions[1]");
-	glUniform3f(lightPosLoc1, lightTester[1].x, lightTester[1].y, lightTester[1].z);
-
-
 	glUniform3f(viewPosLoc, camera->getCameraPosition().x, camera->getCameraPosition().y, camera->getCameraPosition().z);
 
-
-
-	
 
 	glm::mat4 light_view = camera->GetView(); // TODO set it to whatever updateCamera has;
 	glm::mat4 projection_matrix = camera->GetProjection(mainWindow);
@@ -216,10 +206,10 @@ void Renderer::RenderLight(WorldGenericObject* Object, Camera* camera, std::vect
 
 void Renderer::RenderLights(std::vector<WorldGenericObject*> Objects, Camera* camera, std::vector<glm::vec3> lightspos)
 {
-	
+
 	glBindVertexArray(NULL);
 	for (WorldGenericObject* object : Objects) {
-		RenderLight(object,camera, lightspos);
+		RenderLight(object, camera, lightspos);
 	}
 	glBindVertexArray(NULL);
 }
@@ -228,7 +218,7 @@ void Renderer::RenderLights(std::vector<WorldGenericObject*> Objects, Camera* ca
 
 
 void Renderer::RenderSkyBox(Camera* camera) {
-	if (skybox == NULL) 
+	if (skybox == NULL)
 	{
 		InitSkyBox();
 	}
@@ -236,9 +226,9 @@ void Renderer::RenderSkyBox(Camera* camera) {
 	{
 		uint skyboxShaderProgram = skyBoxShader->getShaderProgram();
 		glUseProgram(skyboxShaderProgram);
-		
+
 		glm::mat4 skybox_view = camera->GetView(); // TODO set it to whatever updateCamera has
-		glm::mat4 skybox_transform = glm::scale(glm::mat4(1.f),vec3(1000.f));
+		glm::mat4 skybox_transform = glm::scale(glm::mat4(1.f), vec3(1000.f));
 		glm::mat4 projection_matrix = camera->GetProjection(mainWindow);
 
 		Shader::Uniforms uniform = skyBoxShader->getUniforms();
@@ -261,7 +251,7 @@ void Renderer::RenderSkyBox(Camera* camera) {
 		glDepthMask(GL_TRUE);
 		glUseProgram(shader->getShaderProgram());
 	}
-	
+
 }
 
 bool Renderer::AddToRenderingContext(GLMesh * mesh)
@@ -289,18 +279,18 @@ bool Renderer::AddToRenderingContext(GLMesh * mesh)
 		flatVertices.push_back(vertex.z);
 		flatColor.push_back(color.z);
 	}
-	
+
 	glBindVertexArray(VAO);
 
 	// Position attribute
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size*3, &flatVertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size * 3, &flatVertices[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0); //TODO: Abstract into shader
 
 	// Color Attribute
 	glBindBuffer(GL_ARRAY_BUFFER, colorBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size*3, &flatColor[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*size * 3, &flatColor[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (GLvoid*)0);
 	glEnableVertexAttribArray(1); //TODO: abstract into shader
 
@@ -319,7 +309,7 @@ bool Renderer::AddToRenderingContext(GLMesh * mesh)
 
 
 // References: using the skybox source code from Lab 7
-void Renderer::InitSkyBox() 
+void Renderer::InitSkyBox()
 {
 	skybox = new SkyBox();
 	skybox->loadVertices();

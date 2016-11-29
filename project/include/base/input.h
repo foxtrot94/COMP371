@@ -15,6 +15,8 @@ private:
 	bool isIPressed = false;
 	bool isSpacePressed = false;
 	bool DEBUG_MODE = false;
+	bool flashLightMode = false;
+	bool isFPressed = false;
 
 	Camera* mainCamera;
 

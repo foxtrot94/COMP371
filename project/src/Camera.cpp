@@ -9,7 +9,7 @@ float Camera::GetCameraSpeed()
 
 void Camera::Update(const float& deltaTime)
 {
-	cameraSpeed = (deltaTime) * CAM_SPEED_CONSTANT;
+	cameraSpeed = (deltaTime)* CAM_SPEED_CONSTANT;
 }
 
 GLfloat Camera::GetYaw()
@@ -40,6 +40,34 @@ void Camera::SetCameraFront(glm::vec3 front)
 	camPam.cameraFront = front;
 }
 
+void Camera::LightSwitch(bool isOnOrOff)
+{
+	if (isOnOrOff == true)
+	{
+
+		isLightOn = true;
+	}
+	else if (isOnOrOff == false)
+	{
+		isLightOn = false;
+	}
+}
+
+
+
+
+
+//Lots of better options could of been here
+glm::vec3 Camera::GetCameraFrontForLight()
+{
+	if (isLightOn == true)
+	{
+		return camPam.cameraFront;
+	}
+	else return glm::vec3(0, 0,0);
+}
+
+
 float Camera::GetCameraSensitivity()
 {
 	return cameraSensitivity;
@@ -61,14 +89,14 @@ void Camera::chooseDirection(char operation, char axis)
 	}
 	else if (operation == 'p' && axis == 'z')
 	{
-		
+
 		increaseZ(GetCameraSpeed());
 	}
 	else if (operation == 'n' && axis == 'z')
 	{
 		decreaseZ(GetCameraSpeed());
 	}
-		
+
 
 }
 
@@ -81,20 +109,20 @@ mat4 Camera::GetView()
 	//}
 	//else if (isRoamStarted == true)
 	//{
-		return GetSpaceView();
+	return GetSpaceView();
 	//}
-	
+
 }
 mat4 Camera::GetInitialView()
 {
 	// camPam.cameraPos + camPam.cameraFront
-	 return glm::lookAt(camPam.cameraPos, glm::vec3(0.0f), camPam.cameraUp);
+	return glm::lookAt(camPam.cameraPos, glm::vec3(0.0f), camPam.cameraUp);
 }
 
 mat4 Camera::GetSpaceView()
 {
-	
-    return glm::lookAt(camPam.cameraPos, camPam.cameraPos + camPam.cameraFront, camPam.cameraUp);
+
+	return glm::lookAt(camPam.cameraPos, camPam.cameraPos + camPam.cameraFront, camPam.cameraUp);
 }
 
 
@@ -109,14 +137,14 @@ mat4 Camera::GetProjection(EngWindPtr engineWindow)
 //Freezes Y, so you cant move up
 void Camera::freezeY()
 {
-	
+
 	if (isYFrozen == true)
 	{
 		camPam.cameraPos.y = 5;
 	}
 	else if (isYFrozen == false)
 	{
-		
+
 	}
 
 }
@@ -131,11 +159,11 @@ glm::vec3 Camera::getCameraPosition()
 // Front and Back Operations
 void Camera::increaseZ(float camSpeed)
 {
-	
+
 	camPam.cameraPos += camPam.cameraFront * camSpeed;
 	freezeY();
 
-	
+
 }
 void Camera::decreaseZ(float camSpeed)
 {
@@ -146,7 +174,7 @@ void Camera::decreaseZ(float camSpeed)
 //Strafe Left and Right Operations
 void Camera::decreaseX(float camSpeed)
 {
-	camPam.cameraPos -=  glm::normalize(glm::cross(camPam.cameraFront, camPam.cameraUp)) * camSpeed;
+	camPam.cameraPos -= glm::normalize(glm::cross(camPam.cameraFront, camPam.cameraUp)) * camSpeed;
 	freezeY();
 }
 
@@ -161,13 +189,13 @@ void Camera::debugMode(bool isOn)
 {
 	if (isOn == true)
 	{
-		CAM_SPEED_CONSTANT = 8000;
+		CAM_SPEED_CONSTANT = 500;
 		isYFrozen = false;
 	}
 	else if (isOn == false)
 	{
 		camPam.cameraPos = glm::vec3(0.0f, 5.0f, 3.0f);
-		CAM_SPEED_CONSTANT = 1000;
+		CAM_SPEED_CONSTANT = 150;
 		isYFrozen = true;
 	}
 }
@@ -179,7 +207,7 @@ void Camera::startRoam()
 		camPam.cameraPos = glm::vec3(0.0f, 5.0f, 3.0f);
 		isRoamStarted = true;
 	}
-		
+
 }
 
 

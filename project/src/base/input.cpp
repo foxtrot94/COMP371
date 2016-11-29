@@ -93,9 +93,38 @@ void Input::debugFreeRoam()
 
 void Input::toggleFlashLight()
 {
+	if (isFPressed == false)
+	{
+		flashLightMode = true;
+	}
+	else if (isFPressed == true)
+	{
+		flashLightMode = false;
+	}
 
-	std::cout << "FLASHLIGHT: ON";
-	std::cout << "FLASHLIGHT: OFF";
+
+	if (flashLightMode == false)
+	{
+		std::cout << "FLASHLIGHT: OFF";
+		mainCamera->LightSwitch(flashLightMode);
+	}
+	else if (flashLightMode == true)
+	{
+		std::cout << "FLASHLIGHT: ON";
+		mainCamera->LightSwitch(flashLightMode);
+	}
+
+
+	if (isFPressed == true)
+	{
+		isFPressed = false;
+	}
+	else if (isFPressed == false)
+	{
+		isFPressed = true;
+	}
+	
+
 
 
 }
