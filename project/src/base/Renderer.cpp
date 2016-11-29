@@ -209,6 +209,21 @@ void Renderer::RenderLight(WorldGenericObject* Object, Camera* camera)
 	GLint lightPosLoc = glGetUniformLocation(lightShaderProgram, "lightPos");
 	glUniform3f(lightPosLoc, camera->getCameraPosition().x, camera->getCameraPosition().y, camera->getCameraPosition().z);
 
+	GLint lightPosLoc1 = glGetUniformLocation(lightShaderProgram, "lightPos1");
+	glUniform3f(lightPosLoc1, 10.0, 2.0, 0.0);
+
+	GLint lightPosLoc2 = glGetUniformLocation(lightShaderProgram, "lightPos2");
+	glUniform3f(lightPosLoc2, 480.0, 2.0, 0.0);
+
+	GLint lightPosLoc3 = glGetUniformLocation(lightShaderProgram, "lightPos3");
+	glUniform3f(lightPosLoc3, 0.0, 2.0, 480.0);
+
+	GLint lightPosLoc4 = glGetUniformLocation(lightShaderProgram, "lightPos4");
+	glUniform3f(lightPosLoc4, 480.0, 2.0, 480.0);
+	GLint lightPosLoc5 = glGetUniformLocation(lightShaderProgram, "lightPos5");
+	glUniform3f(lightPosLoc5, 250.0, 2.0, 250.0);
+
+
 
 	
 	glUniform3f(viewPosLoc, camera->getCameraPosition().x, camera->getCameraPosition().y, camera->getCameraPosition().z);
